@@ -69,7 +69,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Даниил\Documents\Visual Studio 2015\Projects\EternityGame\EternityGame\Sources;C:\Users\Даниил\Documents\Visual Studio 2015\Projects\EternityGame;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)Sources\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -123,6 +123,7 @@
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Sources\Battle.cpp" />
+    <ClCompile Include="Sources\Globals.cpp" />
     <ClCompile Include="Sources\Graphics.cpp" />
   </ItemGroup>
   <ItemGroup>

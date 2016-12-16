@@ -68,21 +68,37 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint MainShip = LoadTex("Resource/EternityTop.tga");
 	GLuint BG = LoadTex("Resource/bg.tga");
 	GLuint bul = LoadTex("Resource/shoot01.tga");
+	GLuint book = LoadTex("Resource/enemy01.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
 	Font.loadOffset("Resource/FontOffset.dat", 256);
 
 	Battle gMain = Battle::Battle();
+	/* init main ship */
 	Ship Eternity = Ship::Ship();
 	Eternity.setStats("Eternity", 1000, 1000, 5, 128, MainShip);
 	Eternity.pos = { 400, 400 };
 	Eternity.Entityid = 1;
+	Eternity.side = 0;
 	gMain.addShip(Eternity);
+	/* weapon adjust */
 	Projectile Shoot;
 	Shoot.setTexture(bul);
 	Shoot.speed = 240;
+	Shoot.dmg = 10;
 	Shoot.vec = { 0, -1 };
-	Ship * PlaerShip = gMain.getControl(0);
+	Shoot.ownerID = 1;
+	Shoot.side = 0;
+	/* ship contlor */
+	Ship * PlaerShip = gMain.getControl(1);
 	Shoot.ownerID = PlaerShip->Entityid;
+	/* enemy ship */
+	Ship enemytest = Ship::Ship();
+	enemytest.setStats("Enemy01", 100, 100, 5, 128, book);
+	enemytest.pos = { 400, 200 };
+	enemytest.Entityid = 2;
+	enemytest.side = 1;
+	gMain.addShip(enemytest);
+
 	Init();
 	/* program main loop */
 	while (!bQuit)
@@ -121,8 +137,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				Shoot.pos = PlaerShip->pos;
 				gMain.addProjectile(Shoot);
 			}
+			if (keyState[VK_SPACE])
+			{
+				x++;
+			}
 			PlaerShip->pos.x = x;
 			PlaerShip->pos.y = y;
+
 			StartDraw2D(wndWidth, wndHeight);	
 
 			glBindTexture(GL_TEXTURE_2D, BG);
@@ -137,14 +158,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			glEnd();
 
 			gMain.update(deltaTime);
-			Font.outText(100, 100, "Alpha version v0.001");
+
+			char st[10];
+			_itoa_s(listSize, st, 10);
+			Font.outText(100, 100, st);
 
 			EndDraw2D();
 
-		//	glDepthMask(GL_TRUE);
-		//	glDisable(GL_ALPHA_TEST);
-		//	glDisable(GL_BLEND);
-		//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 			SwapBuffers(hDC);
 			
 		}

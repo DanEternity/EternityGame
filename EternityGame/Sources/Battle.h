@@ -11,20 +11,50 @@ struct vec2
 * Events
 *
 **************************/
+/*
+#define CollisionEvent 1;
+#define ProjectileOption 2;
+#define ShipOption 3;
+#define ControlEvent 4;
+*/
+enum eventType
+{
+	CollisionEvent,
+	ProjectileOption,
+	ShipOption,
+	ControlEvent
+};
 
-#define CollisionEvent 0x0001;
+enum ProjectileCommand
+{
+	destroy,
+	hide,
+	disable, // side -> 0 No collision
+	clearTarget
+};
 
 struct tEvent
 {
-	int type;
-	__int16 data[16];
+	int eventType;
+	__int8 data[60];
 };
 
 struct tCollisionCheck
 {
-	int type;
 	vec2 pos;
 	int projectileID;
+	int side;
+	float dmg;
+	int entityID;
+};
+
+struct tProjectileOption
+{
+	int projectileID;
+	int command;
+	int wParam;
+	vec2 vecParam;
+	int entityID;
 };
 
 class Ship
@@ -61,10 +91,12 @@ public:
 	float speed;
 	int side;
 	int ownerID;
+	int entityID;
 	float dmg;
 	void draw();
 	void setTexture(unsigned int tex);
 	void move(double deltatime);
+	~Projectile();
 private:
 	unsigned int texture;
 };
@@ -80,9 +112,12 @@ public:
 	Battle();
 	~Battle();
 private:
-	std::vector<Ship> units;
-	std::vector<Projectile> projectiles;
+	int projectilesTop;
+	int shipsTop;
+	std::vector<Ship * > units;
+	std::vector<Projectile * > projectiles;
 	std::queue<tEvent> list;
+	void handleEvent(tEvent ev);
 };
 
 float sqtDist(vec2 a, vec2 b);

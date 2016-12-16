@@ -1,4 +1,4 @@
-#pragma once
+#include <Globals.h>
 #include <windows.h>
 
 /**************************
@@ -6,35 +6,35 @@
 *
 **************************/
 
-extern WNDCLASS wc;
-extern HWND hWnd;
-extern HDC hDC;
-extern HGLRC hRC;
-extern MSG msg;
-extern BOOL bQuit;
-extern BOOL keyState[0xffff];
+WNDCLASS wc;
+HWND hWnd;
+HDC hDC;
+HGLRC hRC;
+MSG msg;
+BOOL bQuit = FALSE;
+BOOL keyState[0xffff];
 
 /**************************
 * Options
 *
 **************************/
 
-extern int wndHeight;
-extern int wndWidth;
+int wndHeight = 600;
+int wndWidth = 800;
 
 /**************************
 * Game / Core
 *
 **************************/
 
-extern double deltaTime;
-extern double oldDeltatime;
+double deltaTime;
+double oldDeltatime;
 
 /**************************
 * Other
 *
 **************************/
 
-extern float theta;
-extern int x, y;
-extern int listSize;
+float theta = 0.0f;
+int x = 400, y = 400;
+int listSize = 0;
