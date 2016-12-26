@@ -46,6 +46,7 @@ struct tCollisionCheck
 	int side;
 	float dmg;
 	int entityID;
+	void * pointer;
 };
 
 struct tProjectileOption
@@ -55,32 +56,49 @@ struct tProjectileOption
 	int wParam;
 	vec2 vecParam;
 	int entityID;
+	void * pointer;
 };
 
-class Ship
+enum eAttr
 {
-public:
-	/* Phisical parameters */
-	vec2 pos;
-	float speed;
-	float size;
-	/* Game parameters */
-	int Entityid;
-	int side; // 0 = Player; 1 = Enemy;
-	char name[32]; // Unit name;
-	float hull;
-	float shield;
-	bool bshield;
-	/* Methods */
-	void draw();
-	void setTexture(unsigned int tex);
-	void weaponUse(int WeaponID);
-	void setStats(const char* shipName, float nhull, float nshield, float nspeed, float nsize, unsigned int ntex);
-	void takeDmg(float dmg, int owner);
-	Ship();
-	~Ship();
-private:
-	unsigned int texture;
+	shieldmod,
+	hullmod,
+	engmod,
+	energymod
+};
+
+struct tAttribute
+{
+	eAttr attr;
+	int valueInt1;
+	int valueInt2;
+	float valueFloat1;
+	float valueFloat2;
+};
+
+
+enum ModuleType
+{
+	none,
+	main,
+	sys,
+	weapon,
+	extra
+};
+
+enum ModuleSize
+{
+	szTiny,
+	szSmall,
+	szMeduim,
+	szLarge,
+	szHuge
+};
+
+enum LockoutType
+{
+	front,
+	wide,
 };
 
 class Projectile
@@ -101,6 +119,110 @@ private:
 	unsigned int texture;
 };
 
+class Module
+{
+public:
+	char name[32];
+	float health;
+	float energyConsumption;
+	bool bActive;
+	int entityID;
+	int size; // module size (small - medium - large - huge)
+			  //virtual	int reg(Ship * target);
+	virtual void update(double deltatime);
+	ModuleType type;
+	Module();
+	~Module();
+private:
+
+};
+
+class SysModule : public Module
+{
+public:
+	bool bAttrActive;
+	void update(double deltatime) override;
+	bool addAttribute(tAttribute attribute);
+	bool cutAttribute(int ID);
+	SysModule();
+	tAttribute nAttr[8];
+	int attrCount;
+};
+
+class WepModule : public Module
+{
+public:
+	float wepCooldown;
+	float wepCurrentCd;
+	float delayDuration;
+	float SeekTargetAngle;
+	bool bCooldown;
+	void init(float Cooldown, LockoutType type, Projectile exProjectile);
+	void update(double deltatime) override;
+	bool shoot(Projectile * newProjectile, vec2 rotation);
+	//	int reg(Ship * target);
+	WepModule();
+	~WepModule();
+private:
+
+	LockoutType lType;
+	Projectile mProjectile;
+};
+
+class cShipSystem
+{
+public:
+
+	void addModule(Module * newModule);
+	void update(double deltatime);
+	bool activateWeapon(int wepID, vec2 rotate, Projectile * newProjectile);
+	float totalCapacity;
+	float totalConsumption;
+	float freeEnergy;
+	std::vector<Module *> mArray;
+	std::vector<ModuleSize> sArray;
+	std::vector<int> wepArray;
+};
+
+class Ship
+{
+public:
+	/* Physical parameters */
+	vec2 pos;
+	float speed;
+	float size;
+	/* Game parameters */
+	cShipSystem ShipSystem;
+	char name[32]; // Unit name;
+	int Entityid;
+	int side; // 0 = Player; 1 = Enemy;
+
+	float hull;
+	float hullMax;
+	float hullRegen;
+	float shield;
+	float shieldMax;
+	float shieldRegen;
+
+	float evasion;
+	float speedMax;
+	float acceleration;
+
+	bool bshield;
+
+	/* Methods */
+	void draw();
+	void setTexture(unsigned int tex);
+	void weaponUse(int WeaponID, vec2 pos);
+	void setStats(const char* shipName, float nhull, float nshield, float nspeed, float nsize, unsigned int ntex);
+	void takeDmg(float dmg, int owner);
+	void updStats(double deltatime);
+	Ship();
+	~Ship();
+private:
+	unsigned int texture;
+};
+
 class Battle
 {
 public:
@@ -108,6 +230,7 @@ public:
 	void update(double deltatime);
 	void addShip(Ship target);
 	void addProjectile(Projectile target);
+	void command(Ship * target);
 	Ship* getControl(int ID);
 	Battle();
 	~Battle();

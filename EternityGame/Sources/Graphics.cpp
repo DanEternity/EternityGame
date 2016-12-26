@@ -62,6 +62,21 @@ void DrawSprite(unsigned int tex, float size, float x, float y)
 	glEnd();
 }
 
+void DrawSprite2v(unsigned int tex, float sizeW, float sizeH, float x, float y)
+{
+	float sizex = sizeW / 2;
+	float sizey = sizeH / 2;
+	glBindTexture(GL_TEXTURE_2D, tex);
+
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(0.0f, 1.0f); 		glVertex2f(x - sizex, y - sizey);
+	glTexCoord2f(1.0f, 1.0f);		glVertex2f(x + sizex, y - sizey);
+	glTexCoord2f(1.0f, 0.0f); 		glVertex2f(x + sizex, y + sizey);
+	glTexCoord2f(0.0f, 0.0f); 		glVertex2f(x - sizex, y + sizey);
+
+	glEnd();
+}
 /**************************
 * TGA Class
 *

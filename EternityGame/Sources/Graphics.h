@@ -5,7 +5,7 @@ void StartDraw2D(int sizeX, int sizeY);
 void EndDraw2D();
 unsigned int LoadTex(const char* FilePath);
 void DrawSprite(unsigned int tex, float size, float x, float y);
-
+void DrawSprite2v(unsigned int tex, float sizeW, float sizeH, float x, float y);
 class Tga
 {
 private:

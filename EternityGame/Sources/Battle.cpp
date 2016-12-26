@@ -12,7 +12,7 @@ void Ship::setTexture(unsigned int tex)
 	texture = tex;
 }
 
-void Ship::weaponUse(int WeaponID)
+void Ship::weaponUse(int WeaponID, vec2 pos)
 {
 }
 
@@ -48,6 +48,35 @@ void Ship::takeDmg(float dmg, int owner)
 	*/
 }
 
+void Ship::updStats(double deltatime)
+{
+	for (int i(0); i < ShipSystem.mArray.size(); i++)
+		if (ShipSystem.mArray[i]->bActive && ShipSystem.mArray[i]->type == sys)
+		{
+			SysModule * p = (SysModule * )ShipSystem.mArray[i];
+			for (int j(0); j < p->attrCount; j++)
+				switch (p->nAttr[j].attr)
+				{
+				case shieldmod:
+					shieldMax += p->nAttr[j].valueFloat1; // valueFloat1 = Max shield
+					shieldRegen += p->nAttr[j].valueFloat2; // valueFloat2 = Shield regeneration
+					break;
+				case hullmod:
+					hullMax += p->nAttr[j].valueFloat1; // valueFloat1 = Max hull
+					hullRegen += p->nAttr[j].valueFloat2; // valueFloat2 = Shield regeneration
+					break;
+				case engmod:
+					speedMax += p->nAttr[j].valueFloat1; // valueFloat1 = Max speed
+					acceleration += p->nAttr[j].valueFloat2 * 0.01f; // valueFloat2 = Engine power -> affect multiple stats
+					evasion += p->nAttr[j].valueFloat2 * 0.05f;
+					break;
+				case energymod:
+					ShipSystem.totalCapacity += p->nAttr[j].valueFloat1; // valueFloat1 = Output energy
+					break;
+				}
+		}
+}
+
 Ship::Ship()
 {
 }
@@ -78,6 +107,13 @@ Projectile::~Projectile()
 
 void Battle::update(double deltatime)
 {
+	/* Module events */
+	for (int i(0); i < units.size(); i++)
+	{
+		units[i]->ShipSystem.update(deltatime);
+	}
+
+
 	/* Projectiles events */
 	for (int i(0); i < projectiles.size(); i++)
 	{
@@ -87,6 +123,7 @@ void Battle::update(double deltatime)
 		colEvent.projectileID = projectiles[i]->entityID;
 		colEvent.side = projectiles[i]->side;
 		colEvent.entityID = projectiles[i]->entityID;
+		colEvent.pointer = projectiles[i];
 		tEvent ev;
 		ev.eventType = CollisionEvent;
 		memcpy(&ev.data, &colEvent, sizeof(tCollisionCheck));
@@ -94,33 +131,6 @@ void Battle::update(double deltatime)
 	}
 
 	listSize = list.size();
-
-	/*
-	int i = 0;
-	while(i < projectiles.size())
-	{
-		projectiles[i].move(deltatime);
-
-		bool hit = false;
-		int j = 0;
-		while(j < units.size())
-		{
-			if (projectiles[i].ownerID != units[j].Entityid && sqtDist(projectiles[i].pos, units[j].pos) < (units[j].size/2)*(units[j].size/2))
-			{
-				hit = true;
-				units[j].takeDmg(projectiles[i].dmg, projectiles[i].ownerID);
-				break;
-			}
-			j++;
-		}
-		if (hit || projectiles[i].vec.x > 2000 || projectiles[i].vec.y > 2000 || projectiles[i].vec.x < -200 || projectiles[i].vec.y < -200)
-		{
-			projectiles.erase(projectiles.begin() + i);
-			i--;
-		}
-		i++;
-	}
-	*/
 
 	while(list.size() > 0)
 	{
@@ -148,6 +158,16 @@ void Battle::addProjectile(Projectile target)
 	target.entityID = projectilesTop++;
 	memcpy(tmp, &target, sizeof(Projectile));
 	projectiles.push_back(tmp);
+}
+
+void Battle::command(Ship * target)
+{
+	Projectile nProjectile;
+	if (target->ShipSystem.activateWeapon(0, { 0, -1 }, &nProjectile))
+	{
+		nProjectile.pos = target->pos;
+		addProjectile(nProjectile);
+	}
 }
 
 Ship * Battle::getControl(int ID)
@@ -187,6 +207,7 @@ void Battle::handleEvent(tEvent ev)
 				nEv.wParam = units[i]->Entityid;
 				nEv.vecParam = { 0, 0 };
 				nEv.entityID = hEvent.entityID;
+				nEv.pointer = hEvent.pointer;
 				tEvent buf;
 				buf.eventType = ProjectileOption;
 				memcpy(&buf.data, &nEv, sizeof(nEv));
@@ -202,6 +223,7 @@ void Battle::handleEvent(tEvent ev)
 			nEv.wParam = -1;
 			nEv.vecParam = { 0, 0 };
 			nEv.entityID = hEvent.entityID;
+			nEv.pointer = hEvent.pointer;
 			tEvent buf;
 			buf.eventType = ProjectileOption;
 			memcpy(&buf.data, &nEv, sizeof(nEv));
@@ -231,6 +253,147 @@ void Battle::handleEvent(tEvent ev)
 		break;
 	}
 }
+
+
+void Module::update(double deltatime)
+{
+}
+
+Module::Module()
+{
+}
+
+Module::~Module()
+{
+}
+
+void SysModule::update(double deltatime)
+{
+}
+
+bool SysModule::addAttribute(tAttribute attribute)
+{
+	if (attrCount == 8)
+		return false;
+	else
+		nAttr[attrCount++] = attribute;
+	return true;
+}
+
+bool SysModule::cutAttribute(int ID)
+{
+	if (attrCount == 0 || ID >= attrCount)
+		return false;
+	else
+	{
+		for (int i(ID); i < attrCount-1; i++)
+			nAttr[ID] = nAttr[ID + 1];
+		attrCount--;
+	}
+	return true;
+}
+
+SysModule::SysModule()
+{
+	attrCount = 0;
+}
+
+void WepModule::init(float Cooldown, LockoutType type, Projectile exProjectile)
+{
+	wepCooldown = Cooldown;
+	lType = type;
+	mProjectile = exProjectile;
+	wepCurrentCd = 0;
+}
+
+void WepModule::update(double deltatime)
+{
+	if (bCooldown)
+	{
+		wepCurrentCd -= deltatime;
+		if (wepCurrentCd < 0)
+		{
+			wepCurrentCd = 0;
+			bCooldown = false;
+		}
+	}
+}
+
+bool WepModule::shoot(Projectile * newProjectile, vec2 rotation)
+{
+	if (!bCooldown)
+	{
+		wepCurrentCd = wepCooldown;
+		bCooldown = true;
+		mProjectile.vec = rotation;
+		memcpy(newProjectile, &mProjectile, sizeof(mProjectile));
+		return true;
+	}
+	else
+		return false;
+}
+
+WepModule::WepModule()
+{
+}
+
+WepModule::~WepModule()
+{
+}
+
+void cShipSystem::addModule(Module * newModule)
+{
+	//Module * tmp = new Module();
+//	memcpy(tmp, newModule, sizeof(Module));
+	//mArray.push_back(tmp);
+	
+	
+	if (newModule->type == weapon)
+	{
+		WepModule * tmp = new WepModule();
+		memcpy(tmp, newModule, sizeof(WepModule));
+		mArray.push_back(tmp);
+		wepArray.push_back(mArray.size() - 1);
+	}
+	if (newModule->type == sys)
+	{
+		SysModule * tmp = new SysModule();
+		memcpy(tmp, newModule, sizeof(SysModule));
+		mArray.push_back(tmp);
+	}
+}
+
+void cShipSystem::update(double deltatime)
+{
+	for (int i(0); i < mArray.size(); i++)
+	{
+		mArray[i]->update(deltatime);
+	}
+}
+
+bool cShipSystem::activateWeapon(int wepID, vec2 rotate, Projectile * newProjectile)
+{
+	if (wepID < wepArray.size() && wepArray[wepID] < mArray.size())
+	{
+		int moduleID = wepArray[wepID];
+		if (mArray[moduleID]->type == weapon)
+		{
+			WepModule * wep = (WepModule *)mArray[moduleID];
+			if (wep->shoot(newProjectile, rotate))
+			{
+				//newProjectile->pos = { 100, 100 };
+				return true;
+			}
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+	else
+		return false;
+}
+
 
 float sqtDist(vec2 a, vec2 b)
 {

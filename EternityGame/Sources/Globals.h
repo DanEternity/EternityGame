@@ -21,6 +21,8 @@ extern BOOL keyState[0xffff];
 
 extern int wndHeight;
 extern int wndWidth;
+extern int gameFrameH;
+extern int gameFrameW;
 
 /**************************
 * Game / Core
@@ -29,6 +31,16 @@ extern int wndWidth;
 
 extern double deltaTime;
 extern double oldDeltatime;
+
+
+extern void * pFont;
+
+/**************************
+* Game / Textures
+*
+**************************/
+
+extern unsigned int texModHover;
 
 /**************************
 * Other

@@ -125,11 +125,13 @@
     <ClCompile Include="Sources\Battle.cpp" />
     <ClCompile Include="Sources\Globals.cpp" />
     <ClCompile Include="Sources\Graphics.cpp" />
+    <ClCompile Include="Sources\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\Battle.h" />
     <ClInclude Include="Sources\Globals.h" />
     <ClInclude Include="Sources\Graphics.h" />
+    <ClInclude Include="Sources\UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,7 +8,8 @@
 #include <Graphics.h>
 #include <Globals.h>
 #include <Battle.h>
-
+#include <Modules.h>
+#include <UI.h>
 
 
 /**************************
@@ -69,9 +70,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint BG = LoadTex("Resource/bg.tga");
 	GLuint bul = LoadTex("Resource/shoot01.tga");
 	GLuint book = LoadTex("Resource/enemy01.tga");
+	GLuint UI_001 = LoadTex("Resource/UI_001.tga");
+	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
 	Font.loadOffset("Resource/FontOffset.dat", 256);
-
+	pFont = &Font;
 	Battle gMain = Battle::Battle();
 	/* init main ship */
 	Ship Eternity = Ship::Ship();
@@ -79,7 +82,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	Eternity.pos = { 400, 400 };
 	Eternity.Entityid = 1;
 	Eternity.side = 0;
-	gMain.addShip(Eternity);
+
+	WepModule testWep = WepModule();
+	SysModule testSysMod = SysModule();
 	/* weapon adjust */
 	Projectile Shoot;
 	Shoot.setTexture(bul);
@@ -88,9 +93,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	Shoot.vec = { 0, -1 };
 	Shoot.ownerID = 1;
 	Shoot.side = 0;
+
+
+	gMain.addShip(Eternity);
+
 	/* ship contlor */
-	Ship * PlaerShip = gMain.getControl(1);
-	Shoot.ownerID = PlaerShip->Entityid;
+	
 	/* enemy ship */
 	Ship enemytest = Ship::Ship();
 	enemytest.setStats("Enemy01", 100, 100, 5, 128, book);
@@ -99,6 +107,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	enemytest.side = 1;
 	gMain.addShip(enemytest);
 
+	Ship * PlaerShip = gMain.getControl(1);
+	Shoot.ownerID = PlaerShip->Entityid;
+	testWep.init(0.4, front, Shoot);
+	testWep.type = weapon;
+	strcpy_s(testWep.name, "Weapon Module");
+	PlaerShip->ShipSystem.addModule(&testWep);
+	testSysMod.type = sys;
+	strcpy_s(testSysMod.name, "system module");
+	PlaerShip->ShipSystem.addModule(&testSysMod);
 	Init();
 	/* program main loop */
 	while (!bQuit)
@@ -132,14 +149,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				x--;
 			if (keyState[VK_RIGHT])
 				x++;
+			if (keyState[VK_DOWN])
+				y++;
 			if (keyState[VK_UP])
-			{
-				Shoot.pos = PlaerShip->pos;
-				gMain.addProjectile(Shoot);
-			}
+				y--;
+
 			if (keyState[VK_SPACE])
 			{
-				x++;
+				//Shoot.pos = PlaerShip->pos;
+				//gMain.addProjectile(Shoot);
+				gMain.command(PlaerShip);
 			}
 			PlaerShip->pos.x = x;
 			PlaerShip->pos.y = y;
@@ -151,9 +170,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			glBegin(GL_QUADS);
 
 			glTexCoord2f(0.0f, 1.0f); 		glVertex2f(0, 0);
-			glTexCoord2f(1.0f, 1.0f);		glVertex2f(800, 0);
-			glTexCoord2f(1.0f, 0.0f); 		glVertex2f(800, 600);
-			glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, 600);
+			glTexCoord2f(1.0f, 1.0f);		glVertex2f(gameFrameW, 0);
+			glTexCoord2f(1.0f, 0.0f); 		glVertex2f(gameFrameW, gameFrameH);
+			glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, gameFrameH);
 
 			glEnd();
 
@@ -162,6 +181,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			char st[10];
 			_itoa_s(listSize, st, 10);
 			Font.outText(100, 100, st);
+
+			DrawShipUI(PlaerShip, UI_001);
 
 			EndDraw2D();
 

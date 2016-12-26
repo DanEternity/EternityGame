@@ -19,8 +19,10 @@ BOOL keyState[0xffff];
 *
 **************************/
 
-int wndHeight = 600;
-int wndWidth = 800;
+int wndHeight = 768;
+int wndWidth = 1280;
+int gameFrameH = 768;
+int gameFrameW = 1080;
 
 /**************************
 * Game / Core
@@ -29,6 +31,15 @@ int wndWidth = 800;
 
 double deltaTime;
 double oldDeltatime;
+
+void * pFont = nullptr;
+
+/**************************
+* Game / Textures
+*
+**************************/
+
+unsigned int texModHover = 0;
 
 /**************************
 * Other
