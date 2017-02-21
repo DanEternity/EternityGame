@@ -24,6 +24,7 @@ Module * LoadModuleFromFile(const char * filename)
 	if (freopen_s(&f, filename, "r", stderr))
 	{
 		ModuleType tp;
+		SysModule * tr;
 		Module * target = nullptr;
 		fscanf_s(f, "%i \n", &tp);
 		switch (tp)
@@ -34,7 +35,7 @@ Module * LoadModuleFromFile(const char * filename)
 			break;
 		case sys:
 			target = new SysModule();
-			SysModule * tr = (SysModule *)target;
+			tr = (SysModule *)target;
 			fscanf_s(f, "%s /n", &tr->name);
 			fscanf_s(f, "%f \n", &tr->healthMax);
 			fscanf_s(f, "%f \n", &tr->energyConsumption);
