@@ -48,6 +48,24 @@ void Ship::takeDmg(float dmg, int owner)
 	*/
 }
 
+void Ship::clearStats()
+{
+//	energy
+	ShipSystem.freeEnergy = 0;
+	ShipSystem.totalCapacity = 0;
+	ShipSystem.totalConsumption = 0;
+//	hull
+	hullMax = baseHull;
+	hullRegen = 0;
+//	shield
+	shieldMax = 0;
+	shieldRegen = 0;
+//	movement
+	evasion = 0;
+	speedMax = 0;
+	acceleration = 0;
+}
+
 void Ship::updStats(double deltatime)
 {
 	for (int i(0); i < ShipSystem.mArray.size(); i++)

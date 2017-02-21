@@ -124,6 +124,7 @@ class Module
 public:
 	char name[32];
 	float health;
+	float healthMax;
 	float energyConsumption;
 	bool bActive;
 	int entityID;
@@ -208,6 +209,12 @@ public:
 	float speedMax;
 	float acceleration;
 
+	/* Base stats */
+
+	float baseHull;
+
+	/* Flags */
+
 	bool bshield;
 
 	/* Methods */
@@ -216,6 +223,7 @@ public:
 	void weaponUse(int WeaponID, vec2 pos);
 	void setStats(const char* shipName, float nhull, float nshield, float nspeed, float nsize, unsigned int ntex);
 	void takeDmg(float dmg, int owner);
+	void clearStats();
 	void updStats(double deltatime);
 	Ship();
 	~Ship();
