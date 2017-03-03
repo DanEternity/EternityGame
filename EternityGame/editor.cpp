@@ -1,6 +1,6 @@
 #include "editor.h"
 #include <iostream>
-
+/*
 void SaveModuleToFile(const char * filename, Module * target, int format)
 {
 	FILE * f;
@@ -36,7 +36,7 @@ Module * LoadModuleFromFile(const char * filename)
 		case sys:
 			target = new SysModule();
 			tr = (SysModule *)target;
-			fscanf_s(f, "%s /n", &tr->name);
+			fscanf_s(f, "%s \n", &tr->name);
 			fscanf_s(f, "%f \n", &tr->healthMax);
 			fscanf_s(f, "%f \n", &tr->energyConsumption);
 			fscanf_s(f, "%i \n", &tr->size);
@@ -62,3 +62,4 @@ Module * LoadModuleFromFile(const char * filename)
 	else 
 		return nullptr;
 }
+*/

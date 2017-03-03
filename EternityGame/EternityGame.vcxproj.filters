@@ -13,6 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Ship">
+      <UniqueIdentifier>{1b71b731-5a3c-431c-ac72-44f5a2572948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{5199c426-4db0-4727-982a-a4738ff09ffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projectile">
+      <UniqueIdentifier>{b162ba44-6a62-4ea5-a8f4-c61e8f3d0ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{86f132cf-3117-442b-9982-d8276ded14e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShipModules">
+      <UniqueIdentifier>{ab9e369a-2a60-4ba2-b475-1f44085f4e15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -33,22 +48,46 @@
     <ClCompile Include="editor.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Ship.cpp">
+      <Filter>Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Player.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\module.cpp">
+      <Filter>ShipModules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sources\Battle.h">
-      <Filter>Заголовочные файлы</Filter>
+    <ClInclude Include="editor.h">
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Sources\Globals.h">
-      <Filter>Заголовочные файлы</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Sources\Graphics.h">
-      <Filter>Заголовочные файлы</Filter>
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Types.h">
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Sources\UI.h">
-      <Filter>Заголовочные файлы</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="editor.h">
-      <Filter>Заголовочные файлы</Filter>
+    <ClInclude Include="Sources\Ship.h">
+      <Filter>Ship</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Battle.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Projectile.h">
+      <Filter>Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\module.h">
+      <Filter>ShipModules</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

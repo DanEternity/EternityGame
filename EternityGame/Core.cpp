@@ -5,6 +5,7 @@
 
 #include <windows.h>
 #include <gl/gl.h>
+
 #include <Graphics.h>
 #include <Globals.h>
 #include <Battle.h>
@@ -74,47 +75,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
 	Font.loadOffset("Resource/FontOffset.dat", 256);
 	pFont = &Font;
-	Battle gMain = Battle::Battle();
-	/* init main ship */
-	Ship Eternity = Ship::Ship();
-	Eternity.setStats("Eternity", 1000, 1000, 5, 128, MainShip);
-	Eternity.pos = { 400, 400 };
-	Eternity.Entityid = 1;
-	Eternity.side = 0;
 
-	WepModule testWep = WepModule();
-	SysModule testSysMod = SysModule();
-	/* weapon adjust */
-	Projectile Shoot;
-	Shoot.setTexture(bul);
-	Shoot.speed = 240;
-	Shoot.dmg = 10;
-	Shoot.vec = { 0, -1 };
-	Shoot.ownerID = 1;
-	Shoot.side = 0;
-
-
-	gMain.addShip(Eternity);
-
-	/* ship contlor */
-	
-	/* enemy ship */
-	Ship enemytest = Ship::Ship();
-	enemytest.setStats("Enemy01", 100, 100, 5, 128, book);
-	enemytest.pos = { 400, 200 };
-	enemytest.Entityid = 2;
-	enemytest.side = 1;
-	gMain.addShip(enemytest);
-
-	Ship * PlaerShip = gMain.getControl(1);
-	Shoot.ownerID = PlaerShip->Entityid;
-	testWep.init(0.4, front, Shoot);
-	testWep.type = weapon;
-	strcpy_s(testWep.name, "Weapon Module");
-	PlaerShip->ShipSystem.addModule(&testWep);
-	testSysMod.type = sys;
-	strcpy_s(testSysMod.name, "system module");
-	PlaerShip->ShipSystem.addModule(&testSysMod);
 	Init();
 	/* program main loop */
 	while (!bQuit)
@@ -155,12 +116,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			if (keyState[VK_SPACE])
 			{
-				//Shoot.pos = PlaerShip->pos;
-				//gMain.addProjectile(Shoot);
-				gMain.command(PlaerShip);
+
+			
 			}
-			PlaerShip->pos.x = x;
-			PlaerShip->pos.y = y;
+
 
 			StartDraw2D(wndWidth, wndHeight);	
 
@@ -175,13 +134,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			glEnd();
 
-			gMain.update(deltaTime);
 
-			char st[10];
-			_itoa_s(listSize, st, 10);
-			Font.outText(100, 100, st);
 
-			DrawShipUI(PlaerShip, UI_001);
+	//		char st[10];
+	//		_itoa_s(listSize, st, 10);
+	//		Font.outText(100, 100, st);
+
 
 			EndDraw2D();
 

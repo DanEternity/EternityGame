@@ -2,7 +2,7 @@
 #include<Graphics.h>
 #include<Battle.h>
 #include<Globals.h>
-
+/*
 void DrawShipUI(Ship * target, unsigned int tex)
 {
 	int offset = 0;
@@ -45,3 +45,4 @@ void DrawWepModuleUI(WepModule * target, int * offs)
 	Font->outText((wndWidth - gameFrameW) / 2 + gameFrameW + 10, *offs + 50, c);
 	*offs += 80;
 }
+*/
