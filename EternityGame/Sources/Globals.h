@@ -50,3 +50,5 @@ extern unsigned int texModHover;
 extern float theta;
 extern int x, y;
 extern int listSize;
+
+const float vdiv = 0.707106781f; // sqrt(2)/2

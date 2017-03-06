@@ -72,6 +72,11 @@ void tShip::setPosition(vec2 newPosition)
 void tShip::setMovement(vec2 newMove)
 {
 	float mod = sqrt(newMove.x * newMove.x + newMove.y * newMove.y);
+	if (mod == 0)
+	{
+		movement = { 0, 0 };
+		return;
+	}
 	movement.x = newMove.x / mod;
 	movement.y = newMove.y / mod;
 }

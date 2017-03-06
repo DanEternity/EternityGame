@@ -110,32 +110,31 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			deltaTime = GetDeltaTime();
 
-			/* OpenGL animation code goes here */
-			
-
-			
+			vec2 movement = { 0, 0 };
 
 			if (keyState[VK_LEFT])
 			{
-				player->setShipMovement({ -1,0 });
+				movement.x -= 1;
 			}
 			if (keyState[VK_RIGHT])
 			{
-				player->setShipMovement({ 1,0 });
+				movement.x += 1;
 			}
 			if (keyState[VK_DOWN])
 			{
-				player->setShipMovement({ 0,1 });
+				movement.y += 1;
 			}
 			if (keyState[VK_UP])
-				player->setShipMovement({ 0,-1 });
+				movement.y -= 1;
+
+			player->setShipMovement(movement);
 
 			if (keyState[VK_SPACE])
 			{
 
-			
 			}
 
+			/* OpenGL animation code goes here */	
 
 			StartDraw2D(wndWidth, wndHeight);	
 
@@ -156,7 +155,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			char st[10];
 			tickCount++;
 			_itoa_s(tickCount, st, 10);
-			Font.outText(100, 100, st);
+			Font.outText(40, 40, st);
 
 
 			EndDraw2D();
