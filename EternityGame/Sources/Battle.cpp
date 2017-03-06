@@ -110,3 +110,24 @@ int tBattle::setShipMovement(vec2 pos, int id)
 	pick->setMovement(pos);
 	return 0;
 }
+
+int tBattle::setShootStats(ShootBaseStats buff, int id)
+{
+	tProjectile * pick = (tProjectile*)shoots[id];
+	pick->setStats(buff);
+	return 0;
+}
+
+int tBattle::setShootPosition(vec2 pos, int id)
+{
+	tProjectile * pick = (tProjectile*)shoots[id];
+	pick->setPosition(pos);
+	return 0;
+}
+
+int tBattle::setShootMovement(vec2 pos, int id)
+{
+	tProjectile * pick = (tProjectile*)shoots[id];
+	pick->setMove(pos);
+	return 0;
+}

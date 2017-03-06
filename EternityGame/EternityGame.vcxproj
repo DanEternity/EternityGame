@@ -135,6 +135,7 @@
     <ClCompile Include="Sources\Graphics.cpp" />
     <ClCompile Include="Sources\module.cpp" />
     <ClCompile Include="Sources\Player.cpp" />
+    <ClCompile Include="Sources\Projectile.cpp" />
     <ClCompile Include="Sources\Ship.cpp" />
     <ClCompile Include="Sources\UI.cpp" />
   </ItemGroup>

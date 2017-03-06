@@ -95,3 +95,12 @@ struct ShipBaseStats
 	int sizeX, sizeY;
 };
 
+struct ShootBaseStats
+{
+	vec2 pos;
+	vec2 movement;
+	int ownerId;
+	float speed;
+	float damage;
+	unsigned int texture;
+};
