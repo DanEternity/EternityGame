@@ -71,13 +71,19 @@ int tBattle::eraseShoot(int id)
 
 void tBattle::update(double deltatime)
 {
-	for (auto it(units.begin()); it != units.end(); it++)
+	for (auto it(units.begin()); it != units.end(); it++) // Ship Events
 	{
-		tShip* pick = (tShip*)it->second;
+		tShip* pick = (tShip*)(it->second);
 		vec2 dSpeed;
+		pick->updStats();
 		dSpeed.x = pick->speed * pick->movement.x * deltatime + pick->pos.x;
 		dSpeed.y = pick->speed * pick->movement.y * deltatime + pick->pos.y;
 		pick->setPosition(dSpeed);
+	}
+
+	for (auto it(shoots.begin()); it != shoots.end(); it++) // Projectile Events
+	{
+
 	}
 }
 
@@ -88,5 +94,19 @@ int tBattle::setShipStats(ShipBaseStats buff, int id)
 	pick->setStats(buff.baseHull, buff.baseHullReg, buff.baseShield, buff.baseShieldReg, buff.baseSpeed, buff.baseEvade);
 	pick->setSize(buff.sizeX, buff.sizeY);
 	pick->setTexture(buff.texture);
+	return 0;
+}
+
+int tBattle::setShipPosition(vec2 pos, int id)
+{
+	tShip * pick = (tShip*)units[id];
+	pick->setPosition(pos);
+	return 0;
+}
+
+int tBattle::setShipMovement(vec2 pos, int id)
+{
+	tShip * pick = (tShip*)units[id];
+	pick->setMovement(pos);
 	return 0;
 }

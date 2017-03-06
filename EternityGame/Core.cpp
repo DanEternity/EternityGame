@@ -9,6 +9,7 @@
 #include <Graphics.h>
 #include <Globals.h>
 #include <Battle.h>
+#include <Player.h>
 #include <UI.h>
 
 
@@ -21,6 +22,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void EnableOpenGL(HWND hWnd, HDC *hDC, HGLRC *hRC);
 void DisableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);
 void Init();
+void InitDebug();
 double GetDeltaTime();
 
 /**************************
@@ -77,6 +79,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	pFont = &Font;
 
 	Init();
+
+	/*Init test version*/
+	tBattle * battle = new tBattle();
+	PlayerHandle * player = new PlayerHandle();
+	player->setBattle(battle);
+	player->shipIndex = battle->addShip();
+	battle->setShipStats({ "Test Ship",100,1,0,0,50,0,100, MainShip, 64, 64 }, player->shipIndex);
+	battle->setShipPosition({ 400, 300 }, player->shipIndex);
 	/* program main loop */
 	while (!bQuit)
 	{
@@ -106,13 +116,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			
 
 			if (keyState[VK_LEFT])
-				x--;
+			{
+				player->setShipMovement({ -1,0 });
+			}
 			if (keyState[VK_RIGHT])
-				x++;
+			{
+				player->setShipMovement({ 1,0 });
+			}
 			if (keyState[VK_DOWN])
-				y++;
+			{
+				player->setShipMovement({ 0,1 });
+			}
 			if (keyState[VK_UP])
-				y--;
+				player->setShipMovement({ 0,-1 });
 
 			if (keyState[VK_SPACE])
 			{
@@ -134,11 +150,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			glEnd();
 
+			battle->update(deltaTime);
+			battle->DrawAll();
 
-
-	//		char st[10];
-	//		_itoa_s(listSize, st, 10);
-	//		Font.outText(100, 100, st);
+			char st[10];
+			tickCount++;
+			_itoa_s(tickCount, st, 10);
+			Font.outText(100, 100, st);
 
 
 			EndDraw2D();

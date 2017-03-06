@@ -56,6 +56,6 @@ public:
 	void setMovement(vec2 newMove);
 	int addModule(ModuleType type);
 	int addAttrToModule(int id, Attribute Attr);
-	void getStats();
+	void updStats();
 	void Draw();
 };

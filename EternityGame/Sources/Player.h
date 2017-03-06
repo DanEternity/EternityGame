@@ -7,9 +7,12 @@
 
 class PlayerHandle
 {
+public:
 	tBattle * battle;
 	int shipIndex;
 	int setShipMovement(vec2 NewMove);
 	int setBattle(tBattle * newBattle);
 
+	PlayerHandle();
+	~PlayerHandle();
 };

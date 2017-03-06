@@ -22,5 +22,8 @@ public:
 	int eraseShoot(int id);
 	void update(double deltatime);
 	int setShipStats(ShipBaseStats buff, int id);
+	int setShipPosition(vec2 pos, int id);
+	int setShipMovement(vec2 pos, int id);
+
 };
 

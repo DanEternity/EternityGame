@@ -106,7 +106,7 @@ int tShip::addAttrToModule(int id, Attribute Attr)
 	return pick->attrN;
 }
 
-void tShip::getStats()
+void tShip::updStats()
 {
 	hullReg = baseHullReg;
 	shieldReg = baseShieldReg;

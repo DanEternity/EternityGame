@@ -31,6 +31,7 @@ int gameFrameW = 1080;
 
 double deltaTime;
 double oldDeltatime;
+__int64 tickCount;
 
 void * pFont = nullptr;
 

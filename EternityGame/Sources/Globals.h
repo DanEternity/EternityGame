@@ -31,7 +31,7 @@ extern int gameFrameW;
 
 extern double deltaTime;
 extern double oldDeltatime;
-
+extern __int64 tickCount;
 
 extern void * pFont;
 
