@@ -10,7 +10,7 @@ public:
 	bool active;
 	int id;
 	float energyUsage;
-
+	ModuleType type;
 	Module();
 	~Module();
 };
