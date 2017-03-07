@@ -3,6 +3,7 @@
 #include<Types.h>
 #include<map>
 #include<Ship.h>
+#include<Projectile.h>
 #include<queue>
 
 class tBattle
@@ -24,6 +25,9 @@ public:
 	int setShipStats(ShipBaseStats buff, int id);
 	int setShipPosition(vec2 pos, int id);
 	int setShipMovement(vec2 pos, int id);
+	int setShootStats(ShootBaseStats buff, int id);
+	int setShootPosition(vec2 pos, int id);
+	int setShootMovement(vec2 pos, int id);
 
 };
 

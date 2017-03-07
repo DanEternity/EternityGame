@@ -57,6 +57,9 @@
     <ClCompile Include="Sources\module.cpp">
       <Filter>ShipModules</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Projectile.cpp">
+      <Filter>Projectile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor.h">
