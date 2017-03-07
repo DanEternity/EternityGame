@@ -95,3 +95,10 @@ struct ShipBaseStats
 	int sizeX, sizeY;
 };
 
+struct cell
+{
+	vec2 pos;
+	vec2 size;
+	int id;
+	int additional;	
+};

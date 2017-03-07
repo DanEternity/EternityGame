@@ -50,3 +50,4 @@ unsigned int texModHover = 0;
 float theta = 0.0f;
 int x = 400, y = 400;
 int listSize = 0;
+int mouseX = 0, mouseY = 0;

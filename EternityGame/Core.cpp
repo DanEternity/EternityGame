@@ -196,6 +196,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 	case WM_DESTROY:
 		return 0;
 
+	case WM_MOUSEMOVE:
+	{
+		POINT pt;
+		TCHAR textBuffer[32];
+
+		GetCursorPos(&pt);
+		ScreenToClient(hWnd, &pt);
+		mouseX = pt.x;
+		mouseY = pt.y;
+	}
+	break;
+
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
