@@ -93,6 +93,7 @@ struct ShipBaseStats
 	float baseBattery;
 	unsigned int texture;
 	int sizeX, sizeY;
+	float phisicalSize;
 };
 
 struct ShootBaseStats
@@ -110,4 +111,18 @@ struct cell
 	vec2 size;
 	int id;
 	int additional;	
+};
+
+enum DamageType
+{
+	kinetic,
+	thermal,
+	plasma
+};
+
+struct DamageInfo
+{
+	float Count;
+	DamageType Type;
+	int OwnerId;
 };

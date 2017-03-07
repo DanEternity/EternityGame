@@ -6,6 +6,7 @@ tShip::tShip()
 	strcpy_s(name, "ShipName");
 	movement = { 0, 0 };
 	pos = { 0, 0 };
+	PhysicalSize = 1;
 
 	baseHull = 1;
 	baseHullReg = 0;
@@ -33,7 +34,7 @@ tShip::~tShip()
 {
 }
 
-void tShip::setStats(float bHull, float bHullReg, float bShield, float bShieldReg, float bSpeed, float bEvade)
+void tShip::setStats(float bHull, float bHullReg, float bShield, float bShieldReg, float bSpeed, float bEvade, float bPhysicalSize)
 {
 	baseHull = bHull;
 	baseHullReg = bHullReg;
@@ -41,6 +42,7 @@ void tShip::setStats(float bHull, float bHullReg, float bShield, float bShieldRe
 	baseShieldReg = bShieldReg;
 	baseSpeed = bSpeed;
 	baseEvade = bEvade;
+	PhysicalSize = bPhysicalSize;
 }
 
 void tShip::setName(const char * newName)
@@ -109,6 +111,12 @@ int tShip::addAttrToModule(int id, Attribute Attr)
 	SysModule * pick = (SysModule*)tModule[id];
 	pick->addAtribute(Attr.type, Attr.count);
 	return pick->attrN;
+}
+
+int tShip::tekeDamage(DamageInfo info)
+{
+	hull -= info.Count;
+	return 0;
 }
 
 void tShip::updStats()

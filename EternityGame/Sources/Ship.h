@@ -44,10 +44,11 @@ public:
 	// Graphics
 	unsigned int shipTexture;
 	int sizeX, sizeY; // horizontal; vectical
+	float PhysicalSize;
 
 	tShip();
 	~tShip();
-	void setStats(float bHull, float bHullReg, float bShield, float bShieldReg, float bSpeed, float bEvade);
+	void setStats(float bHull, float bHullReg, float bShield, float bShieldReg, float bSpeed, float bEvade, float bPhysicalSize);
 	void setName(const char * newName);
 	void setTexture(unsigned int tex);
 	void setSize(int sizeShipX, int sizeShipY);
@@ -56,6 +57,7 @@ public:
 	void setMovement(vec2 newMove);
 	int addModule(ModuleType type);
 	int addAttrToModule(int id, Attribute Attr);
+	int tekeDamage(DamageInfo info);
 	void updStats();
 	void Draw();
 };

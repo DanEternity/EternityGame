@@ -83,15 +83,31 @@ void tBattle::update(double deltatime)
 
 	for (auto it(shoots.begin()); it != shoots.end(); it++) // Projectile Events
 	{
-
+		tProjectile* pick = (tProjectile*)(it->second);
+		vec2 dSpeed;
+		dSpeed.x = pick->speed * pick->movement.x * deltatime + pick->pos.x;
+		dSpeed.y = pick->speed * pick->movement.y * deltatime + pick->pos.y;
+		pick->setPosition(dSpeed);
+		for (auto trg(units.begin()); trg != units.end(); trg++) // Collision
+		{
+			tShip * target = (tShip*)(trg->second);
+			if (DistSqr(target->pos, pick->pos) < (target->PhysicalSize)*(target->PhysicalSize))
+			{
+				// Make damage
+				target->tekeDamage({pick->damage, kinetic, pick->ownerId});
+				break;
+			}
+		}
 	}
+
+
 }
 
 int tBattle::setShipStats(ShipBaseStats buff, int id)
 {
 	tShip* pick = (tShip*)units[id];
 	pick->setName(buff.name);
-	pick->setStats(buff.baseHull, buff.baseHullReg, buff.baseShield, buff.baseShieldReg, buff.baseSpeed, buff.baseEvade);
+	pick->setStats(buff.baseHull, buff.baseHullReg, buff.baseShield, buff.baseShieldReg, buff.baseSpeed, buff.baseEvade, buff.phisicalSize);
 	pick->setSize(buff.sizeX, buff.sizeY);
 	pick->setTexture(buff.texture);
 	return 0;
@@ -130,4 +146,9 @@ int tBattle::setShootMovement(vec2 pos, int id)
 	tProjectile * pick = (tProjectile*)shoots[id];
 	pick->setMove(pos);
 	return 0;
+}
+
+inline float DistSqr(vec2 p1, vec2 p2)
+{
+	return (p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y);
 }
