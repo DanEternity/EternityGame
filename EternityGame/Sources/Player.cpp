@@ -6,6 +6,18 @@ int PlayerHandle::setShipMovement(vec2 NewMove)
 	return 0;
 }
 
+int PlayerHandle::addModule(ModuleType type)
+{
+	battle->addShipModule(type, shipIndex);
+	return 0;
+}
+
+int PlayerHandle::addAttrToModule(int moduleId, Attribute attr)
+{
+	battle->addAttrToModule(attr, shipIndex, moduleId);
+	return 0;
+}
+
 int PlayerHandle::setBattle(tBattle * newBattle)
 {
 	battle = newBattle;

@@ -11,6 +11,9 @@ public:
 	tBattle * battle;
 	int shipIndex;
 	int setShipMovement(vec2 NewMove);
+	int addModule(ModuleType type);
+	int addAttrToModule(int moduleId, Attribute attr);
+
 	int setBattle(tBattle * newBattle);
 
 	PlayerHandle();

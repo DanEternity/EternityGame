@@ -28,7 +28,8 @@ public:
 	int setShootStats(ShootBaseStats buff, int id);
 	int setShootPosition(vec2 pos, int id);
 	int setShootMovement(vec2 pos, int id);
-
+	int addShipModule(ModuleType type, int id);
+	int addAttrToModule(Attribute attr, int shipId, int moduleId);
 };
 
 inline float DistSqr(vec2 p1, vec2 p2);

@@ -148,6 +148,20 @@ int tBattle::setShootMovement(vec2 pos, int id)
 	return 0;
 }
 
+int tBattle::addShipModule(ModuleType type, int id)
+{
+	tShip * pick = (tShip*)units[id];
+	pick->addModule(type);
+	return 0;
+}
+
+int tBattle::addAttrToModule(Attribute attr, int shipId, int moduleId)
+{
+	tShip * pick = (tShip*)units[shipId];
+	pick->addAttrToModule(moduleId, attr);
+	return 0;
+}
+
 inline float DistSqr(vec2 p1, vec2 p2)
 {
 	return (p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y);

@@ -85,6 +85,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	PlayerHandle * player = new PlayerHandle();
 	player->setBattle(battle);
 	player->shipIndex = battle->addShip();
+	int id = player->addModule(sys);
+	player->addAttrToModule(id, { tHull, 100 });
 	battle->setShipStats({ "Test Ship",100,1,0,0,50,0,100, MainShip, 64, 64 }, player->shipIndex);
 	battle->setShipPosition({ 400, 300 }, player->shipIndex);
 	/* program main loop */
