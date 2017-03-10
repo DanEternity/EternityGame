@@ -232,3 +232,10 @@ void tFont::outText(int x, int y, const char * text) // Output string at screen
 		mx += offset[(uint8_t)text[i] - fchar];
 	}
 }
+
+void tFont::outInt(int x, int y, const int text)
+{
+	char st[32];
+	_itoa_s(text, st, 10);
+	outText(x, y, st);
+}

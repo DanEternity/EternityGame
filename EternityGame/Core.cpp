@@ -154,10 +154,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			battle->update(deltaTime);
 			battle->DrawAll();
 
-			char st[10];
 			tickCount++;
-			_itoa_s(tickCount, st, 10);
-			Font.outText(40, 40, st);
+
+			Font.outInt(40, 40, tickCount);
 
 
 			EndDraw2D();
