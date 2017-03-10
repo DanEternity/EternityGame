@@ -30,6 +30,9 @@ public:
 	int setShootMovement(vec2 pos, int id);
 	int addShipModule(ModuleType type, int id);
 	int addAttrToModule(Attribute attr, int shipId, int moduleId);
+	WeaponModuleInfo getWeaponInfo(int shipId, int weaponId);
+	int setWeaponCooldown(float newCooldown, int shipId, int weaponId); // newCooldown = -1 to use standart weapon cd;
+	int useWeapon(int shipId, int weaponId);
 };
 
 inline float DistSqr(vec2 p1, vec2 p2);

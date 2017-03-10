@@ -39,11 +39,17 @@ SysModule::~SysModule()
 {
 }
 
+void WepModule::setWeaponModuleInfo(WeaponModuleInfo newInfo)
+{
+	Info = newInfo;
+}
+
 WepModule::WepModule()
 {
-	range = 0;
-	damage = 0;
-	cooldown = 0;
+	baseCooldown = 0;
+	currentCooldown = 0;
+	bCooldown = false;
+	memset(&Info, 0, sizeof(Info));
 	type = wep;
 }
 

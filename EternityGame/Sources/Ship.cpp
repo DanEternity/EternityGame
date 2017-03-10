@@ -6,6 +6,7 @@ tShip::tShip()
 	strcpy_s(name, "ShipName");
 	movement = { 0, 0 };
 	pos = { 0, 0 };
+	direction = { 0, -1 };
 	PhysicalSize = 1;
 
 	baseHull = 1;
@@ -99,6 +100,7 @@ int tShip::addModule(ModuleType type)
 	case wep:
 		tModule.push_back(new WepModule());
 		id = tModule.size() - 1;
+		tWep.push_back(id);
 		break;
 	default:
 		break;
@@ -117,6 +119,35 @@ int tShip::tekeDamage(DamageInfo info)
 {
 	hull -= info.Count;
 	return 0;
+}
+
+WeaponModuleInfo tShip::getWeaponInfo(int id)
+{
+	WepModule * pick = (WepModule*)tModule[tWep[id]];
+	return pick->Info;
+}
+
+int tShip::setWeaponCooldown(int id, float newCd)
+{
+	WepModule * pick = (WepModule *)tModule[tWep[id]];
+	if (newCd == -1)
+		pick->currentCooldown = pick->baseCooldown;
+	else
+		pick->currentCooldown = newCd;
+	return 0;
+}
+
+int tShip::useWeapon(WeaponModuleInfo * info, int id)
+{
+	WepModule * pick = (WepModule*)tModule[tWep[id]];
+	if (!pick->bCooldown)
+	{
+		memcpy(info, &pick->Info, sizeof(info));
+		pick->bCooldown = true;
+		pick->currentCooldown = pick->baseCooldown;
+		return 0;
+	}
+	else return -1; // FAILED!
 }
 
 void tShip::updStats()
