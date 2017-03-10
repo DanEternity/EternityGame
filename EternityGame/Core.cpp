@@ -202,7 +202,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 	{
 		POINT pt;
 		TCHAR textBuffer[32];
-
 		GetCursorPos(&pt);
 		ScreenToClient(hWnd, &pt);
 		mouseX = pt.x;

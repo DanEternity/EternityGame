@@ -60,6 +60,9 @@
     <ClCompile Include="Sources\Projectile.cpp">
       <Filter>Projectile</Filter>
     </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="Sources\module.h">
       <Filter>ShipModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
