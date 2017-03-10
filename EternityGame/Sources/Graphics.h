@@ -27,6 +27,7 @@ public:
 	tFont(const char* FilePath, int charsize, int count, int firstchar);
 	void loadOffset(const char* FilePath, int count);
 	void outText(int x, int y, const char * text);
+	void outInt(int x, int y, const int text);
 private:
 	unsigned int tex;
 	std::vector<int> offset;
