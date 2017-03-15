@@ -150,6 +150,16 @@ int tShip::useWeapon(WeaponModuleInfo * info, int id)
 	else return -1; // FAILED!
 }
 
+int tShip::setWeaponStats(WeaponModuleInfo info, float cooldown, int id)
+{
+	WepModule * pick = (WepModule *)tModule[id];
+	pick->setWeaponModuleInfo(info);
+	pick->currentCooldown = 0;
+	pick->baseCooldown = cooldown;
+	pick->bCooldown = false;
+	return 0;
+}
+
 void tShip::updStats()
 {
 	hullReg = baseHullReg;

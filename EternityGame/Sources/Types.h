@@ -142,3 +142,13 @@ struct WeaponModuleInfo // Projectile Style and other
 	WeaponStyle style;
 	unsigned int texture;
 };
+
+struct WeaponInfo
+{
+	float cooldown;
+	float speed;
+	float damage;
+	float range;
+	WeaponStyle style;
+	unsigned int texture;
+};

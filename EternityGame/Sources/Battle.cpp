@@ -205,6 +205,13 @@ int tBattle::useWeapon(int shipId, int weaponId)
 	else return -1; // FAILED!
 }
 
+int tBattle::setWeaponStats(WeaponModuleInfo info, float cooldown, int shipId, int moduleId)
+{
+	tShip * pick = (tShip *)units[shipId];
+	pick->setWeaponStats(info, cooldown, moduleId);
+	return 0;
+}
+
 inline float DistSqr(vec2 p1, vec2 p2)
 {
 	return (p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y);

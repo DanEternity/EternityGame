@@ -62,6 +62,7 @@ public:
 	WeaponModuleInfo getWeaponInfo(int id);
 	int setWeaponCooldown(int id, float newCd);
 	int useWeapon(WeaponModuleInfo * info, int id);
+	int setWeaponStats(WeaponModuleInfo info, float cooldown, int id);
 	void updStats();
 	void Draw();
 };

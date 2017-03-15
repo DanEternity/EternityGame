@@ -33,6 +33,7 @@ public:
 	WeaponModuleInfo getWeaponInfo(int shipId, int weaponId);
 	int setWeaponCooldown(float newCooldown, int shipId, int weaponId); // newCooldown = -1 to use standart weapon cd;
 	int useWeapon(int shipId, int weaponId);
+	int setWeaponStats(WeaponModuleInfo info, float cooldown, int shipId, int moduleId);
 };
 
 inline float DistSqr(vec2 p1, vec2 p2);

@@ -15,6 +15,7 @@ public:
 	int addAttrToModule(int moduleId, Attribute attr);
 	int useWeapon(int weaponId);
 	int setBattle(tBattle * newBattle);
+	int setWeaponStats(int moduleId, WeaponInfo info);
 
 	PlayerHandle();
 	~PlayerHandle();

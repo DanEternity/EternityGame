@@ -33,6 +33,18 @@ int PlayerHandle::setBattle(tBattle * newBattle)
 	return 0;
 }
 
+int PlayerHandle::setWeaponStats(int moduleId, WeaponInfo info)
+{
+	WeaponModuleInfo buff;
+	buff.damage = info.damage;
+	buff.range = info.range;
+	buff.speed = info.speed;
+	buff.style = info.style;
+	buff.texture = info.texture;
+	battle->setWeaponStats(buff, info.cooldown, shipIndex, moduleId);
+	return 0;
+}
+
 PlayerHandle::PlayerHandle()
 {
 	shipIndex = -1;
