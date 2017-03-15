@@ -161,7 +161,7 @@ int tShip::setWeaponStats(WeaponModuleInfo info, float cooldown, int id)
 	return 0;
 }
 
-void tShip::updStats()
+void tShip::updStats(double deltatime)
 {
 	hullReg = baseHullReg;
 	shieldReg = baseShieldReg;
@@ -172,49 +172,62 @@ void tShip::updStats()
 	powerBatteryMax = baseBattery;
 	for (int i = 0; i < tModule.size(); i++)
 	{
-		SysModule*pick = (SysModule*)tModule[i];
-		for (int k = 0; k < pick->attrN; k++)
+		if (tModule[i]->type == wep)
 		{
-			switch (pick->mAttr[k].type)
+			WepModule*pick = (WepModule*)tModule[i];
+			if (pick->bCooldown)
 			{
-			case tHull:
-			{
-				hullMax =+ pick->mAttr[k].count;
-				break;
+				pick->currentCooldown -= deltatime;
+				if (pick->currentCooldown < 0)
+					pick->bCooldown = false;
 			}
-			case tShield:
+		}
+		if (tModule[i]->type == sys)
+		{
+			SysModule*pick = (SysModule*)tModule[i];
+			for (int k = 0; k < pick->attrN; k++)
 			{
-				shieldMax =+ pick->mAttr[k].count;
-				break;
-			}
-			case tReghp:
-			{
-				hullReg =+ pick->mAttr[k].count;
-				break;
-			}
-			case tRegshield:
-			{
-				shieldReg =+ pick->mAttr[k].count;;
-				break;
-			}
-			case tSpeed:
-			{
-				speed =+ pick->mAttr[k].count;;
-				break;
-			}
-			case tPowerBattery:
-			{
-				powerBatteryMax =+ pick->mAttr[k].count;;
-				break;
-			}
-			case tEvade:
-			{
-				evade =+ pick->mAttr[k].count;;
-				break;
-			}
+				switch (pick->mAttr[k].type)
+				{
+				case tHull:
+				{
+					hullMax = +pick->mAttr[k].count;
+					break;
+				}
+				case tShield:
+				{
+					shieldMax = +pick->mAttr[k].count;
+					break;
+				}
+				case tReghp:
+				{
+					hullReg = +pick->mAttr[k].count;
+					break;
+				}
+				case tRegshield:
+				{
+					shieldReg = +pick->mAttr[k].count;;
+					break;
+				}
+				case tSpeed:
+				{
+					speed = +pick->mAttr[k].count;;
+					break;
+				}
+				case tPowerBattery:
+				{
+					powerBatteryMax = +pick->mAttr[k].count;;
+					break;
+				}
+				case tEvade:
+				{
+					evade = +pick->mAttr[k].count;;
+					break;
+				}
 
-			default:
-				break;
+				default:
+					break;
+				}
 			}
 		}
 

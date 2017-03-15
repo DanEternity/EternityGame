@@ -27,7 +27,7 @@ void tBattle::DrawAll()
 int tBattle::addShip()
 {
 	int pick;
-	if (units.empty())
+	if (unitsQ.empty())
 	{
 		unitsMax++;
 		units[unitsMax] = new tShip();
@@ -52,7 +52,7 @@ int tBattle::eraseShip(int id)
 int tBattle::addShoot()
 {
 	int pick;
-	if (shoots.empty())
+	if (shootsQ.empty())
 	{
 		shootsMax++;
 		shoots[shootsMax] = new tProjectile();
@@ -80,7 +80,7 @@ void tBattle::update(double deltatime)
 	{
 		tShip* pick = (tShip*)(it->second);
 		vec2 dSpeed;
-		pick->updStats();
+		pick->updStats(deltatime);
 		dSpeed.x = pick->speed * pick->movement.x * deltatime + pick->pos.x;
 		dSpeed.y = pick->speed * pick->movement.y * deltatime + pick->pos.y;
 		pick->setPosition(dSpeed);
