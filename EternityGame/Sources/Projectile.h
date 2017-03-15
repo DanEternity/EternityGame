@@ -18,6 +18,7 @@ public:
 	void setPosition(vec2 newPosition);
 	void setStats(ShootBaseStats stats);
 	void setTexture(unsigned int tex);
+	void draw();
 
 	tProjectile();
 	~tProjectile();
