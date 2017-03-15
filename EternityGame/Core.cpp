@@ -11,6 +11,7 @@
 #include <Battle.h>
 #include <Player.h>
 #include <UI.h>
+#include <Menu.h>
 
 
 /**************************
@@ -155,10 +156,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			battle->DrawAll();
 
 			tickCount++;
-
+ 
 			Font.outInt(40, 40, tickCount);
-
-
+			
 			EndDraw2D();
 
 
