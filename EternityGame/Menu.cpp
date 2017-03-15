@@ -2,17 +2,21 @@
 #include <Graphics.h>
 
 
+
 void Botton::drawBotton(int id)
 {
-	Font->outText(100, 100, "Eternity");
-	Font->outText(pos.x, pos.y, "start");
+	bool f;
+	Font->outText(pos.x, pos.y, "Eternity");
 	id++;
-	Font->outText(pos.x+size.x, pos.y + size.y, "setting");
-	id++; 
-	Font->outText(pos.x + size.x + size.x,pos.y + size.y + size.y, "qq");
-	id++; 
-	Font->outText(pos.x + size.x + size.x + size.x, pos.y + size.y + size.y + size.y, "exit");
+	Font->outText(pos.x, pos.y + size.y, "start");
 	id++;
+	Font->outText(pos.x, pos.y + size.y + size.y, "setting");
+	id++; 
+	Font->outText(pos.x,pos.y + size.y + size.y + size.y, "qq");
+	id++; 
+	Font->outText(pos.x, pos.y + size.y + size.y + size.y + size.y, "exit");
+	id++;
+	Font->outInt(100, 100, isInsideCell(mouseX, mouseY));
 }
 
 void Botton::setFont(tFont * pick)
@@ -22,10 +26,10 @@ void Botton::setFont(tFont * pick)
 
 Botton::Botton()
 {
-	pos.x = 0;
-	pos.y = 0;
-	size.x = 0;
-	size.y = 0;
+	pos.x = 500;
+	pos.y = 400;
+	size.x = 50;
+	size.y = 50;
 	id = 0;
 }
 
