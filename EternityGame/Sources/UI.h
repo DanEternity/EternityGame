@@ -18,29 +18,17 @@ public:
 	UIElement();
 	~UIElement();
 };
-class UIGrid: public UIElement
+class UIGrid : public UIElement
 {
 public:
 	vec2 sizeCell, diff;
 	int countX, countY;
-	int isInsideCell(int mouseX, int mouseY)
-	{
-		for (int i = 0; i < countX; i++)
-		{
-			for (int j = 0; j < countY; j++)
-			{
-				if ((mouseX >= x + (j + 1)*diff.x + j*size.x) || (mouseX <= x + (j + 1)*diff.x + (j + 1)*size.x) && (mouseY >= y + (j + 1)*diff.y + j*size.y) || (mouseY >= y + (j + 1)*diff.y + (j + 1)*size.y))
-				{
-					return i * 5 + j;
-				}
-			}
-		}
-		return -1;
-	}
+	int isInsideCell(int mouseX, int mouseY);
 };
 
 class UISmartGrid : public UIElement
 {
+public:
 	std::vector<cell> cells;
 	void remove(int id);
 	void add(cell newcell);

@@ -6,7 +6,7 @@
 #include <UI.h>
 
 
-class Botton : public UIGrid
+class Botton : public UISmartGrid
 {
 public:
 	vec2 size,pos;

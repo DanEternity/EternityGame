@@ -154,9 +154,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			glEnd();
 
-			//battle->update(deltaTime);
-			//battle->DrawAll();
-			bott->drawBotton(0);
+			battle->update(deltaTime);
+			battle->DrawAll();
+			//bott->drawBotton(0);
 			tickCount++;
  
 			Font.outInt(40, 40, tickCount);
