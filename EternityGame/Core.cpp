@@ -90,6 +90,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	player->addAttrToModule(id, { tHull, 100 });
 	battle->setShipStats({ "Test Ship",100,1,0,0,50,0,100, MainShip, 64, 64 }, player->shipIndex);
 	battle->setShipPosition({ 400, 300 }, player->shipIndex);
+	Botton * bott = new Botton();
+	bott->setFont(&Font);
 	/* program main loop */
 	while (!bQuit)
 	{
@@ -152,9 +154,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			glEnd();
 
-			battle->update(deltaTime);
-			battle->DrawAll();
-
+			//battle->update(deltaTime);
+			//battle->DrawAll();
+			bott->drawBotton(0);
 			tickCount++;
  
 			Font.outInt(40, 40, tickCount);

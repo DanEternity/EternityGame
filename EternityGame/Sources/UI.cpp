@@ -59,29 +59,14 @@ bool UIElement::isInside(int mouseX, int mouseY)
 
 UIElement::UIElement()
 {
-	pos.x = 0;
-	pos.y = 0;
-	size.x = 0;
-	size.y = 0;
+	pos.x = 500;
+	pos.y = 400;
+	size.x = 50;
+	size.y = 50;
 }
 
 UIElement::~UIElement()
 {
-}
-
-int UIGrid::isInsideCell(int mouseX, int mouseY)
-{
-	for (int i = 0; i < countX ; i++)
-	{
-		for (int j = 0; j < countY; j++)
-		{
-			if ((mouseX >= x + (j + 1)*diff.x + j*size.x) || (mouseX <= x + (j + 1)*diff.x + (j + 1)*size.x) && (mouseY >= y + (j + 1)*diff.y + j*size.y) || (mouseY >= y + (j + 1)*diff.y + (j + 1)*size.y))
-			{
-				return i * 5 + j;
-			}
-		}
-	}
-	return -1;
 }
 
 void UISmartGrid::remove(int id)
