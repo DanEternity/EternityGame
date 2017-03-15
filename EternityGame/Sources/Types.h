@@ -126,3 +126,19 @@ struct DamageInfo
 	DamageType Type;
 	int OwnerId;
 };
+
+enum WeaponStyle
+{
+	bullet,
+	laser,
+	rocket
+};
+
+struct WeaponModuleInfo // Projectile Style and other
+{
+	float speed;
+	float damage;
+	float range;
+	WeaponStyle style;
+	unsigned int texture;
+};

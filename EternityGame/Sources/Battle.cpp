@@ -91,10 +91,11 @@ void tBattle::update(double deltatime)
 		for (auto trg(units.begin()); trg != units.end(); trg++) // Collision
 		{
 			tShip * target = (tShip*)(trg->second);
-			if (DistSqr(target->pos, pick->pos) < (target->PhysicalSize)*(target->PhysicalSize))
+			if ((DistSqr(target->pos, pick->pos) < (target->PhysicalSize)*(target->PhysicalSize))&& (target->id != pick->ownerId))
 			{
 				// Make damage
 				target->tekeDamage({pick->damage, kinetic, pick->ownerId});
+				eraseShoot(it->first);
 				break;
 			}
 		}
@@ -160,6 +161,48 @@ int tBattle::addAttrToModule(Attribute attr, int shipId, int moduleId)
 	tShip * pick = (tShip*)units[shipId];
 	pick->addAttrToModule(moduleId, attr);
 	return 0;
+}
+
+WeaponModuleInfo tBattle::getWeaponInfo(int shipId, int weaponId)
+{
+	tShip * pick = (tShip *)units[shipId];
+	return pick->getWeaponInfo(weaponId);
+}
+
+int tBattle::setWeaponCooldown(float newCooldown, int shipId, int weaponId)
+{
+	tShip * pick = (tShip*)units[shipId];
+	pick->setWeaponCooldown(weaponId, newCooldown);
+	return 0;
+}
+
+int tBattle::useWeapon(int shipId, int weaponId)
+{
+	tShip * pick = (tShip*)units[shipId];
+	WeaponModuleInfo info;
+	if (pick->useWeapon(&info, weaponId) == 0)
+	{
+		int id;
+		switch (info.style)
+		{
+		case bullet:
+			id = addShoot();
+			setShootStats({
+				pick->pos,
+				pick->direction,
+				shipId,
+				info.speed,
+				info.damage,
+				info.texture },
+				id);
+			return 0;
+		default:
+			break;
+		}
+
+
+	}
+	else return -1; // FAILED!
 }
 
 inline float DistSqr(vec2 p1, vec2 p2)

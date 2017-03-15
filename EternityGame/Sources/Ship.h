@@ -14,6 +14,7 @@ public:
 	// Position
 	vec2 pos;
 	vec2 movement;
+	vec2 direction;
 
 	// Base stats
 	float baseHull;
@@ -58,6 +59,9 @@ public:
 	int addModule(ModuleType type);
 	int addAttrToModule(int id, Attribute Attr);
 	int tekeDamage(DamageInfo info);
+	WeaponModuleInfo getWeaponInfo(int id);
+	int setWeaponCooldown(int id, float newCd);
+	int useWeapon(WeaponModuleInfo * info, int id);
 	void updStats();
 	void Draw();
 };

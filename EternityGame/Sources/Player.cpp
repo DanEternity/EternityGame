@@ -18,6 +18,15 @@ int PlayerHandle::addAttrToModule(int moduleId, Attribute attr)
 	return 0;
 }
 
+int PlayerHandle::useWeapon(int weaponId)
+{
+	if (battle->useWeapon(shipIndex, weaponId) == 0)
+	{
+		return 0;
+	}
+	return -1;
+}
+
 int PlayerHandle::setBattle(tBattle * newBattle)
 {
 	battle = newBattle;

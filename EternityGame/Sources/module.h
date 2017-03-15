@@ -28,9 +28,12 @@ public:
 class WepModule : public Module
 {
 public:
-	float range;
-	float damage;
-	float cooldown;
+	float baseCooldown;
+	float currentCooldown;
+	bool bCooldown;
+	WeaponModuleInfo Info;
+	void setWeaponModuleInfo(WeaponModuleInfo newInfo);
+
 	WepModule();
 	~WepModule();
 };
