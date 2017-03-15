@@ -1,4 +1,5 @@
 #include "Projectile.h"
+#include<Graphics.h>
 
 void tProjectile::setMove(vec2 newMove)
 {
@@ -31,6 +32,11 @@ void tProjectile::setStats(ShootBaseStats stats)
 void tProjectile::setTexture(unsigned int tex)
 {
 	texture = tex;
+}
+
+void tProjectile::draw()
+{
+	DrawSprite(texture, 32, pos.x, pos.y);
 }
 
 tProjectile::tProjectile()

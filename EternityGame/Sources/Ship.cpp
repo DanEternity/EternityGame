@@ -142,7 +142,8 @@ int tShip::useWeapon(WeaponModuleInfo * info, int id)
 	WepModule * pick = (WepModule*)tModule[tWep[id]];
 	if (!pick->bCooldown)
 	{
-		memcpy(info, &pick->Info, sizeof(info));
+		WeaponModuleInfo * buff = &pick->Info;
+		memcpy(info, buff, sizeof(WeaponModuleInfo));
 		pick->bCooldown = true;
 		pick->currentCooldown = pick->baseCooldown;
 		return 0;
@@ -153,7 +154,7 @@ int tShip::useWeapon(WeaponModuleInfo * info, int id)
 int tShip::setWeaponStats(WeaponModuleInfo info, float cooldown, int id)
 {
 	WepModule * pick = (WepModule *)tModule[id];
-	pick->setWeaponModuleInfo(info);
+	pick->Info = info;
 	pick->currentCooldown = 0;
 	pick->baseCooldown = cooldown;
 	pick->bCooldown = false;

@@ -17,6 +17,11 @@ void tBattle::DrawAll()
 		tShip* pick = (tShip*)it->second;
 		pick->Draw();
 	}
+	for (auto it(shoots.begin()); it != shoots.end(); it++)
+	{
+		tProjectile* pick = (tProjectile*)it->second;
+		pick->draw();
+	}
 }
 
 int tBattle::addShip()
@@ -50,14 +55,14 @@ int tBattle::addShoot()
 	if (shoots.empty())
 	{
 		shootsMax++;
-		//shoots[shootsMax] = new tProjectile();
+		shoots[shootsMax] = new tProjectile();
 		pick = shootsMax;
 	}
 	else
 	{
 		pick = shootsQ.front();
 		shootsQ.pop();
-		shoots[pick] = new tShip();
+		shoots[pick] = new tProjectile();
 	}
 	return pick;
 }
@@ -152,8 +157,7 @@ int tBattle::setShootMovement(vec2 pos, int id)
 int tBattle::addShipModule(ModuleType type, int id)
 {
 	tShip * pick = (tShip*)units[id];
-	pick->addModule(type);
-	return 0;
+	return pick->addModule(type); 
 }
 
 int tBattle::addAttrToModule(Attribute attr, int shipId, int moduleId)

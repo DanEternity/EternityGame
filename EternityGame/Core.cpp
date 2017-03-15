@@ -86,10 +86,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	PlayerHandle * player = new PlayerHandle();
 	player->setBattle(battle);
 	player->shipIndex = battle->addShip();
-	int id = player->addModule(sys);
-	player->addAttrToModule(id, { tHull, 100 });
+
 	battle->setShipStats({ "Test Ship",100,1,0,0,50,0,100, MainShip, 64, 64 }, player->shipIndex);
 	battle->setShipPosition({ 400, 300 }, player->shipIndex);
+
+	int id = player->addModule(sys);
+	player->addAttrToModule(id, { tHull, 100 });
+	id = player->addModule(wep);
+	player->setWeaponStats(id, { 2, 100, 10, 600, bullet, bul });
+
 	Botton * bott = new Botton();
 	bott->setFont(&Font);
 	/* program main loop */
@@ -136,7 +141,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			if (keyState[VK_SPACE])
 			{
-
+				player->useWeapon(0);
 			}
 
 			/* OpenGL animation code goes here */	

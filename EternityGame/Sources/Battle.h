@@ -8,12 +8,12 @@
 
 class tBattle
 {
-protected:
+public:
 
 	int unitsMax, shootsMax;
 	std::queue<int> unitsQ, shootsQ;
 	std::map<int, void*> units, shoots;
-public:
+
 	tBattle();
 	~tBattle();
 	void DrawAll();
