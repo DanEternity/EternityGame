@@ -85,6 +85,12 @@ void tBattle::update(double deltatime)
 		dSpeed.x = pick->speed * pick->movement.x * deltatime + pick->pos.x;
 		dSpeed.y = pick->speed * pick->movement.y * deltatime + pick->pos.y;
 		pick->setPosition(dSpeed);
+		if (pick->hull < 0)
+		{
+			eraseShip(it->first);
+			if (it._Myproxy == NULL)
+				break;
+		}
 	}
 
 	for (auto it(shoots.begin()); it != shoots.end(); it++) // Projectile Events
@@ -94,7 +100,9 @@ void tBattle::update(double deltatime)
 		dSpeed.x = pick->speed * pick->movement.x * deltatime + pick->pos.x;
 		dSpeed.y = pick->speed * pick->movement.y * deltatime + pick->pos.y;
 		pick->setPosition(dSpeed);
+		bool delShoot = false;
 		if (DistSqr(pick->pos, { (float)gameFrameW / 2, (float)gameFrameW / 2 }) < 8000000)
+		{
 			for (auto trg(units.begin()); trg != units.end(); trg++) // Collision
 			{
 				tShip * target = (tShip*)(trg->second);
@@ -102,12 +110,19 @@ void tBattle::update(double deltatime)
 				{
 					// Make damage
 					target->tekeDamage({ pick->damage, kinetic, pick->ownerId });
-					eraseShoot(it->first);
+					delShoot = true;
 					break;
 				}
 			}
+		}
 		else
+			delShoot = true;
+		if (delShoot)
+		{
 			eraseShoot(it->first);
+			if (it._Myproxy == NULL)
+				break;
+		}
 	}
 
 
@@ -203,6 +218,7 @@ int tBattle::useWeapon(int shipId, int weaponId)
 				info.damage,
 				info.texture },
 				id);
+
 			return 0;
 		default:
 			break;

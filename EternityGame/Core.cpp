@@ -88,13 +88,17 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	player->setBattle(battle);
 	player->shipIndex = battle->addShip();
 
-	battle->setShipStats({ "Test Ship",100,1,0,0,50,0,100, MainShip, 64, 64 }, player->shipIndex);
+	battle->setShipStats({ "Test Ship",100,1,0,0,50,0,100, MainShip, 64, 64}, player->shipIndex);
 	battle->setShipPosition({ 400, 300 }, player->shipIndex);
 
 	int id = player->addModule(sys);
 	player->addAttrToModule(id, { tHull, 100 });
 	id = player->addModule(wep);
-	player->setWeaponStats(id, { 2, 100, 10, 600, bullet, bul });
+	player->setWeaponStats(id, { 0.7f, 230, 40, 600, bullet, bul });
+
+	id = battle->addShip();
+	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 45}, id);
+	battle->setShipPosition({ 300, 100 }, id);
 
 	Botton * bott = new Botton();
 	bott->setFont(&Font);
@@ -161,9 +165,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			glEnd();
 
-			//battle->update(deltaTime);
-			//battle->DrawAll();
-			bott->drawBotton(0);
+			battle->update(deltaTime);
+			battle->DrawAll();
+			//bott->drawBotton(0);
 			tickCount++;
  
 			Font.outInt(40, 40, tickCount);
