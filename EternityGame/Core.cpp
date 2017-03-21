@@ -159,9 +159,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			glEnd();
 
-			battle->update(deltaTime);
-			battle->DrawAll();
-			//bott->drawBotton(0);
+			//battle->update(deltaTime);
+			//battle->DrawAll();
+			bott->drawBotton(0);
 			tickCount++;
  
 			Font.outInt(40, 40, tickCount);
@@ -203,7 +203,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 
 	case WM_DESTROY:
 		return 0;
-
+	case WM_RBUTTONDOWN:
+	{
+		POINT pt;
+		TCHAR textBuffer[32];
+		GetCursorPos(&pt);
+		ScreenToClient(hWnd, &pt);
+		xPos = pt.x;
+		yPos = pt.y;
+		lMouseBotton = true;
+	}
+	case WM_RBUTTONUP:
+		lMouseBotton = false;
+	case WM_LBUTTONDOWN:
+	{
+		POINT pt;
+		TCHAR textBuffer[32];
+		GetCursorPos(&pt);
+		ScreenToClient(hWnd, &pt);
+		xPos = pt.x;
+		yPos = pt.y;
+		lMouseBotton = true;
+	}
+	case WM_LBUTTONUP:
+		lMouseBotton = false;
 	case WM_MOUSEMOVE:
 	{
 		POINT pt;

@@ -51,3 +51,5 @@ float theta = 0.0f;
 int x = 400, y = 400;
 int listSize = 0;
 int mouseX = 0, mouseY = 0;
+int xPos = 0, yPos = 0;
+bool lMouseBotton = false;
