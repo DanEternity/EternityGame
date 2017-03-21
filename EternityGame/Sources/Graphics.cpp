@@ -77,6 +77,55 @@ void DrawSprite2v(unsigned int tex, float sizeW, float sizeH, float x, float y)
 
 	glEnd();
 }
+void DrawImage(unsigned int tex, int texSizeX, int texSizeY, int PartSizeX, int PartSizeY, int PosX, int PosY, int Sx, int Sy)
+{
+	/*
+		tex - texture id
+		texSize - file resolution (image resolution -> 512 512)
+		PartSize - fragment resoluton // показывает размер картинки в файле, если картинка меньше чем размер текстуры
+		Pos - left up point of image // показывает левый верхний угол выводимого изображени€
+		Sx, Sy - ћасштабирование по X и Y. ѕоказывает фактическую ширину изображени€	
+	*/
+
+	float SizeX = PartSizeX/texSizeX;
+	float SizeY = PartSizeY/ (PartSizeY-texSizeY);
+	glBindTexture(GL_TEXTURE_2D, tex);
+
+	glBegin(GL_QUADS);
+	/*
+	glTexCoord2f(0.0f, 1.0f); 		glVertex2f(PosX - sizex, PosY - sizey);
+	glTexCoord2f(1.0f, 1.0f);		glVertex2f(PosX + sizex, PosY - sizey);
+	glTexCoord2f(1.0f, 0.0f); 		glVertex2f(PosX + sizex, PosY + sizey);
+	glTexCoord2f(0.0f, 0.0f); 		glVertex2f(PosX - sizex, PosY + sizey);
+	*/
+	glTexCoord2f(0.0f, 1.0f); 		glVertex2f(PosX, PosY);
+	glTexCoord2f(SizeX, 1.0f);		glVertex2f(PosX + Sx, PosY);
+	glTexCoord2f(SizeX, SizeY); 	glVertex2f(PosX + Sx, PosY + Sy);
+	glTexCoord2f(0.0f, SizeY); 		glVertex2f(PosX, PosY + Sy);
+
+	glEnd();
+}
+
+void DrawSprite3v(unsigned int tex, int sizeW, int sizeH, float x, float y)
+{
+	glBindTexture(GL_TEXTURE_2D, tex);
+
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(0.0f, 1.0f); 		glVertex2f(x, y);
+	glTexCoord2f(1.0f, 1.0f);		glVertex2f(x + sizeW, y);
+	glTexCoord2f(1.0f, 0.0f); 		glVertex2f(x + sizeW, y + sizeH);
+	glTexCoord2f(0.0f, 0.0f); 		glVertex2f(x, y + sizeH);
+
+	glEnd();
+}
+
+void GetScale(int sizeW, int sizeH, int texSizeX, int texSizeY, float &scaleX, float &scaleY)
+{
+	scaleX = (float)texSizeX / (float)sizeW;
+	scaleY = (float)texSizeY / (float)sizeH;
+}
+
 /**************************
 * TGA Class
 *

@@ -39,6 +39,7 @@ void tShip::setStats(float bHull, float bHullReg, float bShield, float bShieldRe
 {
 	baseHull = bHull;
 	baseHullReg = bHullReg;
+	hull = bHull;
 	baseShield = bShield;
 	baseShieldReg = bShieldReg;
 	baseSpeed = bSpeed;
