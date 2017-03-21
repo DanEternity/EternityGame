@@ -13,6 +13,8 @@ public:
 	int id;
 	void drawBotton(int id);
 	tFont * Font;
+	unsigned int texbt_001;
+
 	void setFont(tFont * pick);
 	
 	Botton();
