@@ -1,4 +1,5 @@
 #include "Battle.h"
+#include "globals.h"
 
 tBattle::tBattle()
 {
@@ -93,17 +94,20 @@ void tBattle::update(double deltatime)
 		dSpeed.x = pick->speed * pick->movement.x * deltatime + pick->pos.x;
 		dSpeed.y = pick->speed * pick->movement.y * deltatime + pick->pos.y;
 		pick->setPosition(dSpeed);
-		for (auto trg(units.begin()); trg != units.end(); trg++) // Collision
-		{
-			tShip * target = (tShip*)(trg->second);
-			if ((DistSqr(target->pos, pick->pos) < (target->PhysicalSize)*(target->PhysicalSize))&& (target->id != pick->ownerId))
+		if (DistSqr(pick->pos, { (float)gameFrameW / 2, (float)gameFrameW / 2 }) < 8000000)
+			for (auto trg(units.begin()); trg != units.end(); trg++) // Collision
 			{
-				// Make damage
-				target->tekeDamage({pick->damage, kinetic, pick->ownerId});
-				eraseShoot(it->first);
-				break;
+				tShip * target = (tShip*)(trg->second);
+				if ((DistSqr(target->pos, pick->pos) < (target->PhysicalSize)*(target->PhysicalSize)) && (target->id != pick->ownerId))
+				{
+					// Make damage
+					target->tekeDamage({ pick->damage, kinetic, pick->ownerId });
+					eraseShoot(it->first);
+					break;
+				}
 			}
-		}
+		else
+			eraseShoot(it->first);
 	}
 
 
