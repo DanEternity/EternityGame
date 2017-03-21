@@ -51,5 +51,7 @@ extern float theta;
 extern int x, y;
 extern int listSize;
 extern int mouseX, mouseY;
+extern int xPos, yPos;
+extern bool lMouseBotton;
 
 const float vdiv = 0.707106781f; // sqrt(2)/2

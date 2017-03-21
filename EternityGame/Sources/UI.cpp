@@ -94,7 +94,7 @@ int UISmartGrid::isInsideCell2(int mouseX, int mouseY)
 		cells[i].pos.y;
 		cells[i].size.x;
 		cells[i].size.y;
-		if ( (mouseX >=cells[i].pos.x) && (mouseX <=cells[i].pos.x + cells[i].size.x) && (mouseY >=cells[i].pos.y) && (mouseY >=cells[i].pos.y + cells[i].size.y))
+		if ( ((mouseX >=cells[i].pos.x) && (mouseX <=cells[i].pos.x + cells[i].size.x)) && ((mouseY >=cells[i].pos.y) && (mouseY <=cells[i].pos.y + cells[i].size.y)) )
 		{
 			return cells[i].id;
 		}		
@@ -117,7 +117,7 @@ int UIGrid::isInsideCell(int mouseX, int mouseY)
 		{
 			for (int j = 0; j < countY; j++)
 			{
-				if ((mouseX >= x + (j + 1)*diff.x + j*size.x) && (mouseX <= x + (j + 1)*diff.x + (j + 1)*size.x) && (mouseY >= y + (j + 1)*diff.y + j*size.y) && (mouseY >= y + (j + 1)*diff.y + (j + 1)*size.y))
+				if ((mouseX >= x + (j + 1)*diff.x + j*size.x) && (mouseX <= x + (j + 1)*diff.x + (j + 1)*size.x) && (mouseY >= y + (j + 1)*diff.y + j*size.y) && (mouseY <= y + (j + 1)*diff.y + (j + 1)*size.y))
 				{
 					return i * 5 + j;
 				}
