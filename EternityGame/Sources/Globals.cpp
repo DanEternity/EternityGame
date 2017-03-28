@@ -19,9 +19,9 @@ BOOL keyState[0xffff];
 *
 **************************/
 
-int wndHeight = 768;
+int wndHeight = 720;
 int wndWidth = 1280;
-int gameFrameH = 768;
+int gameFrameH = 720;
 int gameFrameW = 1080;
 
 /**************************
