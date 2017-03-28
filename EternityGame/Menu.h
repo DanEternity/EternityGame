@@ -14,9 +14,7 @@ public:
 	void drawBotton(int id);
 	tFont * Font;
 	unsigned int texbt_001;
-
-	void setFont(tFont * pick);
-	
+	void setFont(tFont * pick);	
 	Botton();
 	~Botton();
 };

@@ -126,3 +126,28 @@ int UIGrid::isInsideCell(int mouseX, int mouseY)
 		return -1;
 	
 }
+
+void DrawModule::drawModule(int id)
+{
+	for (int i(0); i<7; i++)
+	DrawSprite2v(texbt_001, 200, 200, 1240, 150+100*i );
+	for (int i(0); i < 3; i++)
+	{		
+		DrawSprite2v(texbt_001, 300, 300, 200, 200+250*i);
+	}
+
+
+}
+
+void DrawModule::setFont(tFont * pick)
+{
+	Font = pick;
+}
+
+DrawModule::DrawModule()
+{
+}
+
+DrawModule::~DrawModule()
+{
+}

@@ -75,6 +75,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint book = LoadTex("Resource/enemy01.tga");
 	GLuint UI_001 = LoadTex("Resource/UI_001.tga");
 	GLuint bt_001 = LoadTex("Resource/bt_001.tga");
+	GLuint bt_002 = LoadTex("Resource/bt_002.tga");
 	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
 	Font.loadOffset("Resource/FontOffset.dat", 256);
@@ -103,6 +104,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	Botton * bott = new Botton();
 	bott->setFont(&Font);
 	bott->texbt_001 = bt_001;
+
+	DrawModule * drmod = new DrawModule();
+	drmod->setFont(&Font);
+	drmod->texbt_001 = bt_002;
+
 	/* program main loop */
 	while (!bQuit)
 	{

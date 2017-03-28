@@ -3,7 +3,7 @@
 
 void Botton::drawBotton(int id)
 {
-	DrawSprite2v(texbt_001, 200, 100, pos.x + 70, pos.y + 25 + size.y*id);
+	DrawSprite2v(texbt_001, 200, 93, pos.x + 70, pos.y + 25 + size.y*id);
 	Font->outText(pos.x, pos.y, "Eternity");
 	cell buff;
 	buff.pos = { pos.x-35, pos.y-50 };
@@ -11,28 +11,28 @@ void Botton::drawBotton(int id)
 	buff.size = { size.x, size.y + size.y*id};
 	add(buff);
 	id++;
-	DrawSprite2v(texbt_001, 200, 100, pos.x + 70, pos.y + 25 + size.y*id);
+	DrawSprite2v(texbt_001, 200, 93, pos.x + 70, pos.y + 25 + size.y*id);
 	Font->outText(pos.x, pos.y + size.y, "start");
 	buff.pos = { pos.x - 35, pos.y - 50 + size.y*id };
 	buff.id = 1;
 	buff.size = { size.x, size.y};
 	add(buff);
 	id++;
-	DrawSprite2v(texbt_001, 200, 100, pos.x + 70, pos.y + 25 + size.y*id);
+	DrawSprite2v(texbt_001, 200, 93, pos.x + 70, pos.y + 25 + size.y*id);
 	Font->outText(pos.x, pos.y + size.y + size.y, "setting");
 	buff.pos = { pos.x - 35, pos.y - 50 + size.y*id };
 	buff.id = 2;
 	buff.size = { size.x, size.y };
 	add(buff);
 	id++; 
-	DrawSprite2v(texbt_001, 200, 100, pos.x + 70, pos.y + 25 + size.y*id);
+	DrawSprite2v(texbt_001, 200, 93, pos.x + 70, pos.y + 25 + size.y*id);
 	Font->outText(pos.x,pos.y + size.y + size.y + size.y, "others");
 	buff.pos = { pos.x - 35, pos.y - 50 + size.y*id };
 	buff.id = 3;
 	buff.size = { size.x, size.y};
 	add(buff);
 	id++; 
-	DrawSprite2v(texbt_001, 200, 100, pos.x + 70, pos.y + 25 + size.y*id);
+	DrawSprite2v(texbt_001, 200, 93, pos.x + 70, pos.y + 25 + size.y*id);
 	Font->outText(pos.x, pos.y + size.y + size.y + size.y + size.y, "exit");
 	buff.pos = { pos.x - 35, pos.y - 50 + size.y*id };
 	buff.id = 4;
