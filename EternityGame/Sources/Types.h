@@ -152,3 +152,11 @@ struct WeaponInfo
 	WeaponStyle style;
 	unsigned int texture;
 };
+
+enum ItemType
+{
+	nullItem,
+	resource,
+	module,
+	blank
+};

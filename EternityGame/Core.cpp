@@ -76,6 +76,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint UI_001 = LoadTex("Resource/UI_001.tga");
 	GLuint bt_001 = LoadTex("Resource/bt_001.tga");
 	GLuint bt_002 = LoadTex("Resource/bt_002.tga");
+	GLuint textureCell_004 = LoadTex("Resource/cell_004.tga");
+	GLuint textureCell_004s = LoadTex("Resource/cell_004s.tga");
+
 	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
 	Font.loadOffset("Resource/FontOffset.dat", 256);
@@ -100,6 +103,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	id = battle->addShip();
 	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 45}, id);
 	battle->setShipPosition({ 300, 100 }, id);
+
+	PrimaryStore * store = new PrimaryStore(40);
+	UIStore * UIComponentStore = new UIStore();
+	UIComponentStore->texCell_004 = textureCell_004;
+	UIComponentStore->texCell_004s = textureCell_004s;
+//	UIComponentStore->setPosition({ 350, 75 });
+	UIComponentStore->createGrid(5, 8, 4, { 64, 64 });
 
 	Botton * bott = new Botton();
 	bott->setFont(&Font);
@@ -173,6 +183,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			battle->update(deltaTime);
 			battle->DrawAll();
+			UIComponentStore->DrawStore();
 			//bott->drawBotton(0);
 			tickCount++;
  
