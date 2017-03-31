@@ -226,8 +226,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				case 1: 
 					drmod->init(0);
 					drmod->drawShip();
-					drmod->drawModule(0);
-					//gameStatus = bott->drawBotton(0);
+					drmod->drawModule();
+
+					gameStatus =drmod->checkNumb();
 					
 
 					
