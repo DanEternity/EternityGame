@@ -11,7 +11,8 @@ class Botton : public UISmartGrid
 public:
 	vec2 size,pos;
 	int id;
-	int drawBotton(int id);
+	int init(int id);
+	int drawBotton();
 	tFont * Font;
 	unsigned int texbt_001;
 	unsigned int texbt_002;

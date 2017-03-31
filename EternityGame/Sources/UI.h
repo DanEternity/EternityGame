@@ -43,9 +43,11 @@ class DrawModule : public UISmartGrid
 public:
 	vec2 size, pos;
 	int id;
-	void drawModule(int id);
+	int init(int id);
+	void drawModule();
 	void drawShip();
 	void drawGui();
+	int checkNumb();
 	tFont * Font;
 	unsigned int texbt_001;
 	unsigned int texbt_002;

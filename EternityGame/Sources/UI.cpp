@@ -127,74 +127,80 @@ int UIGrid::isInsideCell(int mouseX, int mouseY)
 	
 }
 
-void DrawModule::drawModule(int id)
+int DrawModule::init(int id)
 {
-	/*for (int i(0); i<7; i++)
-	DrawSprite2v(texbt_002, 200, 200, 1240, 150+100*i );
-	for (int i(0); i < 3; i++)
-	DrawSprite2v(texbt_001, 300, 300, 200, 200+250*i);*/
 	vec2 size, pos;
-	float deltaY=15, deltaX=5,delX=4,delY=4;
+	float deltaY = 15, deltaX = 5, delX = 4, delY = 4;
 	size.x = 64;
 	size.y = 64;
-	DrawSprite3v(texbt_004, size.x, size.y, 180, 320);//1    
 	cell buff;
+
 	buff.pos = { 180, 320 - deltaY };
 	buff.id = id;
 	buff.size = { size.x, size.y };
 	add(buff);
 	id++;
-	if (isInsideCell2(xPos, yPos) == 0)
-		DrawSprite3v(texbt_005, size.x, size.y, 180, 320);
-	DrawSprite3v(texbt_004, size.x, size.y, 360, 190);//2
 	buff.pos = { 360 - deltaX, 190 - deltaY };
 	buff.id = id;
 	buff.size = { size.x, size.y };
 	add(buff);
 	id++;
-	if (isInsideCell2(xPos, yPos) == 1)
-		DrawSprite3v(texbt_005, size.x, size.y, 360, 190);
-	DrawSprite3v(texbt_004, size.x, size.y, 360, 440);//3
-	buff.pos = { 360 - deltaX, 440 - deltaY-5 };
+	buff.pos = { 360 - deltaX, 480 - deltaY - 5 };
 	buff.id = id;
-	buff.size = { size.x, size.y-delY };
+	buff.size = { size.x, size.y - delY };
 	add(buff);
 	id++;
-	if (isInsideCell2(xPos, yPos) == 2)
-		DrawSprite3v(texbt_005, size.x, size.y, 360, 440);
-	DrawSprite3v(texbt_004, size.x, size.y, 560, 215);//4
 	buff.pos = { 560 - deltaX, 215 - deltaY };
 	buff.id = id;
 	buff.size = { size.x, size.y };
 	add(buff);
 	id++;
-	if (isInsideCell2(xPos, yPos) == 3)
-		DrawSprite3v(texbt_005, size.x, size.y, 560, 215);
-	DrawSprite3v(texbt_004, size.x, size.y, 560, 420);//5
-	buff.pos = { 560 - deltaX, 420 - deltaY-5 };
+	buff.pos = { 560 - deltaX, 460 - deltaY - 5 };
 	buff.id = id;
 	buff.size = { size.x, size.y - delY };
 	add(buff);
 	id++;
-	if (isInsideCell2(xPos, yPos) == 4)
-		DrawSprite3v(texbt_005, size.x, size.y, 560, 420);
-	DrawSprite3v(texbt_004, size.x, size.y, 740, 245);//6
 	buff.pos = { 740 - deltaX, 245 - deltaY };
 	buff.id = id;
 	buff.size = { size.x, size.y };
 	add(buff);
 	id++;
-	if (isInsideCell2(xPos, yPos) == 5)
-		DrawSprite3v(texbt_005, size.x, size.y, 740, 245);
-	DrawSprite3v(texbt_004, size.x, size.y, 740, 395);//7
-	buff.pos = { 740 - deltaX, 395 - deltaY-5};
+	buff.pos = { 740 - deltaX, 425 - deltaY - 5 };
 	buff.id = id;
 	buff.size = { size.x, size.y - delY };
 	add(buff);
 	id++;
-	if (isInsideCell2(xPos, yPos) == 6)
-		DrawSprite3v(texbt_005, size.x, size.y, 740, 395);
 
+	buff.pos = { 770, 615 };//7
+	buff.id = id;
+	buff.size = { 103,43 };
+	add(buff);
+	id++;
+	buff.pos = {950, 615 };
+	buff.id = id;
+	buff.size = { 103,43 };
+	add(buff);
+	id++;
+
+	return 0;
+}
+
+void DrawModule::drawModule()
+{
+	float px, py;
+
+	GetScale(103, 45, 128, 128, px, py);
+	for (int i(0); i < cells.size(); i++)	
+		DrawSprite3v(texbt_004, cells[i].size.x, cells[i].size.y, cells[i].pos.x, cells[i].pos.y);
+	
+	if (isInsideCell2(xPos, yPos) != -1)	
+		DrawSprite3v(texbt_005, cells[isInsideCell2(xPos, yPos)].size.x, cells[isInsideCell2(xPos, yPos)].size.y, cells[isInsideCell2(xPos, yPos)].pos.x, cells[isInsideCell2(xPos, yPos)].pos.y);
+
+	Font->outInt(1050, 30, mouseX);
+	Font->outInt(1050, 50, mouseY);
+	Font->outInt(1050, 100, xPos);
+	Font->outInt(1050, 130, yPos);
+	Font->outInt(200, 100, isInsideCell2(xPos - 5, yPos + 3));
 }
 
 void DrawModule::drawShip()
@@ -205,6 +211,34 @@ void DrawModule::drawShip()
 void DrawModule::drawGui()
 {
 	//0,580 1064,730
+}
+
+int DrawModule::checkNumb()
+{
+	float px, py;
+	GetScale(103, 45, 128, 128, px, py);
+	int a;
+	DrawSprite3v(texbt_001, cells[7].size.x*px, cells[7].size.y*py, cells[7].pos.x, cells[7].pos.y);
+	Font->outText(cells[7].pos.x + 30, cells[7].pos.y + 20, "menu");
+
+	DrawSprite3v(texbt_001, cells[8].size.x*px, cells[8].size.y*py, cells[8].pos.x, cells[8].pos.y);
+	Font->outText(cells[8].pos.x + 30, cells[8].pos.y + 20, "exit");
+
+	switch (isInsideCell2(xPos - 5, yPos + 3))
+	{
+	case 7:
+		a = -1;
+		break;
+	case 8:
+		a = 4;
+		break;
+	default:
+		a = 1;
+	}
+
+
+
+	return a;
 }
 
 void DrawModule::setFont(tFont * pick)

@@ -202,21 +202,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, gameFrameH);
 
 			glEnd();
-			bott->drawBotton(0);
+			
+
 			switch (gameStatus)
 			{
 				case -1: 	
-					bott->drawBotton(0);
-					gameStatus = bott->drawBotton(0);
+					bott->init(0);
+					gameStatus = bott->drawBotton();
 					break;
-				
+				case 0:
+					battle->update(deltaTime);
+					battle->DrawAll();
+					break;
 				case 1: 
+					drmod->init(0);
 					drmod->drawShip();
-					drmod->drawModule(0);
-					//gameStatus = bott->drawBotton(0);
-					tickCount++;
-
-					Font.outInt(40, 40, tickCount);
+					gameStatus = drmod->checkNumb();
 					break;
 				case 4: 
 					bQuit = true;
@@ -224,37 +225,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				default:
 					gameStatus = -1;
 			}
-		
-		/*	if (gameStatus == 1)
-			{
-				if (bott->drawBotton(0) != 4)
-				{
-					//battle->update(deltaTime);
-					//battle->DrawAll();
-					//bott->drawBotton(0);
-
-					drmod->drawShip();
-					drmod->drawModule(0);
-					if (bott->drawBotton(0) == 0)
-					{
-						Font.outInt(100, 40, 72227611);
-					}
-
-					tickCount++;
-
-					Font.outInt(40, 40, tickCount);
-
-					EndDraw2D();
-
-
-					SwapBuffers(hDC);
-				}
-				else bQuit = true;
-
-			}*/
+			tickCount++;
+			Font.outInt(40, 40, tickCount);
 			EndDraw2D();
-
-
 			SwapBuffers(hDC);
 		}
 	}
@@ -294,8 +267,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 		TCHAR textBuffer[32];
 		GetCursorPos(&pt);
 		ScreenToClient(hWnd, &pt);
-		xPos = pt.x;
-		yPos = pt.y;
+		xPos = pt.x*1.02f;
+		yPos = pt.y*1.05f;
 		lMouseBotton = true;
 	}
 	case WM_RBUTTONUP:
@@ -306,8 +279,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 		TCHAR textBuffer[32];
 		GetCursorPos(&pt);
 		ScreenToClient(hWnd, &pt);
-		xPos = pt.x;
-		yPos = pt.y;
+		xPos = pt.x*1.02f;
+		yPos = pt.y*1.05f;
 		lMouseBotton = true;
 	}
 	case WM_LBUTTONUP:
@@ -318,8 +291,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 		TCHAR textBuffer[32];
 		GetCursorPos(&pt);
 		ScreenToClient(hWnd, &pt);
-		mouseX = pt.x;
-		mouseY = pt.y;
+		mouseX = pt.x*1.02f;
+		mouseY = pt.y*1.05f;
 	}
 	break;
 
