@@ -101,8 +101,21 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	player->setWeaponStats(id, { 0.7f, 230, 40, 600, bullet, bul });
 
 	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 45}, id);
+	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
 	battle->setShipPosition({ 300, 100 }, id);
+
+	id = battle->addShip();
+	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
+	battle->setShipPosition({ 400, 150 }, id);
+
+	id = battle->addShip();
+	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
+	battle->setShipPosition({ 720, 400 }, id);
+
+	id = battle->addShip();
+	battle->setShipStats({ "Meteorite", 300, 0, 0, 0, 1, 0, 1, book, 160, 160, 60 }, id);
+	battle->setShipPosition({ 620, 300 }, id);
+
 
 	PrimaryStore * store = new PrimaryStore(40);
 	UIStore * UIComponentStore = new UIStore();
@@ -183,7 +196,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			battle->update(deltaTime);
 			battle->DrawAll();
-			UIComponentStore->DrawStore();
+			//UIComponentStore->DrawStore();
 			//bott->drawBotton(0);
 			tickCount++;
  
