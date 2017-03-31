@@ -44,8 +44,15 @@ public:
 	vec2 size, pos;
 	int id;
 	void drawModule(int id);
+	void drawShip();
+	void drawGui();
 	tFont * Font;
 	unsigned int texbt_001;
+	unsigned int texbt_002;
+	unsigned int texbt_004;
+	unsigned int texbt_005;
+	unsigned int texbt_006;
+	unsigned int shipui;
 	void setFont(tFont * pick);
 	DrawModule();
 	~DrawModule();

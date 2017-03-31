@@ -129,14 +129,82 @@ int UIGrid::isInsideCell(int mouseX, int mouseY)
 
 void DrawModule::drawModule(int id)
 {
-	for (int i(0); i<7; i++)
-	DrawSprite2v(texbt_001, 200, 200, 1240, 150+100*i );
+	/*for (int i(0); i<7; i++)
+	DrawSprite2v(texbt_002, 200, 200, 1240, 150+100*i );
 	for (int i(0); i < 3; i++)
-	{		
-		DrawSprite2v(texbt_001, 300, 300, 200, 200+250*i);
-	}
+	DrawSprite2v(texbt_001, 300, 300, 200, 200+250*i);*/
+	vec2 size, pos;
+	float deltaY=15, deltaX=5,delX=4,delY=4;
+	size.x = 64;
+	size.y = 64;
+	DrawSprite3v(texbt_004, size.x, size.y, 180, 320);//1    
+	cell buff;
+	buff.pos = { 180, 320 - deltaY };
+	buff.id = id;
+	buff.size = { size.x, size.y };
+	add(buff);
+	id++;
+	if (isInsideCell2(xPos, yPos) == 0)
+		DrawSprite3v(texbt_005, size.x, size.y, 180, 320);
+	DrawSprite3v(texbt_004, size.x, size.y, 360, 190);//2
+	buff.pos = { 360 - deltaX, 190 - deltaY };
+	buff.id = id;
+	buff.size = { size.x, size.y };
+	add(buff);
+	id++;
+	if (isInsideCell2(xPos, yPos) == 1)
+		DrawSprite3v(texbt_005, size.x, size.y, 360, 190);
+	DrawSprite3v(texbt_004, size.x, size.y, 360, 440);//3
+	buff.pos = { 360 - deltaX, 440 - deltaY-5 };
+	buff.id = id;
+	buff.size = { size.x, size.y-delY };
+	add(buff);
+	id++;
+	if (isInsideCell2(xPos, yPos) == 2)
+		DrawSprite3v(texbt_005, size.x, size.y, 360, 440);
+	DrawSprite3v(texbt_004, size.x, size.y, 560, 215);//4
+	buff.pos = { 560 - deltaX, 215 - deltaY };
+	buff.id = id;
+	buff.size = { size.x, size.y };
+	add(buff);
+	id++;
+	if (isInsideCell2(xPos, yPos) == 3)
+		DrawSprite3v(texbt_005, size.x, size.y, 560, 215);
+	DrawSprite3v(texbt_004, size.x, size.y, 560, 420);//5
+	buff.pos = { 560 - deltaX, 420 - deltaY-5 };
+	buff.id = id;
+	buff.size = { size.x, size.y - delY };
+	add(buff);
+	id++;
+	if (isInsideCell2(xPos, yPos) == 4)
+		DrawSprite3v(texbt_005, size.x, size.y, 560, 420);
+	DrawSprite3v(texbt_004, size.x, size.y, 740, 245);//6
+	buff.pos = { 740 - deltaX, 245 - deltaY };
+	buff.id = id;
+	buff.size = { size.x, size.y };
+	add(buff);
+	id++;
+	if (isInsideCell2(xPos, yPos) == 5)
+		DrawSprite3v(texbt_005, size.x, size.y, 740, 245);
+	DrawSprite3v(texbt_004, size.x, size.y, 740, 395);//7
+	buff.pos = { 740 - deltaX, 395 - deltaY-5};
+	buff.id = id;
+	buff.size = { size.x, size.y - delY };
+	add(buff);
+	id++;
+	if (isInsideCell2(xPos, yPos) == 6)
+		DrawSprite3v(texbt_005, size.x, size.y, 740, 395);
 
+}
 
+void DrawModule::drawShip()
+{	
+	DrawSprite3v(shipui, 1024, 1024, 0, 100);	
+}
+
+void DrawModule::drawGui()
+{
+	//0,580 1064,730
 }
 
 void DrawModule::setFont(tFont * pick)

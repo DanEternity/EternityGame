@@ -1,7 +1,7 @@
 #include "Menu.h"
 #include <Graphics.h>
 
-void Botton::drawBotton(int id)
+int Botton::drawBotton(int id)
 {
 	DrawSprite2v(texbt_001, 200, 93, pos.x + 70, pos.y + 25 + size.y*id);
 	Font->outText(pos.x, pos.y, "Eternity");
@@ -46,6 +46,7 @@ void Botton::drawBotton(int id)
 	Font->outInt(1050, 100, xPos);
 	Font->outInt(1050, 130, yPos);
 	Font->outInt(200, 100, isInsideCell2(xPos, yPos));
+	return isInsideCell2(xPos, yPos);
 }
 
 void Botton::setFont(tFont * pick)

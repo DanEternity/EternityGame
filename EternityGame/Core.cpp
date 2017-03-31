@@ -76,6 +76,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint UI_001 = LoadTex("Resource/UI_001.tga");
 	GLuint bt_001 = LoadTex("Resource/bt_001.tga");
 	GLuint bt_002 = LoadTex("Resource/bt_002.tga");
+	GLuint bt_004 = LoadTex("Resource/cell_002.tga");
+	GLuint bt_005 = LoadTex("Resource/cell_002s.tga");
+	GLuint shipui = LoadTex("Resource/shipui.tga");
 	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
 	Font.loadOffset("Resource/FontOffset.dat", 256);
@@ -106,8 +109,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	bott->texbt_001 = bt_001;
 
 	DrawModule * drmod = new DrawModule();
+
 	drmod->setFont(&Font);
-	drmod->texbt_001 = bt_002;
+	drmod->texbt_001 = bt_001;
+	drmod->texbt_002 = bt_002;
+	drmod->texbt_004 = bt_004;
+	drmod->texbt_005 = bt_005;
+	drmod->texbt_006 = UI_001; 	
+	drmod->shipui = shipui;
 
 	/* program main loop */
 	while (!bQuit)
@@ -170,19 +179,60 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, gameFrameH);
 
 			glEnd();
+			bott->drawBotton(0);
+			switch (gameStatus)
+			{
+				case -1: 	
+					bott->drawBotton(0);
+					gameStatus = bott->drawBotton(0);
+					break;
+				
+				case 1: 
+					drmod->drawShip();
+					drmod->drawModule(0);
+					//gameStatus = bott->drawBotton(0);
+					tickCount++;
 
-			battle->update(deltaTime);
-			battle->DrawAll();
-			//bott->drawBotton(0);
-			tickCount++;
- 
-			Font.outInt(40, 40, tickCount);
-			
+					Font.outInt(40, 40, tickCount);
+					break;
+				case 4: 
+					bQuit = true;
+					break;
+				default:
+					gameStatus = -1;
+			}
+		
+		/*	if (gameStatus == 1)
+			{
+				if (bott->drawBotton(0) != 4)
+				{
+					//battle->update(deltaTime);
+					//battle->DrawAll();
+					//bott->drawBotton(0);
+
+					drmod->drawShip();
+					drmod->drawModule(0);
+					if (bott->drawBotton(0) == 0)
+					{
+						Font.outInt(100, 40, 72227611);
+					}
+
+					tickCount++;
+
+					Font.outInt(40, 40, tickCount);
+
+					EndDraw2D();
+
+
+					SwapBuffers(hDC);
+				}
+				else bQuit = true;
+
+			}*/
 			EndDraw2D();
 
 
 			SwapBuffers(hDC);
-			
 		}
 	}
 

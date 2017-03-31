@@ -41,6 +41,7 @@ void * pFont = nullptr;
 **************************/
 
 unsigned int texModHover = 0;
+int gameStatus = -1;
 
 /**************************
 * Other

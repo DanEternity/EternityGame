@@ -41,6 +41,7 @@ extern void * pFont;
 **************************/
 
 extern unsigned int texModHover;
+extern int gameStatus;
 
 /**************************
 * Other
