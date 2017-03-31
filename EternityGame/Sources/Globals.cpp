@@ -43,6 +43,10 @@ void * pFont = nullptr;
 unsigned int texModHover = 0;
 int gameStatus = -1;
 
+unsigned int targetTextureMap = 0;
+int targetTextureMapSizeX = 0;
+int targetTextureMapSizeY = 0;
+
 /**************************
 * Other
 *
@@ -53,4 +57,5 @@ int x = 400, y = 400;
 int listSize = 0;
 int mouseX = 0, mouseY = 0;
 int xPos = 0, yPos = 0;
+int SelectedItemId = -1;
 bool lMouseBotton = false;

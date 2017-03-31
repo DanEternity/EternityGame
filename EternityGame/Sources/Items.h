@@ -10,6 +10,7 @@ public:
 	ItemType type;
 
 	int count;
+	int texId;
 
 	void* entity;
 };

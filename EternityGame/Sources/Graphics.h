@@ -18,6 +18,8 @@ Sx, Sy - Масштабирование по X и Y. Показывает фактическую ширину изображения
 */
 
 void DrawSprite3v(unsigned int tex, int sizeW, int sizeH, float x, float y);
+void DrawSprite4v(int size, int texId, float x, float y); // using for texture map
+void AssignTextureMap(int id, int sizeX, int sizeY);
 void GetScale(int sizeW, int sizeH, int texSizeX, int texSizeY, float &scaleX, float &scaleY);
 
 class Tga

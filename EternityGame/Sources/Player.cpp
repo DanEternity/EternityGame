@@ -96,6 +96,30 @@ void PrimaryStore::deleteItem(int id)
 	items[id].type = nullItem;
 }
 
+int PrimaryStore::selectItem(int mouseX, int mouseY)
+{
+	int id = _Store->GetCellOnMouse(mouseX, mouseY);
+	selected = id;
+	_Store->selectedId = id;
+	return id;
+}
+
+int PrimaryStore::configItem(int id, int count, int texId, const char * name)
+{
+	items[id].texId = texId;
+	items[id].count = count;
+	strcpy_s(items[id].name, name);
+
+	_Store->cells[id].additional = texId;
+
+	return 0;
+}
+
+void PrimaryStore::setUIStore(UIStore * pick)
+{
+	_Store = pick;
+}
+
 PrimaryStore::PrimaryStore(int size)
 {
 	capacity = size;
@@ -106,6 +130,7 @@ PrimaryStore::PrimaryStore(int size)
 	}
 	used = 0;
 	empty = size;
+	selected = -1;
 }
 
 PrimaryStore::~PrimaryStore()

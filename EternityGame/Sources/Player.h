@@ -5,6 +5,7 @@
 #include<Ship.h>
 #include<Battle.h>
 #include<items.h>
+#include<UI.h>
 
 class PlayerHandle
 {
@@ -33,10 +34,14 @@ public:
 	int capacity;
 	int used, empty;
 
+	int selected;
+	UIStore * _Store;
+
 	int addItem(int id, ItemType type);
 	void deleteItem(int id);
-
-
+	int selectItem(int mouseX, int mouseY);
+	int configItem(int id, int count, int texId, const char * name);
+	void setUIStore(UIStore * pick);
 
 
 	PrimaryStore(int size);
