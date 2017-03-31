@@ -4,6 +4,7 @@
 #include<Globals.h>
 #include<Ship.h>
 #include<Battle.h>
+#include<items.h>
 
 class PlayerHandle
 {
@@ -17,6 +18,27 @@ public:
 	int setBattle(tBattle * newBattle);
 	int setWeaponStats(int moduleId, WeaponInfo info);
 
+
+
+
 	PlayerHandle();
 	~PlayerHandle();
+};
+
+class PrimaryStore
+{
+public:
+	/* Player store */
+	std::vector<Item> items;
+	int capacity;
+	int used, empty;
+
+	int addItem(int id, ItemType type);
+	void deleteItem(int id);
+
+
+
+
+	PrimaryStore(int size);
+	~PrimaryStore();
 };

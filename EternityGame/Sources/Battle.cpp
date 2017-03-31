@@ -87,7 +87,7 @@ void tBattle::update(double deltatime)
 		pick->setPosition(dSpeed);
 		if (pick->hull < 0)
 		{
-			eraseShip(it->first);
+ 			eraseShip(it->first);
 			if (it._Myproxy == NULL)
 				break;
 		}

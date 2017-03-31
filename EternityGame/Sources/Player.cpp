@@ -53,3 +53,68 @@ PlayerHandle::PlayerHandle()
 PlayerHandle::~PlayerHandle()
 {
 }
+
+int PrimaryStore::addItem(int id, ItemType type)
+{
+	switch (type)
+	{
+	case nullItem:
+		if (items[id].type == module)
+			((Module*)items[id].entity)->~Module();
+		items[id].count = 0;
+		items[id].type = nullItem;
+		break;
+	case resource:
+		if (items[id].type == module)
+			((Module*)items[id].entity)->~Module();
+		items[id].count = 0;
+		items[id].type = resource;
+		break;
+	case module:
+		if (items[id].type == module)
+			((Module*)items[id].entity)->~Module();
+		items[id].count = 1;
+		items[id].type = module;
+		break;
+	case blank:
+		if (items[id].type == module)
+			((Module*)items[id].entity)->~Module();
+		items[id].count = 1;
+		items[id].type = blank;
+		break;
+	default:
+		break;
+	}
+	return 0;
+}
+
+void PrimaryStore::deleteItem(int id)
+{
+	if (items[id].type == module)
+		((Module*)items[id].entity)->~Module();
+	items[id].count = 0;
+	items[id].type = nullItem;
+}
+
+PrimaryStore::PrimaryStore(int size)
+{
+	capacity = size;
+	for (int i(0); i < size; i++) 
+	{ 
+		items.push_back(Item()); 
+		items[i].type = nullItem; 
+	}
+	used = 0;
+	empty = size;
+}
+
+PrimaryStore::~PrimaryStore()
+{
+	for (int i(0); i < items.size(); i++)
+	{
+		if (items[i].type == module)
+		{
+			((Module*)items[i].entity)->~Module();
+		}
+	}
+}

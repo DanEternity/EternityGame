@@ -146,6 +146,7 @@
     <ClInclude Include="Sources\Battle.h" />
     <ClInclude Include="Sources\Globals.h" />
     <ClInclude Include="Sources\Graphics.h" />
+    <ClInclude Include="Sources\Items.h" />
     <ClInclude Include="Sources\module.h" />
     <ClInclude Include="Sources\Player.h" />
     <ClInclude Include="Sources\Projectile.h" />

@@ -219,3 +219,51 @@ DrawModule::DrawModule()
 DrawModule::~DrawModule()
 {
 }
+
+int UIStore::GetCellOnMouse(int x, int y)
+{
+	return isInsideCell2(x, y);
+}
+
+int UIStore::DrawStore()
+{
+	for (int i(0); i < cells.size(); i++)
+	{
+		if (selectedId == cells[i].id)
+			DrawSprite3v(texCell_004s, cells[i].size.x, cells[i].size.y, cells[i].pos.x, cells[i].pos.y);
+		else
+			DrawSprite3v(texCell_004, cells[i].size.x, cells[i].size.y, cells[i].pos.x, cells[i].pos.y);
+		
+	}
+	
+	return 0;
+}
+
+void UIStore::setPosition(vec2 newPos)
+{
+	pos = newPos;
+}
+
+void UIStore::createGrid(int height, int width, int diff, vec2 size)
+{
+	int id = 0;
+	for (int i(0); i<height; i++)
+		for (int j(0); j < width; j++)
+		{
+			cell temp;
+			temp.size = size;
+			temp.pos.x = (size.x + diff)*j;
+			temp.pos.y = (size.y + diff)*i;
+			temp.id = id++;
+			add(temp);
+		}
+}
+
+UIStore::UIStore()
+{
+	selectedId = -1;
+}
+
+UIStore::~UIStore()
+{
+}

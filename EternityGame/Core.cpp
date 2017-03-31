@@ -79,6 +79,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint bt_004 = LoadTex("Resource/cell_002.tga");
 	GLuint bt_005 = LoadTex("Resource/cell_002s.tga");
 	GLuint shipui = LoadTex("Resource/shipui.tga");
+	GLuint textureCell_004 = LoadTex("Resource/cell_004.tga");
+	GLuint textureCell_004s = LoadTex("Resource/cell_004s.tga");
+
 	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
 	Font.loadOffset("Resource/FontOffset.dat", 256);
@@ -101,8 +104,28 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	player->setWeaponStats(id, { 0.7f, 230, 40, 600, bullet, bul });
 
 	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 45}, id);
+	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
 	battle->setShipPosition({ 300, 100 }, id);
+
+	id = battle->addShip();
+	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
+	battle->setShipPosition({ 400, 150 }, id);
+
+	id = battle->addShip();
+	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
+	battle->setShipPosition({ 720, 400 }, id);
+
+	id = battle->addShip();
+	battle->setShipStats({ "Meteorite", 300, 0, 0, 0, 1, 0, 1, book, 160, 160, 60 }, id);
+	battle->setShipPosition({ 620, 300 }, id);
+
+
+	PrimaryStore * store = new PrimaryStore(40);
+	UIStore * UIComponentStore = new UIStore();
+	UIComponentStore->texCell_004 = textureCell_004;
+	UIComponentStore->texCell_004s = textureCell_004s;
+//	UIComponentStore->setPosition({ 350, 75 });
+	UIComponentStore->createGrid(5, 8, 4, { 64, 64 });
 
 	Botton * bott = new Botton();
 	bott->setFont(&Font);

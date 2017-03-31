@@ -58,3 +58,22 @@ public:
 	~DrawModule();
 
 };
+
+class UIStore : public UISmartGrid
+{
+public:
+	int selectedId; // SelectedCellId
+	/*Textures*/
+	GLuint texCell_004;
+	GLuint texCell_004s;
+	/*textures end*/
+
+
+
+	int GetCellOnMouse(int x, int y);
+	int DrawStore();
+	void setPosition(vec2 newPos);
+	void createGrid(int height, int width, int diff, vec2 size);
+	UIStore();
+	~UIStore();
+};
