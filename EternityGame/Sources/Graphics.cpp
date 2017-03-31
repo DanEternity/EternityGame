@@ -8,6 +8,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <Globals.h>
 
 /**************************
 * Functions
@@ -118,6 +119,28 @@ void DrawSprite3v(unsigned int tex, int sizeW, int sizeH, float x, float y)
 	glTexCoord2f(0.0f, 0.0f); 		glVertex2f(x, y + sizeH);
 
 	glEnd();
+}
+
+void DrawSprite4v(int size, int texId, float x, float y)
+{
+	float tx = texId%targetTextureMapSizeX, ty = targetTextureMapSizeY - texId/targetTextureMapSizeX;
+	float texSize = 1.0f / targetTextureMapSizeX;
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(tx / targetTextureMapSizeX, ty / targetTextureMapSizeY + texSize); 				glVertex2f(x, y);
+	glTexCoord2f(tx / targetTextureMapSizeX + texSize, ty / targetTextureMapSizeY + texSize);		glVertex2f(x + size, y);
+	glTexCoord2f(tx / targetTextureMapSizeX + texSize, ty / targetTextureMapSizeY); 				glVertex2f(x + size, y + size);
+	glTexCoord2f(tx / targetTextureMapSizeX, ty / targetTextureMapSizeY); 							glVertex2f(x, y + size);
+
+	glEnd();
+}
+
+void AssignTextureMap(int id, int sizeX, int sizeY)
+{
+	targetTextureMap = id;
+	targetTextureMapSizeX = sizeX;
+	targetTextureMapSizeY = sizeY;
+	glBindTexture(GL_TEXTURE_2D, id);
 }
 
 void GetScale(int sizeW, int sizeH, int texSizeX, int texSizeY, float &scaleX, float &scaleY)

@@ -81,6 +81,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint shipui = LoadTex("Resource/shipui.tga");
 	GLuint textureCell_004 = LoadTex("Resource/cell_004.tga");
 	GLuint textureCell_004s = LoadTex("Resource/cell_004s.tga");
+	GLuint textureScreen_001 = LoadTex("Resource/window_back.tga");
+	GLuint textureCellHoverBlue = LoadTex("Resource/cell_hower_blue.tga");
+	GLuint textureItemMap = LoadTex("Resource/textureMap.tga");
 
 	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
@@ -122,10 +125,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	PrimaryStore * store = new PrimaryStore(40);
 	UIStore * UIComponentStore = new UIStore();
+	store->setUIStore(UIComponentStore);
 	UIComponentStore->texCell_004 = textureCell_004;
 	UIComponentStore->texCell_004s = textureCell_004s;
-//	UIComponentStore->setPosition({ 350, 75 });
+	UIComponentStore->texBack_001 = textureScreen_001;
+	UIComponentStore->texMap = textureItemMap;
 	UIComponentStore->createGrid(5, 8, 4, { 64, 64 });
+	UIComponentStore->setPosition({ 350, 75 });
+
+	store->addItem(1, resource);
+	store->configItem(1, 10, 32, "Iron");
 
 	Botton * bott = new Botton();
 	bott->setFont(&Font);
@@ -217,7 +226,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				case 1: 
 					drmod->init(0);
 					drmod->drawShip();
-					gameStatus = drmod->checkNumb();
+					drmod->drawModule(0);
+					//gameStatus = bott->drawBotton(0);
+					
+
+					
+					break;
+				case 2:
+					store->selectItem(xPos, yPos);
+					UIComponentStore->DrawStore();
+
+					SelectedItemId = UIComponentStore->selectedId;
+					Font.outInt(40, 65, SelectedItemId);
+
 					break;
 				case 4: 
 					bQuit = true;

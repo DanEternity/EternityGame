@@ -68,6 +68,8 @@ public:
 	/*Textures*/
 	GLuint texCell_004;
 	GLuint texCell_004s;
+	GLuint texBack_001;
+	GLuint texMap;
 	/*textures end*/
 
 

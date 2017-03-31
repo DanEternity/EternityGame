@@ -43,6 +43,10 @@ extern void * pFont;
 extern unsigned int texModHover;
 extern int gameStatus;
 
+extern unsigned int  targetTextureMap;
+extern int targetTextureMapSizeX;
+extern int targetTextureMapSizeY;
+
 /**************************
 * Other
 *
@@ -54,5 +58,6 @@ extern int listSize;
 extern int mouseX, mouseY;
 extern int xPos, yPos;
 extern bool lMouseBotton;
+extern int SelectedItemId;
 
 const float vdiv = 0.707106781f; // sqrt(2)/2
