@@ -29,6 +29,7 @@ void SysModule::addAtribute(tAttribute type, float count)
 
 }
 
+
 SysModule::SysModule()
 {
 	attrN = 0;

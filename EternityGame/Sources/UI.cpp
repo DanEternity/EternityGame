@@ -2,6 +2,7 @@
 #include<Graphics.h>
 #include<Battle.h>
 #include<Globals.h>
+
 /*
 void DrawShipUI(Ship * target, unsigned int tex)
 {
@@ -69,7 +70,6 @@ UIElement::~UIElement()
 {
 }
 
-
 void UISmartGrid::remove(int id)
 {
 	for (int i(0); i < cells.size(); i++)
@@ -134,7 +134,6 @@ int DrawModule::init(int id)
 	size.x = 64;
 	size.y = 64;
 	cell buff;
-
 	buff.pos = { 180, 320 - deltaY };
 	buff.id = id;
 	buff.size = { size.x, size.y };
@@ -170,7 +169,6 @@ int DrawModule::init(int id)
 	buff.size = { size.x, size.y - delY };
 	add(buff);
 	id++;
-
 	buff.pos = { 770, 615 };//7
 	buff.id = id;
 	buff.size = { 103,43 };
@@ -183,6 +181,11 @@ int DrawModule::init(int id)
 	id++;
 
 	return 0;
+}
+
+void DrawModule::setFont(tFont * pick)
+{
+	Font = pick;
 }
 
 void DrawModule::drawModule()
@@ -213,6 +216,14 @@ void DrawModule::drawGui()
 	//0,580 1064,730
 }
 
+void DrawModule::drawHp(tShip* pick)
+{
+	Font->outText(350, 100, "BaseHP/FullHP");
+	Font->outInt(485, 100, pick->baseHull);
+	Font->outText(510, 100, "/");
+	Font->outInt(515, 100, pick->hullMax);
+}
+
 int DrawModule::checkNumb()
 {
 	float px, py;
@@ -238,10 +249,12 @@ int DrawModule::checkNumb()
 	return a;
 }
 
-void DrawModule::setFont(tFont * pick)
+
+
+/*void DrawModule::setFont(tFont * pick)
 {
 	Font = pick;
-}
+}*/
 
 DrawModule::DrawModule()
 {

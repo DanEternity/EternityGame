@@ -178,6 +178,7 @@ void tShip::updStats(double deltatime)
 			WepModule*pick = (WepModule*)tModule[i];
 			if (pick->bCooldown)
 			{
+				pick->active = true;
 				pick->currentCooldown -= deltatime;
 				if (pick->currentCooldown < 0)
 					pick->bCooldown = false;
@@ -186,43 +187,44 @@ void tShip::updStats(double deltatime)
 		if (tModule[i]->type == sys)
 		{
 			SysModule*pick = (SysModule*)tModule[i];
+			pick->active = true;
 			for (int k = 0; k < pick->attrN; k++)
 			{
 				switch (pick->mAttr[k].type)
 				{
 				case tHull:
 				{
-					hullMax = +pick->mAttr[k].count;
+					hullMax += pick->mAttr[k].count;
 					break;
 				}
 				case tShield:
 				{
-					shieldMax = +pick->mAttr[k].count;
+					shieldMax += pick->mAttr[k].count;
 					break;
 				}
 				case tReghp:
 				{
-					hullReg = +pick->mAttr[k].count;
+					hullReg += pick->mAttr[k].count;
 					break;
 				}
 				case tRegshield:
 				{
-					shieldReg = +pick->mAttr[k].count;;
+					shieldReg += pick->mAttr[k].count;;
 					break;
 				}
 				case tSpeed:
 				{
-					speed = +pick->mAttr[k].count;;
+					speed += pick->mAttr[k].count;;
 					break;
 				}
 				case tPowerBattery:
 				{
-					powerBatteryMax = +pick->mAttr[k].count;;
+					powerBatteryMax += pick->mAttr[k].count;;
 					break;
 				}
 				case tEvade:
 				{
-					evade = +pick->mAttr[k].count;;
+					evade += pick->mAttr[k].count;;
 					break;
 				}
 
@@ -231,11 +233,16 @@ void tShip::updStats(double deltatime)
 				}
 			}
 		}
+		
+
 
 	}
 }
 
 
+
+
+//87 66 90
 void tShip::Draw()
 {
 	DrawSprite2v(shipTexture, sizeX, sizeY, pos.x, pos.y);

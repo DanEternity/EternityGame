@@ -140,8 +140,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	bott->setFont(&Font);
 	bott->texbt_001 = bt_001;
 
-	DrawModule * drmod = new DrawModule();
 
+
+	DrawModule * drmod = new DrawModule();
 	drmod->setFont(&Font);
 	drmod->texbt_001 = bt_001;
 	drmod->texbt_002 = bt_002;
@@ -224,14 +225,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					battle->DrawAll();
 					break;
 				case 1: 
+					((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
 					drmod->init(0);
 					drmod->drawShip();
 					drmod->drawModule();
-
-					gameStatus =drmod->checkNumb();
-					
-
-					
+					drmod->drawHp((tShip*) battle->units[player->shipIndex]);
+					gameStatus =drmod->checkNumb();				
 					break;
 				case 2:
 					store->selectItem(xPos, yPos);

@@ -6,6 +6,8 @@
 #include <Types.h>
 #include <Vector>
 #include <windows.h>
+#include<module.h>
+#include<ship.h>
 /*
 void DrawShipUI(Ship * target, unsigned int tex);
 void DrawSysModuleUI(SysModule * target, int * offs);
@@ -31,6 +33,7 @@ class UISmartGrid : public UIElement
 {
 public:
 	std::vector<cell> cells;
+
 	void remove(int id);
 	void add(cell newcell);
 	int isInsideCell2(int mouseX, int mouseY);
@@ -44,9 +47,11 @@ public:
 	vec2 size, pos;
 	int id;
 	int init(int id);
+	void setFont(tFont * pick);
 	void drawModule();
 	void drawShip();
 	void drawGui();
+	void drawHp(tShip* pick);
 	int checkNumb();
 	tFont * Font;
 	unsigned int texbt_001;
@@ -55,7 +60,6 @@ public:
 	unsigned int texbt_005;
 	unsigned int texbt_006;
 	unsigned int shipui;
-	void setFont(tFont * pick);
 	DrawModule();
 	~DrawModule();
 
