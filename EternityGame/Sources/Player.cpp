@@ -96,6 +96,18 @@ void PrimaryStore::deleteItem(int id)
 	items[id].type = nullItem;
 }
 
+void PrimaryStore::swapItem(int id1, int id2)
+{
+	Item temp = items[id1];
+	items[id1] = items[id2];
+	items[id2] = temp;
+
+	int pt = _Store->cells[id1].additional;
+	_Store->cells[id1].additional = _Store->cells[id2].additional;
+	_Store->cells[id2].additional = pt;
+
+}
+
 int PrimaryStore::selectItem(int mouseX, int mouseY)
 {
 	int id = _Store->GetCellOnMouse(mouseX, mouseY);
@@ -118,6 +130,33 @@ int PrimaryStore::configItem(int id, int count, int texId, const char * name)
 void PrimaryStore::setUIStore(UIStore * pick)
 {
 	_Store = pick;
+}
+
+int PrimaryStore::update(double deltatime)
+{
+	_Store->DrawStore();
+	
+	if (mouseClickL)
+	{
+		if (selected != -1)
+		{
+			int Scr = selected;
+			selectItem(xPos, yPos);
+			if (selected != -1)
+			{
+				swapItem(selected, Scr);
+			}
+			selected = -1;
+			_Store->selectedId = -1;
+		}
+		else
+		{
+			selected = selectItem(xPos, yPos);
+			SelectedItemId = selected;
+		}
+	}
+
+	return 0;
 }
 
 PrimaryStore::PrimaryStore(int size)

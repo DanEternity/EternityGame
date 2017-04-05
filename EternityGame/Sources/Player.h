@@ -39,10 +39,12 @@ public:
 
 	int addItem(int id, ItemType type);
 	void deleteItem(int id);
+	void swapItem(int id1, int id2);
 	int selectItem(int mouseX, int mouseY);
+
 	int configItem(int id, int count, int texId, const char * name);
 	void setUIStore(UIStore * pick);
-
+	int update(double deltatime);
 
 	PrimaryStore(int size);
 	~PrimaryStore();

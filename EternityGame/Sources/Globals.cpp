@@ -47,6 +47,18 @@ unsigned int targetTextureMap = 0;
 int targetTextureMapSizeX = 0;
 int targetTextureMapSizeY = 0;
 
+bool mouseClickR = false;
+bool mouseClickL = false;
+bool mouseClickM = false;
+
+bool mouseClickBlockR = false;
+bool mouseClickBlockL = false;
+bool mouseClickBlockM = false;
+
+bool mouseDownR = false;
+bool mouseDownL = false;
+bool mouseDownM = false;
+
 /**************************
 * Other
 *
