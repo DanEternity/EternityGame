@@ -132,9 +132,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	UIComponentStore->texMap = textureItemMap;
 	UIComponentStore->createGrid(5, 8, 4, { 64, 64 });
 	UIComponentStore->setPosition({ 350, 75 });
+	store->Font = &Font;
 
 	store->addItem(1, resource);
-	store->configItem(1, 10, 32, "Iron");
+	store->configItem(1, 10, 0, "Iron");
+	store->addItem(2, resource);
+	store->configItem(2, 25, 1, "Iron");
 
 	Botton * bott = new Botton();
 	bott->setFont(&Font);

@@ -36,6 +36,7 @@ public:
 
 	int selected;
 	UIStore * _Store;
+	tFont * Font;
 
 	int addItem(int id, ItemType type);
 	void deleteItem(int id);
@@ -45,6 +46,7 @@ public:
 	int configItem(int id, int count, int texId, const char * name);
 	void setUIStore(UIStore * pick);
 	int update(double deltatime);
+	int drawStats(int id);
 
 	PrimaryStore(int size);
 	~PrimaryStore();

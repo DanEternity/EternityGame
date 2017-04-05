@@ -134,8 +134,6 @@ void PrimaryStore::setUIStore(UIStore * pick)
 
 int PrimaryStore::update(double deltatime)
 {
-	_Store->DrawStore();
-	
 	if (mouseClickL)
 	{
 		if (selected != -1)
@@ -156,6 +154,18 @@ int PrimaryStore::update(double deltatime)
 		}
 	}
 
+	_Store->DrawStore();
+	for (int i(0); i < capacity; i++)
+		if (items[i].type != nullItem)
+			drawStats(i);
+
+	return 0;
+}
+
+int PrimaryStore::drawStats(int id)
+{
+	vec2 pos = _Store->cells[id].pos;
+	Font->outInt(pos.x + 19, pos.y + 16, items[id].count);
 	return 0;
 }
 

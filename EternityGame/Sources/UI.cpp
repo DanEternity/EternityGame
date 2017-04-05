@@ -264,7 +264,7 @@ int UIStore::DrawStore()
 	{
 		DrawSprite4v(cells[i].size.x, cells[i].additional, cells[i].pos.x, cells[i].pos.y);
 		if (selectedId == cells[i].id)
-			DrawSprite4v(cells[i].size.x, 65, cells[i].pos.x, cells[i].pos.y);
+			DrawSprite4v(cells[i].size.x, 33, cells[i].pos.x, cells[i].pos.y);
 	}	
 	return 0;
 }
@@ -290,7 +290,7 @@ void UIStore::createGrid(int height, int width, int diff, vec2 size)
 			temp.pos.x = (size.x + diff)*j+pos.x;
 			temp.pos.y = (size.y + diff)*i+pos.y;
 			temp.id = id++;
-			temp.additional = 64;
+			temp.additional = 32;
 			add(temp);
 		}
 }
