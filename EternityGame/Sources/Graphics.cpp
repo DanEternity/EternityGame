@@ -123,6 +123,7 @@ void DrawSprite3v(unsigned int tex, int sizeW, int sizeH, float x, float y)
 
 void DrawSprite4v(int size, int texId, float x, float y)
 {
+	texId += 32;
 	float tx = texId%targetTextureMapSizeX, ty = targetTextureMapSizeY - texId/targetTextureMapSizeX;
 	float texSize = 1.0f / targetTextureMapSizeX;
 	glBegin(GL_QUADS);

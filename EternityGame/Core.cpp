@@ -132,9 +132,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	UIComponentStore->texMap = textureItemMap;
 	UIComponentStore->createGrid(5, 8, 4, { 64, 64 });
 	UIComponentStore->setPosition({ 350, 75 });
+	store->Font = &Font;
 
 	store->addItem(1, resource);
-	store->configItem(1, 10, 32, "Iron");
+	store->configItem(1, 10, 0, "Iron");
+	store->addItem(2, resource);
+	store->configItem(2, 25, 1, "Iron");
 
 	Botton * bott = new Botton();
 	bott->setFont(&Font);
@@ -233,11 +236,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					gameStatus =drmod->checkNumb();				
 					break;
 				case 2:
-					store->selectItem(xPos, yPos);
-					UIComponentStore->DrawStore();
+					
+					store->update(deltaTime);
 
-					SelectedItemId = UIComponentStore->selectedId;
+				//	SelectedItemId = UIComponentStore->selectedId;
+
 					Font.outInt(40, 65, SelectedItemId);
+					if (mouseClickL)
+						Font.outText(40, 85, "Left mouse click");
+					if (mouseDownL)
+						Font.outText(40, 105, "Left mouse down");
 
 					break;
 				case 4: 
@@ -250,6 +258,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			Font.outInt(40, 40, tickCount);
 			EndDraw2D();
 			SwapBuffers(hDC);
+			/* Clearing buttons*/
+			mouseClickL = false;
+			mouseClickR = false;
 		}
 	}
 
@@ -291,9 +302,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 		xPos = pt.x*1.02f;
 		yPos = pt.y*1.05f;
 		lMouseBotton = true;
+		if (!mouseClickBlockR)
+			mouseClickR = true;
+		mouseClickBlockR = true;
+		mouseDownR = true;
+		break;
 	}
 	case WM_RBUTTONUP:
+		mouseClickBlockR = false;
+		mouseClickR = false;
+		mouseDownR = false;
 		lMouseBotton = false;
+		break;
 	case WM_LBUTTONDOWN:
 	{
 		POINT pt;
@@ -302,10 +322,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 		ScreenToClient(hWnd, &pt);
 		xPos = pt.x*1.02f;
 		yPos = pt.y*1.05f;
+		if (!mouseClickBlockL)
+			mouseClickL = true;
+		mouseClickBlockL = true;
+		mouseDownL = true;
 		lMouseBotton = true;
+		break;
 	}
 	case WM_LBUTTONUP:
+		mouseClickBlockL = false;
+		mouseClickL = false;
+		mouseDownL = false;
 		lMouseBotton = false;
+		break;
 	case WM_MOUSEMOVE:
 	{
 		POINT pt;

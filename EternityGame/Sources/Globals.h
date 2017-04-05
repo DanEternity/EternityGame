@@ -47,6 +47,18 @@ extern unsigned int  targetTextureMap;
 extern int targetTextureMapSizeX;
 extern int targetTextureMapSizeY;
 
+extern bool mouseClickR;
+extern bool mouseClickL;
+extern bool mouseClickM;
+
+extern bool mouseClickBlockR;
+extern bool mouseClickBlockL;
+extern bool mouseClickBlockM;
+
+extern bool mouseDownR;
+extern bool mouseDownL;
+extern bool mouseDownM;
+
 /**************************
 * Other
 *
