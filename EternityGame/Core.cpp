@@ -137,7 +137,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	store->addItem(1, resource);
 	store->configItem(1, 10, 0, "Iron");
 	store->addItem(2, resource);
-	store->configItem(2, 25, 1, "Iron");
+	store->configItem(2, 25, 1, "Nickel");
+	//store->addItem(3, module);
+	store->createItemModule(3, 64, sys, "Basic Engine");
+	((SysModule*)(store->items[3].entity))->addAtribute(tSpeed, 15);
+
+	//store->configItem(2, 25, 1, "Iron");
 
 	Botton * bott = new Botton();
 	bott->setFont(&Font);
