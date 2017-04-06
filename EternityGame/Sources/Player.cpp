@@ -235,30 +235,36 @@ void PrimaryStore::description(int id, vec2 pos)
 			DrawSprite3v(_Store->texCell_004, 200, 710, 1090, 0);
 			Font->outText(1120, 57, "name:");
 			Font->outText(1125, 57, ((SysModule*)(items[id].entity))->name);
-			Font->outText(1120, 62, "Hp/MaxHp:");
-			Font->outInt(1120, 62, ((SysModule*)(items[id].entity))->hp);
-			Font->outText(1120, 62, "/");
-			Font->outInt(1120, 62, ((SysModule*)(items[id].entity))->hpmax);
-			Font->outText(1120, 67, "energyUsage:");
-			Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->energyUsage);
+			Font->outText(1120, 67, "Hp/MaxHp:");
+			Font->outInt(1130, 67, ((SysModule*)(items[id].entity))->hp);
+			Font->outText(1135, 67, "/");
+			Font->outInt(1140, 67, ((SysModule*)(items[id].entity))->hpmax);
+			Font->outText(1120, 77, "energyUsage:");
+			Font->outInt(1125, 77, ((SysModule*)(items[id].entity))->energyUsage);
 			for (int i(0); i < ((SysModule*)(items[id].entity))->attrN; i++)
 			{
 				switch (((SysModule*)(items[id].entity))->mAttr[i].type)
 				{
 				case tHull:
-						Font->outInt(1120, 67,((SysModule*)(items[id].entity))->mAttr[i].count);
+					//Font->outInt(1120, 67,((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tShield:
+					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tReghp:
+					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tRegshield:
+					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tSpeed:
+					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tPowerBattery:
+					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tEvade:
+					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				default:
 					break;

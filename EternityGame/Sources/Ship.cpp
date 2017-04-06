@@ -241,8 +241,6 @@ void tShip::updStats(double deltatime)
 
 
 
-
-//87 66 90
 void tShip::Draw()
 {
 	DrawSprite2v(shipTexture, sizeX, sizeY, pos.x, pos.y);
