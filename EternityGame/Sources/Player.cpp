@@ -127,6 +127,48 @@ int PrimaryStore::configItem(int id, int count, int texId, const char * name)
 	return 0;
 }
 
+int PrimaryStore::createItemModule(int id, int texId, ModuleType type, const char * name)
+{
+	if (items[id].type == nullItem)
+	{
+		items[id].type = module;
+		items[id].texId = texId;
+		items[id].count = 1;
+		_Store->cells[id].additional = texId;
+
+		switch (type)
+		{
+		case none:
+			items[id].entity = new Module();
+			strcpy_s(items[id].name, "Null module type");
+			strcpy_s(((Module*)(items[id].entity))->name, name);
+			((Module*)(items[id].entity))->active = false;
+			((Module*)(items[id].entity))->id = -1;
+			break;
+		case core:
+			break;
+		case sys:
+			items[id].entity = new SysModule();
+			strcpy_s(items[id].name, name);
+			strcpy_s(((SysModule*)(items[id].entity))->name, name);
+			((SysModule*)(items[id].entity))->active = false;
+			((SysModule*)(items[id].entity))->id = -1;
+			break;
+		case wep:
+			items[id].entity = new WepModule();
+			strcpy_s(items[id].name, name);
+			strcpy_s(((WepModule*)(items[id].entity))->name, name);
+			((WepModule*)(items[id].entity))->active = false;
+			((WepModule*)(items[id].entity))->id = -1;
+			break;
+		default:
+			break;
+		}
+		return id;
+	}
+	else return -1;
+}
+
 void PrimaryStore::setUIStore(UIStore * pick)
 {
 	_Store = pick;
@@ -165,7 +207,8 @@ int PrimaryStore::update(double deltatime)
 int PrimaryStore::drawStats(int id)
 {
 	vec2 pos = _Store->cells[id].pos;
-	Font->outInt(pos.x + 19, pos.y + 16, items[id].count);
+	if (items[id].count > 1)
+		Font->outInt(pos.x + 19, pos.y + 16, items[id].count);
 	return 0;
 }
 

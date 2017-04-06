@@ -44,6 +44,7 @@ public:
 	int selectItem(int mouseX, int mouseY);
 
 	int configItem(int id, int count, int texId, const char * name);
+	int createItemModule(int id, int texId, ModuleType type, const char * name);
 	void setUIStore(UIStore * pick);
 	int update(double deltatime);
 	int drawStats(int id);
