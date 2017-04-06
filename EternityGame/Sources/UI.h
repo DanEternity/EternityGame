@@ -82,6 +82,7 @@ public:
 	int DrawStore();
 	void setPosition(vec2 newPos);
 	void createGrid(int height, int width, int diff, vec2 size);
+
 	UIStore();
 	~UIStore();
 };

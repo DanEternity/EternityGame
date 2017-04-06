@@ -120,6 +120,8 @@ int PrimaryStore::configItem(int id, int count, int texId, const char * name)
 {
 	items[id].texId = texId;
 	items[id].count = count;
+
+
 	strcpy_s(items[id].name, name);
 
 	_Store->cells[id].additional = texId;
@@ -155,9 +157,13 @@ int PrimaryStore::update(double deltatime)
 	}
 
 	_Store->DrawStore();
+
 	for (int i(0); i < capacity; i++)
 		if (items[i].type != nullItem)
 			drawStats(i);
+
+	if (selected != -1)
+		description(selected, _Store->cells[selected].pos);
 
 	return 0;
 }
@@ -167,6 +173,85 @@ int PrimaryStore::drawStats(int id)
 	vec2 pos = _Store->cells[id].pos;
 	Font->outInt(pos.x + 19, pos.y + 16, items[id].count);
 	return 0;
+}
+
+void PrimaryStore::description(int id, vec2 pos)
+{
+	
+	switch (items[id].type)
+	{
+	case nullItem:
+		break;
+	case module: 
+		switch (((Module*)(items[id].entity))->type)
+		{
+		case core:
+			break;
+		case sys:
+			//((SysModule*)(items[id].entity))->hp;
+			DrawSprite3v(_Store->texCell_004, 200, 710, 1090, 0);
+			Font->outText(1120, 57, "name:");
+			Font->outText(1125, 57, ((SysModule*)(items[id].entity))->name);
+			Font->outText(1120, 62, "Hp/MaxHp:");
+			Font->outInt(1120, 62, ((SysModule*)(items[id].entity))->hp);
+			Font->outText(1120, 62, "/");
+			Font->outInt(1120, 62, ((SysModule*)(items[id].entity))->hpmax);
+			Font->outText(1120, 67, "energyUsage:");
+			Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->energyUsage);
+			for (int i(0); i < ((SysModule*)(items[id].entity))->attrN; i++)
+			{
+				switch (((SysModule*)(items[id].entity))->mAttr[i].type)
+				{
+				case tHull:
+						Font->outInt(1120, 67,((SysModule*)(items[id].entity))->mAttr[i].count);
+					break;
+				case tShield:
+					break;
+				case tReghp:
+					break;
+				case tRegshield:
+					break;
+				case tSpeed:
+					break;
+				case tPowerBattery:
+					break;
+				case tEvade:
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		case wep:
+			//((WepModule*)(items[id].entity))->bCooldown;
+			DrawSprite3v(_Store->texCell_004, 200, 710, 1090, 0);
+			Font->outText(1120, 57, "name:");
+			Font->outText(1120, 57, ((WepModule*)(items[id].entity))->name);
+			Font->outText(1120, 62, "cooldown:");
+			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->currentCooldown);
+			Font->outText(1120, 57, "energyUsage:");
+			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->energyUsage);
+			Font->outText(1120, 57, "Damage:");
+			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->Info.damage);
+			Font->outText(1120, 57, "Range:");
+			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->Info.range);
+			Font->outText(1120, 57, "Speed:");
+			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->Info.speed);
+
+			break;
+		case none:
+			break;
+		default:
+			break;
+		};
+		break;
+	case resource: 		
+		DrawSprite3v(_Store->texCell_004,200,710,1090,0);
+		Font->outText(1120,57, items[id].name);
+		break;
+	default:
+		break;
+	}
 }
 
 PrimaryStore::PrimaryStore(int size)

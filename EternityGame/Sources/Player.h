@@ -47,6 +47,7 @@ public:
 	void setUIStore(UIStore * pick);
 	int update(double deltatime);
 	int drawStats(int id);
+	void description(int id, vec2 pos);
 
 	PrimaryStore(int size);
 	~PrimaryStore();
