@@ -19,9 +19,6 @@ public:
 	int setBattle(tBattle * newBattle);
 	int setWeaponStats(int moduleId, WeaponInfo info);
 
-
-
-
 	PlayerHandle();
 	~PlayerHandle();
 };

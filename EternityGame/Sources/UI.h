@@ -74,6 +74,7 @@ public:
 	GLuint texCell_004s;
 	GLuint texBack_001;
 	GLuint texMap;
+	GLuint texturegray;
 	/*textures end*/
 
 

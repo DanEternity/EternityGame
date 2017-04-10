@@ -84,6 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint textureScreen_001 = LoadTex("Resource/window_back.tga");
 	GLuint textureCellHoverBlue = LoadTex("Resource/cell_hower_blue.tga");
 	GLuint textureItemMap = LoadTex("Resource/textureMap.tga");
+	GLuint texturegray = LoadTex("Resource/texture_gray.tga");
 
 	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);

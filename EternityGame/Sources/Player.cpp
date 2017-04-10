@@ -232,39 +232,46 @@ void PrimaryStore::description(int id, vec2 pos)
 			break;
 		case sys:
 			//((SysModule*)(items[id].entity))->hp;
-			DrawSprite3v(_Store->texCell_004, 200, 710, 1090, 0);
+			DrawSprite3v(_Store->texturegray, 200, 300, pos.x, pos.y);
 			Font->outText(1120, 57, "name:");
-			Font->outText(1125, 57, ((SysModule*)(items[id].entity))->name);
-			Font->outText(1120, 67, "Hp/MaxHp:");
-			Font->outInt(1130, 67, ((SysModule*)(items[id].entity))->hp);
-			Font->outText(1135, 67, "/");
-			Font->outInt(1140, 67, ((SysModule*)(items[id].entity))->hpmax);
-			Font->outText(1120, 77, "energyUsage:");
-			Font->outInt(1125, 77, ((SysModule*)(items[id].entity))->energyUsage);
+			Font->outText(1185, 57, ((SysModule*)(items[id].entity))->name);
+			Font->outText(1120, 77, "Hp/MaxHp:");
+			Font->outInt(1215, 77, ((SysModule*)(items[id].entity))->hp);
+			Font->outText(1225, 77, "/");
+			Font->outInt(1235, 77, ((SysModule*)(items[id].entity))->hpmax);
+			Font->outText(1120, 97, "energyUsage:");
+			Font->outInt(1225, 97, ((SysModule*)(items[id].entity))->energyUsage);
 			for (int i(0); i < ((SysModule*)(items[id].entity))->attrN; i++)
 			{
 				switch (((SysModule*)(items[id].entity))->mAttr[i].type)
 				{
 				case tHull:
-					//Font->outInt(1120, 67,((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(1120, 117, "+energyUsage:");
+					Font->outInt(1235, 117,((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tShield:
-					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(1120, 137, "+Hull:");
+					Font->outInt(1235, 137, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tReghp:
-					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(1120, 157, "+Reghp:");
+					Font->outInt(1235, 157, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tRegshield:
-					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(1120, 177, "+Regshield:");
+					Font->outInt(1235, 177, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tSpeed:
-					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(1120, 197, "+Speed:");
+					Font->outInt(1235, 197, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tPowerBattery:
-					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(1120, 217, "+PowerBattery:");
+					Font->outInt(1235, 217, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				case tEvade:
-					//Font->outInt(1120, 67, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(1120, 237, "+Evade:");
+					Font->outInt(1235, 237, ((SysModule*)(items[id].entity))->mAttr[i].count);
 					break;
 				default:
 					break;
