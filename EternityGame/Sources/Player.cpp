@@ -220,7 +220,7 @@ int PrimaryStore::drawStats(int id)
 
 void PrimaryStore::description(int id, vec2 pos)
 {
-	
+	int k = 1;
 	switch (items[id].type)
 	{
 	case nullItem:
@@ -231,47 +231,48 @@ void PrimaryStore::description(int id, vec2 pos)
 		case core:
 			break;
 		case sys:
+			
 			//((SysModule*)(items[id].entity))->hp;
-			//DrawSprite3v(_Store->texturegray, 200, 300, pos.x, pos.y);
-			Font->outText(1120, 57, "name:");
-			Font->outText(1185, 57, ((SysModule*)(items[id].entity))->name);
-			Font->outText(1120, 77, "Hp/MaxHp:");
-			Font->outInt(1215, 77, ((SysModule*)(items[id].entity))->hp);
-			Font->outText(1225, 77, "/");
-			Font->outInt(1235, 77, ((SysModule*)(items[id].entity))->hpmax);
-			Font->outText(1120, 97, "energyUsage:");
-			Font->outInt(1225, 97, ((SysModule*)(items[id].entity))->energyUsage);
+			DrawSprite3v(_Store->texturegray, 200, 300, pos.x+32, pos.y+32);
+			Font->outText(pos.x+64, pos.y + 32 + 20 * k, "name:"); 
+			Font->outText(pos.x + 106, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->name); k++;
+			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Hp/MaxHp:"); 
+			Font->outInt(pos.x + 141, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->hp); 
+			Font->outText(pos.x + 155, pos.y + 32 + 20 * k, "/");
+			Font->outInt(pos.x + 169, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->hpmax); k++;
+			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "energyUsage:");
+			Font->outInt(pos.x + 155, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->energyUsage); k++;
 			for (int i(0); i < ((SysModule*)(items[id].entity))->attrN; i++)
 			{
 				switch (((SysModule*)(items[id].entity))->mAttr[i].type)
 				{
 				case tHull:
-					Font->outText(1120, 117, "+energyUsage:");
-					Font->outInt(1235, 117,((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "energyUsage:+"); 
+					Font->outInt(pos.x + 162, pos.y + 32 + 20 * k,((SysModule*)(items[id].entity))->mAttr[i].count); k++;
 					break;
 				case tShield:
-					Font->outText(1120, 137, "+Hull:");
-					Font->outInt(1235, 137, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "HP:+");
+					Font->outInt(pos.x + 99, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->mAttr[i].count); k++;
 					break;
 				case tReghp:
-					Font->outText(1120, 157, "+Reghp:");
-					Font->outInt(1235, 157, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Reghp:+"); 
+					Font->outInt(pos.x + 120, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->mAttr[i].count); k++;
 					break;
 				case tRegshield:
-					Font->outText(1120, 177, "+Regshield:");
-					Font->outInt(1235, 177, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Regshield:+"); 
+					Font->outInt(pos.x + 148, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->mAttr[i].count); k++;
 					break;
 				case tSpeed:
-					Font->outText(1120, 197, "+Speed:");
-					Font->outInt(1235, 197, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Speed:+"); 
+					Font->outInt(pos.x + 120, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->mAttr[i].count); k++;
 					break;
 				case tPowerBattery:
-					Font->outText(1120, 217, "+PowerBattery:");
-					Font->outInt(1235, 217, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "PowerBattery:+"); 
+					Font->outInt(pos.x + 169, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->mAttr[i].count); k++;
 					break;
 				case tEvade:
-					Font->outText(1120, 237, "+Evade:");
-					Font->outInt(1235, 237, ((SysModule*)(items[id].entity))->mAttr[i].count);
+					Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Evade:+"); 
+					Font->outInt(pos.x + 120, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->mAttr[i].count); k++;
 					break;
 				default:
 					break;
@@ -279,20 +280,19 @@ void PrimaryStore::description(int id, vec2 pos)
 			}
 			break;
 		case wep:
-			//((WepModule*)(items[id].entity))->bCooldown;
-			DrawSprite3v(_Store->texCell_004, 200, 710, 1090, 0);
-			Font->outText(1120, 57, "name:");
-			Font->outText(1120, 57, ((WepModule*)(items[id].entity))->name);
-			Font->outText(1120, 62, "cooldown:");
-			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->currentCooldown);
-			Font->outText(1120, 57, "energyUsage:");
-			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->energyUsage);
-			Font->outText(1120, 57, "Damage:");
-			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->Info.damage);
-			Font->outText(1120, 57, "Range:");
-			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->Info.range);
-			Font->outText(1120, 57, "Speed:");
-			Font->outInt(1120, 57, ((WepModule*)(items[id].entity))->Info.speed);
+			DrawSprite3v(_Store->texturegray, 200, 300, pos.x + 32, pos.y + 32);
+			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "name:");
+			Font->outText(pos.x + 106, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->name); k++;
+			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "cooldown:");
+			Font->outInt(pos.x + 141, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->currentCooldown);
+			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "energyUsage:");
+			Font->outInt(pos.x + 155, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->energyUsage); k++;
+			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Damage:");
+			Font->outInt(pos.x + 120, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->Info.damage); k++;
+			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Range:");
+			Font->outInt(pos.x + 113, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->Info.range); k++;
+			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Speed:");
+			Font->outInt(pos.x + 113, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->Info.speed); k++;
 
 			break;
 		case none:
@@ -301,9 +301,9 @@ void PrimaryStore::description(int id, vec2 pos)
 			break;
 		};
 		break;
-	case resource: 		
-		DrawSprite3v(_Store->texCell_004,200,710,1090,0);
-		Font->outText(1120,57, items[id].name);
+	case resource: 	
+		DrawSprite3v(_Store->texturegray, 200, 300, pos.x + 32, pos.y + 32);
+		Font->outText(pos.x + 64, pos.y + 32 + 20 * k, items[id].name);
 		break;
 	default:
 		break;
