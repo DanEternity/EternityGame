@@ -28,6 +28,7 @@ class PrimaryStore
 public:
 	/* Player store */
 	std::vector<Item> items;
+
 	int capacity;
 	int used, empty;
 
@@ -46,7 +47,47 @@ public:
 	int update(double deltatime);
 	int drawStats(int id);
 	void description(int id, vec2 pos);
+	void clearSelection();
 
 	PrimaryStore(int size);
+	PrimaryStore();
 	~PrimaryStore();
+};
+
+class ShipMap : public PrimaryStore
+{
+public:
+
+	//std::vector<Item> shipModules;
+	std::vector<SocketInfo> sockets;
+
+
+	int update(double deltatime);
+	int swapItem(int id1, int id2);
+
+	int createShipMap(const char * filename);
+
+	ShipMap();
+	~ShipMap();
+};
+
+class PlayerEnviroment
+{
+public:
+	int selectedShipMapId;
+	int selectedStoreId;
+	ShipMap * _shipM;
+	PrimaryStore * _store;
+
+	/* Flags */
+	bool bShipMapActive;
+	bool bStoreActive;
+	bool bStoreExpanded;
+
+	/* Functions */
+	int update(double deltatime);
+
+	PlayerEnviroment();
+	~PlayerEnviroment();
+
 };

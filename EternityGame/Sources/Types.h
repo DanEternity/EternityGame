@@ -78,7 +78,8 @@ enum ModuleType
 	none,
 	core,
 	sys,
-	wep
+	wep,
+	extend
 };
 
 struct ShipBaseStats
@@ -159,4 +160,20 @@ enum ItemType
 	resource,
 	module,
 	blank
+};
+
+enum ModuleSize
+{
+	sizeTiny,
+	sizeSmall,
+	sizeMedium,
+	sizeHeavy,
+	sizeHuge
+};
+
+struct SocketInfo
+{
+	ModuleType type;
+	ModuleSize size;
+	int maxLevel;
 };

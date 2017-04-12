@@ -124,16 +124,35 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	battle->setShipPosition({ 620, 300 }, id);
 
 
-	PrimaryStore * store = new PrimaryStore(40);
+	PrimaryStore * store = new PrimaryStore(8);
 	UIStore * UIComponentStore = new UIStore();
 	store->setUIStore(UIComponentStore);
 	UIComponentStore->texCell_004 = textureCell_004;
 	UIComponentStore->texCell_004s = textureCell_004s;
 	UIComponentStore->texBack_001 = textureScreen_001;
 	UIComponentStore->texMap = textureItemMap;
-	UIComponentStore->createGrid(5, 8, 4, { 64, 64 });
-	UIComponentStore->setPosition({ 350, 75 });
+	UIComponentStore->createGrid(1, 8, 4, { 64, 64 });
+	UIComponentStore->setPosition({ 350, 475 });
 	store->Font = &Font;
+
+
+	ShipMap * sMap = new ShipMap();
+	UIStore * UIComponentShip = new UIStore();
+	sMap->setUIStore(UIComponentShip);
+
+	PlayerEnviroment * pEnv = new PlayerEnviroment();
+	pEnv->_shipM = sMap;
+	pEnv->_store = store;
+	pEnv->bStoreActive = true;
+	pEnv->bShipMapActive = true;
+
+	sMap->createShipMap("UI/ShipMap_001.txt");
+	UIComponentShip->texCell_004 = textureCell_004;
+	UIComponentShip->texCell_004s = textureCell_004s;
+	UIComponentShip->texBack_001 = textureScreen_001;
+	UIComponentShip->texMap = textureItemMap;
+	UIComponentShip->setPosition({ 350, 75 });
+	sMap->Font = &Font;
 
 	store->addItem(1, resource);
 	store->configItem(1, 10, 0, "Iron");
@@ -142,6 +161,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	//store->addItem(3, module);
 	store->createItemModule(3, 64, sys, "Basic Engine");
 	((SysModule*)(store->items[3].entity))->addAtribute(tSpeed, 15);
+
+	sMap->createItemModule(0, 64, sys, "Basec Engine");
 
 	//store->configItem(2, 25, 1, "Iron");
 
@@ -239,11 +260,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					drmod->drawShip();
 					drmod->drawModule();
 					drmod->drawHp((tShip*) battle->units[player->shipIndex]);
-					gameStatus =drmod->checkNumb();				
+					gameStatus = drmod->checkNumb();				
 					break;
 				case 2:
 					
-					store->update(deltaTime);
+				//	store->update(deltaTime);
+				//	sMap->update(deltaTime);
+
+					pEnv->update(deltaTime);
 
 				//	SelectedItemId = UIComponentStore->selectedId;
 
