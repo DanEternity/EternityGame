@@ -131,6 +131,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	UIComponentStore->texCell_004s = textureCell_004s;
 	UIComponentStore->texBack_001 = textureScreen_001;
 	UIComponentStore->texMap = textureItemMap;
+	UIComponentStore->texturegray = texturegray;
 	UIComponentStore->createGrid(5, 8, 4, { 64, 64 });
 	UIComponentStore->setPosition({ 350, 75 });
 	store->Font = &Font;
