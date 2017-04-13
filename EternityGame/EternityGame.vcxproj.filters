@@ -66,6 +66,9 @@
     <ClCompile Include="Sources\Player.cpp">
       <Filter>Player</Filter>
     </ClCompile>
+    <ClCompile Include="Talking.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="Sources\Items.h">
       <Filter>items</Filter>
+    </ClInclude>
+    <ClInclude Include="Talking.h">
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@
 #include <Player.h>
 #include <UI.h>
 #include <Menu.h>
+#include <Talking.h>
 
 
 /**************************
@@ -150,7 +151,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	bott->setFont(&Font);
 	bott->texbt_001 = bt_001;
 
-
+	Talking * talk = new Talking();
+	talk->texturegray = texturegray;
+	talk->setFont(&Font);
+	talk->texbt_001 = bt_001;
 
 	DrawModule * drmod = new DrawModule();
 	drmod->setFont(&Font);
@@ -228,11 +232,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			{
 				case -1: 	
 					bott->init(0);
+
 					gameStatus = bott->drawBotton();
 					break;
 				case 0:
 					battle->update(deltaTime);
 					battle->DrawAll();
+					talk->fileRead("new document.txt");
 					break;
 				case 1: 
 					((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
