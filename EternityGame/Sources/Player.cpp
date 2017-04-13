@@ -310,6 +310,12 @@ void PrimaryStore::description(int id, vec2 pos)
 	}
 }
 
+void PrimaryStore::clearSelection()
+{
+	selected = -1;
+	_Store->selectedId = -1;
+}
+
 PrimaryStore::PrimaryStore(int size)
 {
 	capacity = size;
@@ -323,6 +329,14 @@ PrimaryStore::PrimaryStore(int size)
 	selected = -1;
 }
 
+PrimaryStore::PrimaryStore()
+{
+	capacity = 0;
+	used = 0;
+	empty = 0;
+	selected = -1;
+}
+
 PrimaryStore::~PrimaryStore()
 {
 	for (int i(0); i < items.size(); i++)
@@ -332,4 +346,184 @@ PrimaryStore::~PrimaryStore()
 			((Module*)items[i].entity)->~Module();
 		}
 	}
+}
+
+int ShipMap::update(double deltatime)
+{
+	if (mouseClickL)
+	{
+		if (selected != -1)
+		{
+			int Scr = selected;
+			selectItem(xPos, yPos);
+			if (selected != -1)
+			{
+				if (sockets[Scr].type == sockets[selected].type)
+					swapItem(selected, Scr);
+			}
+			selected = -1;
+			_Store->selectedId = -1;
+		}
+		else
+		{
+			selected = selectItem(xPos, yPos);
+			SelectedItemId = selected;
+		}
+	}
+
+	_Store->DrawStore();
+
+	for (int i(0); i < capacity; i++)
+		if (items[i].type != nullItem)
+			drawStats(i);
+
+	if (selected != -1)
+		description(selected, _Store->cells[selected].pos);
+
+	return 0;
+}
+
+int ShipMap::swapItem(int id1, int id2)
+{
+	Item temp = items[id1];
+	items[id1] = items[id2];
+	items[id2] = temp;
+
+	int pt = _Store->cells[id1].additional;
+	_Store->cells[id1].additional = _Store->cells[id2].additional;
+	_Store->cells[id2].additional = pt;
+	return 0;
+}
+
+int ShipMap::createShipMap(const char * filename)
+{
+	FILE * file;
+	if (freopen_s(&file, filename, "r", stdin))
+		return 0;
+
+	int sz;
+
+	std::cin >> sz;
+
+	for (int i(0); i < sz; i++)
+	{
+		cell temp;
+		char c[10];
+		std::cin >> temp.pos.x >> temp.pos.y >> temp.size.x >> temp.size.y >> c;
+		temp.id = i;
+		temp.additional = 32;
+		_Store->add(temp);
+		items.push_back(Item());
+		sockets.push_back(SocketInfo());
+		if (strcmp(c, "sys") == 0)
+			sockets[i].type = sys;
+		if (strcmp(c, "wep") == 0)
+			sockets[i].type = wep;
+		if (strcmp(c, "core") == 0)
+			sockets[i].type = core;
+	}
+
+	fclose(file);
+	return 0;
+}
+
+ShipMap::ShipMap()
+{
+}
+
+ShipMap::~ShipMap()
+{
+}
+
+int PlayerEnviroment::update(double deltatime)
+{
+	int tmpItemShipMap = selectedShipMapId;
+	int	tmpItemStore = selectedStoreId;
+
+	if (bShipMapActive)
+	{
+		_shipM->update(deltatime);
+		selectedShipMapId = _shipM->selected;
+		if (tmpItemStore != -1 && selectedShipMapId != -1 && mouseClickL)
+		{
+			if (_store->items[tmpItemStore].type == module && _shipM->sockets[selectedShipMapId].type == ((Module *)(_store->items[tmpItemStore].entity))->type)
+			{
+				std::swap(_shipM->items[selectedShipMapId], _store->items[tmpItemStore]);
+				std::swap(_shipM->_Store->cells[selectedShipMapId].additional, _store->_Store->cells[tmpItemStore].additional);
+			}
+
+			selectedShipMapId = -1;
+			_shipM->clearSelection();
+			_store->clearSelection();
+
+			mouseClickL = false;
+		}
+	}
+	if (bStoreActive)
+	{
+		_store->update(deltatime);
+		selectedStoreId = _store->selected;
+		if (selectedStoreId != -1 && tmpItemShipMap != -1 && mouseClickL)
+		{
+			if ((_store->items[selectedStoreId].type == module && _shipM->sockets[tmpItemShipMap].type == ((Module *)(_store->items[tmpItemShipMap].entity))->type)
+				||(_store->items[selectedStoreId].type == nullItem))
+			{
+				std::swap(_shipM->items[tmpItemShipMap], _store->items[selectedStoreId]);
+				std::swap(_shipM->_Store->cells[tmpItemShipMap].additional, _store->_Store->cells[selectedStoreId].additional);
+			}
+
+			selectedStoreId = -1;
+			_shipM->clearSelection();
+			_store->clearSelection();
+
+			mouseClickL = false;
+		}
+	}
+/*
+	if (mouseClickL)
+	{
+		if (selected != -1)
+		{
+			int Scr = selected;
+			selectItem(xPos, yPos);
+			if (selected != -1)
+			{
+				swapItem(selected, Scr);
+			}
+			selected = -1;
+			_Store->selectedId = -1;
+		}
+		else
+		{
+			selected = selectItem(xPos, yPos);
+			SelectedItemId = selected;
+		}
+	}
+*/
+/*
+	_Store->DrawStore();
+
+	for (int i(0); i < capacity; i++)
+		if (items[i].type != nullItem)
+			drawStats(i);
+
+	if (selected != -1)
+		description(selected, _Store->cells[selected].pos);
+
+	return 0;
+*/
+	return 0;
+}
+
+PlayerEnviroment::PlayerEnviroment()
+{
+	selectedShipMapId = -1;
+	selectedStoreId = -1;
+	bShipMapActive = false;
+	bStoreActive = false;
+	bStoreExpanded = false;
+}
+
+PlayerEnviroment::~PlayerEnviroment()
+{
 }
