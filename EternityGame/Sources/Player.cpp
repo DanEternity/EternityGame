@@ -358,7 +358,8 @@ int ShipMap::update(double deltatime)
 			selectItem(xPos, yPos);
 			if (selected != -1)
 			{
-				swapItem(selected, Scr);
+				if (sockets[Scr].type == sockets[selected].type)
+					swapItem(selected, Scr);
 			}
 			selected = -1;
 			_Store->selectedId = -1;
@@ -396,28 +397,33 @@ int ShipMap::swapItem(int id1, int id2)
 
 int ShipMap::createShipMap(const char * filename)
 {
-	// for test
-	cell temp;
-	temp.pos = { 100, 100 };
-	temp.additional = 32;
-	temp.size = { 64, 64 };
-	temp.id = 0;
-	_Store->add(temp);
-	temp.pos = { 100, 200 };
-	temp.additional = 32;
-	temp.size = { 64, 64 };
-	temp.id = 1;
-	_Store->add(temp);
-	temp.pos = { 200, 100 };
-	temp.additional = 32;
-	temp.size = { 64, 64 };
-	temp.id = 2;
-	_Store->add(temp);
-	items.push_back(Item());
-	items.push_back(Item());
-	items.push_back(Item());
-	//
+	FILE * file;
+	if (freopen_s(&file, filename, "r", stdin))
+		return 0;
 
+	int sz;
+
+	std::cin >> sz;
+
+	for (int i(0); i < sz; i++)
+	{
+		cell temp;
+		char c[10];
+		std::cin >> temp.pos.x >> temp.pos.y >> temp.size.x >> temp.size.y >> c;
+		temp.id = i;
+		temp.additional = 32;
+		_Store->add(temp);
+		items.push_back(Item());
+		sockets.push_back(SocketInfo());
+		if (strcmp(c, "sys") == 0)
+			sockets[i].type = sys;
+		if (strcmp(c, "wep") == 0)
+			sockets[i].type = wep;
+		if (strcmp(c, "core") == 0)
+			sockets[i].type = core;
+	}
+
+	fclose(file);
 	return 0;
 }
 
@@ -440,13 +446,11 @@ int PlayerEnviroment::update(double deltatime)
 		selectedShipMapId = _shipM->selected;
 		if (tmpItemStore != -1 && selectedShipMapId != -1 && mouseClickL)
 		{
-			Item temp = _shipM->items[selectedShipMapId];
-			_shipM->items[selectedShipMapId] = _store->items[tmpItemStore];
-			_store->items[tmpItemStore] = temp;
-
-			int pt = _shipM->_Store->cells[selectedShipMapId].additional;
-			_shipM->_Store->cells[selectedShipMapId].additional = _store->_Store->cells[tmpItemStore].additional;
-			_store->_Store->cells[tmpItemStore].additional = pt;
+			if (_store->items[tmpItemStore].type == module && _shipM->sockets[selectedShipMapId].type == ((Module *)(_store->items[tmpItemStore].entity))->type)
+			{
+				std::swap(_shipM->items[selectedShipMapId], _store->items[tmpItemStore]);
+				std::swap(_shipM->_Store->cells[selectedShipMapId].additional, _store->_Store->cells[tmpItemStore].additional);
+			}
 
 			selectedShipMapId = -1;
 			_shipM->clearSelection();
@@ -461,13 +465,12 @@ int PlayerEnviroment::update(double deltatime)
 		selectedStoreId = _store->selected;
 		if (selectedStoreId != -1 && tmpItemShipMap != -1 && mouseClickL)
 		{
-			Item temp = _shipM->items[tmpItemShipMap];
-			_shipM->items[tmpItemShipMap] = _store->items[selectedStoreId];
-			_store->items[selectedStoreId] = temp;
-
-			int pt = _shipM->_Store->cells[tmpItemShipMap].additional;
-			_shipM->_Store->cells[tmpItemShipMap].additional = _store->_Store->cells[selectedStoreId].additional;
-			_store->_Store->cells[selectedStoreId].additional = pt;
+			if ((_store->items[selectedStoreId].type == module && _shipM->sockets[tmpItemShipMap].type == ((Module *)(_store->items[tmpItemShipMap].entity))->type)
+				||(_store->items[selectedStoreId].type == nullItem))
+			{
+				std::swap(_shipM->items[tmpItemShipMap], _store->items[selectedStoreId]);
+				std::swap(_shipM->_Store->cells[tmpItemShipMap].additional, _store->_Store->cells[selectedStoreId].additional);
+			}
 
 			selectedStoreId = -1;
 			_shipM->clearSelection();

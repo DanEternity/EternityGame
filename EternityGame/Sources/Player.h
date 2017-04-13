@@ -5,7 +5,9 @@
 #include<Ship.h>
 #include<Battle.h>
 #include<items.h>
+#include<algorithm>
 #include<UI.h>
+#include<iostream>
 
 class PlayerHandle
 {

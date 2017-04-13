@@ -131,6 +131,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	UIComponentStore->texCell_004s = textureCell_004s;
 	UIComponentStore->texBack_001 = textureScreen_001;
 	UIComponentStore->texMap = textureItemMap;
+	UIComponentStore->texturegray = texturegray;
 	UIComponentStore->createGrid(1, 8, 4, { 64, 64 });
 	UIComponentStore->setPosition({ 350, 475 });
 	store->Font = &Font;
@@ -146,11 +147,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	pEnv->bStoreActive = true;
 	pEnv->bShipMapActive = true;
 
-	sMap->createShipMap("UI/ShipMap_001.txt");
+	sMap->createShipMap("GameData/ShipMap_000.shipmap");
 	UIComponentShip->texCell_004 = textureCell_004;
 	UIComponentShip->texCell_004s = textureCell_004s;
 	UIComponentShip->texBack_001 = textureScreen_001;
 	UIComponentShip->texMap = textureItemMap;
+	UIComponentShip->texturegray = texturegray;
 	UIComponentShip->setPosition({ 350, 75 });
 	sMap->Font = &Font;
 
@@ -161,9 +163,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	//store->addItem(3, module);
 	store->createItemModule(3, 64, sys, "Basic Engine");
 	((SysModule*)(store->items[3].entity))->addAtribute(tSpeed, 15);
-
+	/*
 	sMap->createItemModule(0, 64, sys, "Basec Engine");
-
+	((SysModule*)(sMap->items[0].entity))->addAtribute(tSpeed, 15);
+	*/
 	//store->configItem(2, 25, 1, "Iron");
 
 	Botton * bott = new Botton();
