@@ -282,6 +282,19 @@ int UIStore::DrawStore()
 	return 0;
 }
 
+int UIStore::DrawLine(int first, int last)
+{
+	DrawSprite3v(texBack_001, 1040, 1080, pos.x - 5, pos.y - 5);
+	AssignTextureMap(texMap, 32, 32);
+	for (int i(first); i < cells.size() && i < i <= last; i++)
+	{
+		DrawSprite4v(cells[i].size.x, cells[i].additional, cells[i].pos.x, cells[i].pos.y);
+		if (selectedId == cells[i].id)
+			DrawSprite4v(cells[i].size.x, 33, cells[i].pos.x, cells[i].pos.y);
+	}
+	return 0;
+}
+
 void UIStore::setPosition(vec2 newPos)
 {
 	for (int i(0); i < cells.size(); i++)

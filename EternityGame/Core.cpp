@@ -124,7 +124,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	battle->setShipPosition({ 620, 300 }, id);
 
 
-	PrimaryStore * store = new PrimaryStore(8);
+	PrimaryStore * store = new PrimaryStore(40);
 	UIStore * UIComponentStore = new UIStore();
 	store->setUIStore(UIComponentStore);
 	UIComponentStore->texCell_004 = textureCell_004;

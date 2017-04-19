@@ -197,16 +197,29 @@ int PrimaryStore::update(double deltatime)
 			SelectedItemId = selected;
 		}
 	}
+	
+	if (!collapsed)
+	{
+		_Store->DrawStore();
 
-	_Store->DrawStore();
+		for (int i(0); i < capacity; i++)
+			if (items[i].type != nullItem)
+				drawStats(i);
 
-	for (int i(0); i < capacity; i++)
-		if (items[i].type != nullItem)
-			drawStats(i);
+		if (selected != -1)
+			description(selected, _Store->cells[selected].pos);
+	}
+	else
+	{
+		_Store->DrawLine((lineNum - 1)*lineSize, lineNum*lineSize - 1);
 
-	if (selected != -1)
-		description(selected, _Store->cells[selected].pos);
+		for (int i((lineNum - 1)*lineSize); i < lineNum*lineSize; i++)
+			if (items[i].type != nullItem)
+				drawStats(i);
 
+		if (selected != -1)
+			description(selected, _Store->cells[selected].pos);
+	}
 	return 0;
 }
 
@@ -327,6 +340,9 @@ PrimaryStore::PrimaryStore(int size)
 	used = 0;
 	empty = size;
 	selected = -1;
+	collapsed = false;
+	lineSize = -1;
+	lineNum = -1;
 }
 
 PrimaryStore::PrimaryStore()
@@ -335,6 +351,9 @@ PrimaryStore::PrimaryStore()
 	used = 0;
 	empty = 0;
 	selected = -1;
+	collapsed = false;
+	lineSize = -1;
+	lineNum = -1;
 }
 
 PrimaryStore::~PrimaryStore()
@@ -460,23 +479,52 @@ int PlayerEnviroment::update(double deltatime)
 		}
 	}
 	if (bStoreActive)
-	{
-		_store->update(deltatime);
-		selectedStoreId = _store->selected;
-		if (selectedStoreId != -1 && tmpItemShipMap != -1 && mouseClickL)
+	{	
+		if (bStoreExpanded)
 		{
-			if ((_store->items[selectedStoreId].type == module && _shipM->sockets[tmpItemShipMap].type == ((Module *)(_store->items[tmpItemShipMap].entity))->type)
-				||(_store->items[selectedStoreId].type == nullItem))
+			_store->update(deltatime);
+			selectedStoreId = _store->selected;
+			if (selectedStoreId != -1 && tmpItemShipMap != -1 && mouseClickL)
 			{
-				std::swap(_shipM->items[tmpItemShipMap], _store->items[selectedStoreId]);
-				std::swap(_shipM->_Store->cells[tmpItemShipMap].additional, _store->_Store->cells[selectedStoreId].additional);
+				if ((_store->items[selectedStoreId].type == module && _shipM->sockets[tmpItemShipMap].type == ((Module *)(_store->items[tmpItemShipMap].entity))->type)
+					|| (_store->items[selectedStoreId].type == nullItem))
+				{
+					std::swap(_shipM->items[tmpItemShipMap], _store->items[selectedStoreId]);
+					std::swap(_shipM->_Store->cells[tmpItemShipMap].additional, _store->_Store->cells[selectedStoreId].additional);
+				}
+
+				selectedStoreId = -1;
+				_shipM->clearSelection();
+				_store->clearSelection();
+
+				mouseClickL = false;
 			}
+		}
+		else
+		{
+			_store->update(deltatime);
+			selectedStoreId = _store->selected;
+			if (selectedStoreId < (Storeline - 1)*StorelineSize || selectedStoreId >= Storeline*StorelineSize)
+			{
+				_store->selected = -1;
+				_store->_Store->selectedId = -1;
+				selectedStoreId = -1;
+			}
+			if (selectedStoreId != -1 && tmpItemShipMap != -1 && mouseClickL)
+			{
+				if ((_store->items[selectedStoreId].type == module && _shipM->sockets[tmpItemShipMap].type == ((Module *)(_store->items[tmpItemShipMap].entity))->type)
+					|| (_store->items[selectedStoreId].type == nullItem))
+				{
+					std::swap(_shipM->items[tmpItemShipMap], _store->items[selectedStoreId]);
+					std::swap(_shipM->_Store->cells[tmpItemShipMap].additional, _store->_Store->cells[selectedStoreId].additional);
+				}
 
-			selectedStoreId = -1;
-			_shipM->clearSelection();
-			_store->clearSelection();
+				selectedStoreId = -1;
+				_shipM->clearSelection();
+				_store->clearSelection();
 
-			mouseClickL = false;
+				mouseClickL = false;
+			}
 		}
 	}
 /*
@@ -512,6 +560,23 @@ int PlayerEnviroment::update(double deltatime)
 
 	return 0;
 */
+	return 0;
+}
+
+int PlayerEnviroment::StoreCollapse(vec2 pos, int line, int size)
+{
+	bStoreExpanded = false;
+	Storeline = line;
+	StorelineSize = size;
+	_store->lineNum = line;
+	_store->lineSize = size;
+	_store->_Store->setPosition(Storelinepos);
+	if (selectedStoreId < (Storeline - 1)*StorelineSize || selectedStoreId >= Storeline*StorelineSize)
+	{
+		_store->selected = -1;
+		_store->_Store->selectedId = -1;
+		selectedStoreId = -1;
+	}
 	return 0;
 }
 
