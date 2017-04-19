@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include<string>
 
 void StartDraw2D(int sizeX, int sizeY);
 void EndDraw2D();
@@ -43,6 +44,7 @@ public:
 	tFont(const char* FilePath, int charsize, int count, int firstchar);
 	void loadOffset(const char* FilePath, int count);
 	void outText(int x, int y, const char * text);
+	void outString(int x, int y, const std::string * text);
 	void outInt(int x, int y, const int text);
 private:
 	unsigned int tex;

@@ -82,6 +82,7 @@ public:
 
 	int GetCellOnMouse(int x, int y);
 	int DrawStore();
+	int DrawLine(int first, int last);
 	void setPosition(vec2 newPos);
 	void createGrid(int height, int width, int diff, vec2 size);
 

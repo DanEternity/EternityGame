@@ -306,6 +306,14 @@ void tFont::outText(int x, int y, const char * text) // Output string at screen
 	}
 }
 
+void tFont::outString(int x, int y, const std::string * text)
+{
+	char * temp = new char[text->size()];
+	for (int i(0); i < text->size(); i++)
+		temp[i] = text->at(i);
+	outText(x, y, temp);
+}
+
 void tFont::outInt(int x, int y, const int text)
 {
 	char st[32];

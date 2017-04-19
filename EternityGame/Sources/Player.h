@@ -37,6 +37,12 @@ public:
 	int selected;
 	UIStore * _Store;
 	tFont * Font;
+	
+	bool collapsed;
+	int lineSize;
+	int lineNum;
+	vec2 linePos;
+
 
 	int addItem(int id, ItemType type);
 	void deleteItem(int id);
@@ -86,8 +92,14 @@ public:
 	bool bStoreActive;
 	bool bStoreExpanded;
 
+	int Storeline;
+	int StorelineSize;
+	vec2 Storelinepos;
+	vec2 StorePos;
+
 	/* Functions */
 	int update(double deltatime);
+	int StoreCollapse(vec2 pos, int line, int size);
 
 	PlayerEnviroment();
 	~PlayerEnviroment();
