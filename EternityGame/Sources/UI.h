@@ -78,6 +78,8 @@ public:
 	GLuint texturegray;
 	/*textures end*/
 
+	vec2 bgSize;
+	vec2 bgSizeSmall;
 
 
 	int GetCellOnMouse(int x, int y);
@@ -88,4 +90,16 @@ public:
 
 	UIStore();
 	~UIStore();
+};
+
+class SimpleButton : public UIElement
+{
+public:
+	unsigned int texture;
+	bool (* funcPointer)(int *, int *);
+	void Draw();
+	void SetTexture(unsigned int tex);
+	bool onClick(int mouseX, int mouseY);
+	SimpleButton();
+	SimpleButton(bool (* functionPointer)(int *, int *));
 };

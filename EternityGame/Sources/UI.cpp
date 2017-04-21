@@ -50,12 +50,10 @@ void DrawWepModuleUI(WepModule * target, int * offs)
 
 bool UIElement::isInside(int mouseX, int mouseY)
 {
-	if ((mouseX >= pos.x) || (mouseX <= pos.x + size.x) && (mouseY >= pos.y) || (mouseY <= pos.y + size.y))
+	if ((mouseX >= pos.x) && (mouseX <= pos.x + size.x) && (mouseY >= pos.y) && (mouseY <= pos.y + size.y))
 		return true;
 	else 
-	{
 		return false;
-	}
 }
 
 UIElement::UIElement()
@@ -271,7 +269,7 @@ int UIStore::GetCellOnMouse(int x, int y)
 
 int UIStore::DrawStore()
 {
-	DrawSprite3v(texBack_001, 1040, 1080, pos.x-5, pos.y-5);
+	DrawSprite3v(texBack_001, bgSize.x, bgSize.y, pos.x-5, pos.y-5);
 	AssignTextureMap(texMap, 32, 32);
 	for (int i(0); i < cells.size(); i++)
 	{
@@ -284,9 +282,9 @@ int UIStore::DrawStore()
 
 int UIStore::DrawLine(int first, int last)
 {
-	DrawSprite3v(texBack_001, 1040, 1080, pos.x - 5, pos.y - 5);
+	DrawSprite3v(texBack_001, bgSizeSmall.x, bgSizeSmall.y, pos.x - 5, pos.y - 5);
 	AssignTextureMap(texMap, 32, 32);
-	for (int i(first); i < cells.size() && i < i <= last; i++)
+	for (int i(first); i < cells.size() && i <= last; i++)
 	{
 		DrawSprite4v(cells[i].size.x, cells[i].additional, cells[i].pos.x, cells[i].pos.y);
 		if (selectedId == cells[i].id)
@@ -323,9 +321,44 @@ void UIStore::createGrid(int height, int width, int diff, vec2 size)
 
 UIStore::UIStore()
 {
+	bgSize = { 0, 0 };
+	bgSizeSmall = { 0, 0 };
 	selectedId = -1;
 }
 
 UIStore::~UIStore()
 {
+}
+
+void SimpleButton::Draw()
+{
+	DrawSprite3v(texture, size.x, size.y, pos.x, pos.y);
+}
+
+void SimpleButton::SetTexture(unsigned int tex)
+{
+	texture = tex;
+}
+
+bool SimpleButton::onClick(int mouseX, int mouseY)
+{
+	if (isInside(mouseX, mouseY))
+	{
+		if (funcPointer == NULL)
+			return TRUE;
+		else
+			return funcPointer(&mouseX, &mouseY);
+	}
+	else
+		return false;
+}
+
+SimpleButton::SimpleButton()
+{
+	funcPointer = NULL;
+}
+
+SimpleButton::SimpleButton(bool(*functionPointer)(int *, int *))
+{
+	funcPointer = functionPointer;
 }
