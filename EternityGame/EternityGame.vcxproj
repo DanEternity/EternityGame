@@ -140,6 +140,7 @@
     <ClCompile Include="Sources\Ship.cpp" />
     <ClCompile Include="Sources\UI.cpp" />
     <ClCompile Include="Talking.cpp" />
+    <ClCompile Include="tview.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Sources\Types.h" />
     <ClInclude Include="Sources\UI.h" />
     <ClInclude Include="Talking.h" />
+    <ClInclude Include="tview.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

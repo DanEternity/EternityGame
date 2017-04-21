@@ -186,6 +186,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	talk->texturegray = texturegray;
 	talk->setFont(&Font);
 	talk->texbt_001 = bt_001;
+	UISmartGrid tUISmartGrid;
+	Tview view;
+	talk->check(&tUISmartGrid);
 
 	DrawModule * drmod = new DrawModule();
 	drmod->setFont(&Font);
