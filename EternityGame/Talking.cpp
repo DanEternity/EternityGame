@@ -12,25 +12,29 @@ void Talking::fileRead(char s[])
 	else
 	{
 		std::string qq;
-		while (!ins.eof())
+		while (!ins.eof()&&k!=0)
 		{
+		/*	std::getline(ins, qq);
+			conclusion(qq);
+		}*/
 
-		}
-
-
-			/*strings.push_back(qq);
-			//if (conclusion(qq.c_str()) == 1)
+			std::getline(ins, qq);
+			strings.push_back(qq);
+			conclusion_v2(qq.c_str());
+			//while (qq)
+			/*if (conclusion(qq.c_str()) == 1)
 			{
 				std::getline(ins, qq);
-				k = 1;
+				
 			}
 			if (conclusion(qq.c_str()) == 0)
 				k = 0;
 
 			//std::getline(ins, qq);
-			//ins.getline(qq, 255);
+			//ins.getline(qq, 255);*/
+		
+		}
 
-		}*/
 		ins.close();
 	}
 }
@@ -60,13 +64,14 @@ int Talking::init(int id)
 	return 0;
 }
 
-int Talking::conclusion(std::string s[])
+int Talking::conclusion(std::string s)
 {
 	float px, py;
 	GetScale(103, 45, 128, 128, px, py);
 	DrawSprite3v(texturegray,size.x,size.y,pos.x,pos.y);
 
 	//Font->outText(70,70,s);
+	//Font->outString(70,70,&s);
 
 	DrawSprite3v(texbt_001, 103*px, 43*py, size.x + pos.x+25 - 103 * px, pos.y + size.y);
 	Font->outText(size.x + pos.x + 25 - 103 * px + 50, pos.y + size.y + 25, "next");
@@ -87,6 +92,19 @@ int Talking::conclusion(std::string s[])
 	//Font->outInt(1000, 200, tUISmartGrid->isInsideCell2(xPos - 5, yPos + 3));
 	//return isInsideCell2(xPos - 5, yPos + 3);*/
 	//Font->outInt(1000, 200, tUISmartGrid->isInsideCell2(xPos - 5, yPos + 3));
+	return tUISmartGrid->isInsideCell2(xPos - 5, yPos + 3);
+}
+int Talking::conclusion_v2(const char s[])
+{
+	float px, py;
+	GetScale(103, 45, 128, 128, px, py);
+	DrawSprite3v(texturegray, size.x, size.y, pos.x, pos.y);
+
+	DrawSprite3v(texbt_001, 103 * px, 43 * py, size.x + pos.x + 25 - 103 * px, pos.y + size.y);
+	Font->outText(size.x + pos.x + 25 - 103 * px + 50, pos.y + size.y + 25, "next");
+	DrawSprite3v(texbt_001, 103 * px, 43 * py, size.x + pos.x + 25 - 3 * 103 * px, pos.y + size.y);
+	Font->outText(size.x + pos.x + 25 - 3 * 103 * px + 50, pos.y + size.y + 25, "skip");
+
 	return tUISmartGrid->isInsideCell2(xPos - 5, yPos + 3);
 }
 void Talking::setFont(tFont * pick)

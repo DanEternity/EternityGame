@@ -13,11 +13,12 @@
 #include<UI.h>
 #include<Tview.h>
 
-std::vector<std::string>strings;
+
 
 class Talking 
 {
 public:
+	std::vector<std::string>strings;
 	UISmartGrid * UISG;
 	vec2 pos,size;
 	unsigned int texturegray;
@@ -26,7 +27,8 @@ public:
 	int init(int id);
 	void check(UISmartGrid*UISG);
 	
-	int conclusion(std::string s[]);
+	int conclusion(std::string s);
+	int conclusion_v2(const char s[]);
 	void setFont(tFont * pick);
 	tFont * Font;
 	UISmartGrid * tUISmartGrid;

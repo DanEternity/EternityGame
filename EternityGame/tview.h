@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>;
+#include <UI.h>
 class Tview
 {
 public:
 	std::string name;
+	UISmartGrid * tUISmartGrid;
 	Tview();
 	~Tview();
 };

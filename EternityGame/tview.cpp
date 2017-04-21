@@ -11,7 +11,7 @@ Tview::~Tview()
 
 void Batton::init(int id)
 {
-
+	cell buff;
 }
 
 

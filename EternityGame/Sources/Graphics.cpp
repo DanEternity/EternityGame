@@ -308,10 +308,12 @@ void tFont::outText(int x, int y, const char * text) // Output string at screen
 
 void tFont::outString(int x, int y, const std::string * text)
 {
-	char * temp = new char[text->size()];
+	char * temp = new char[text->size()+4];
 	for (int i(0); i < text->size(); i++)
 		temp[i] = text->at(i);
+	temp[text->size()] = 0;
 	outText(x, y, temp);
+	delete temp;
 }
 
 void tFont::outInt(int x, int y, const int text)
