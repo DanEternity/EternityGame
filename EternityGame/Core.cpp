@@ -133,10 +133,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	UIComponentStore->texBack_001 = textureScreen_001;
 	UIComponentStore->texMap = textureItemMap;
 	UIComponentStore->texturegray = texturegray;
-	UIComponentStore->createGrid(1, 8, 4, { 64, 64 });
-	UIComponentStore->setPosition({ 350, 475 });
+	UIComponentStore->createGrid(5, 8, 4, { 64, 64 });
+	UIComponentStore->setPosition({ 350, 175 });
 	store->Font = &Font;
-
+	store->_Store->bgSize = { 1040, 1080 };
+	store->_Store->bgSizeSmall = { 1040, 250 };
 
 	ShipMap * sMap = new ShipMap();
 	UIStore * UIComponentShip = new UIStore();
@@ -147,6 +148,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	pEnv->_store = store;
 	pEnv->bStoreActive = true;
 	pEnv->bShipMapActive = true;
+	pEnv->bStoreExpanded = true;
 
 	sMap->createShipMap("GameData/ShipMap_000.shipmap");
 	UIComponentShip->texCell_004 = textureCell_004;
@@ -156,6 +158,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	UIComponentShip->texturegray = texturegray;
 	UIComponentShip->setPosition({ 350, 75 });
 	sMap->Font = &Font;
+	sMap->_Store->bgSize = { 1040, 1080 };
+
+	SimpleButton * btExpandStore = new SimpleButton();
+	btExpandStore->pos = { 400, 560 };
+	btExpandStore->size = { 60, 16 };
+	btExpandStore->texture = texturegray;
 
 	store->addItem(1, resource);
 	store->configItem(1, 10, 0, "Iron");
@@ -187,6 +195,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	drmod->texbt_005 = bt_005;
 	drmod->texbt_006 = UI_001; 	
 	drmod->shipui = shipui;
+
+	/*INTERFACE SETUP*/
+	pEnv->StoreCollapse({ 350, 475 }, 1, 8);
 
 	/* program main loop */
 	while (!bQuit)
@@ -273,13 +284,17 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					break;
 				case 2:
 					
-				//	store->update(deltaTime);
-				//	sMap->update(deltaTime);
+
 
 					pEnv->update(deltaTime);
-
-				//	SelectedItemId = UIComponentStore->selectedId;
-
+					btExpandStore->Draw();
+					if (mouseClickL && btExpandStore->onClick(xPos, yPos))
+					{
+						if (pEnv->bStoreExpanded)
+							pEnv->StoreCollapse({ 350, 475 }, 1, 8);
+						else
+							pEnv->StoreExpand({ 350, 75 });
+					}
 					Font.outInt(40, 65, SelectedItemId);
 					if (mouseClickL)
 						Font.outText(40, 85, "Left mouse click");

@@ -568,15 +568,26 @@ int PlayerEnviroment::StoreCollapse(vec2 pos, int line, int size)
 	bStoreExpanded = false;
 	Storeline = line;
 	StorelineSize = size;
+	Storelinepos = pos;
 	_store->lineNum = line;
 	_store->lineSize = size;
-	_store->_Store->setPosition(Storelinepos);
+	_store->collapsed = true;
+	_store->_Store->setPosition(pos);
 	if (selectedStoreId < (Storeline - 1)*StorelineSize || selectedStoreId >= Storeline*StorelineSize)
 	{
 		_store->selected = -1;
 		_store->_Store->selectedId = -1;
 		selectedStoreId = -1;
 	}
+	return 0;
+}
+
+int PlayerEnviroment::StoreExpand(vec2 pos)
+{
+	bStoreExpanded = true;
+	Storelinepos = pos;
+	_store->collapsed = false;
+	_store->_Store->setPosition(pos);
 	return 0;
 }
 
@@ -591,4 +602,10 @@ PlayerEnviroment::PlayerEnviroment()
 
 PlayerEnviroment::~PlayerEnviroment()
 {
+}
+
+bool execButtonExpandStore(int *, int *)
+{
+
+	return true;
 }

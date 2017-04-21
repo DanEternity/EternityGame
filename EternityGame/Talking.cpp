@@ -33,7 +33,7 @@ int Talking::conclusion(const char s[])
 	Font->outText(size.x + pos.x + 25 - 103 * px + 50, pos.y + size.y + 25, "next");
 	DrawSprite3v(texbt_001, 103*px, 43*py, size.x + pos.x+25 - 3*103 * px, pos.y+size.y);
 	Font->outText(size.x + pos.x + 25 - 3 * 103 * px + 50, pos.y + size.y + 25, "skip");
-	return isInsideCell2(xPos - 5, yPos + 3);
+	return  0; //isInsideCell2(xPos - 5, yPos + 3);
 }
 void Talking::setFont(tFont * pick)
 {
@@ -54,12 +54,12 @@ Talking::Talking()
 	buff.pos = { size.x + pos.x + 25 - 103 * px, pos.y + size.y };
 	buff.id = id;
 	buff.size = { 103 * px, 43 * py };
-	add(buff);
+	//add(buff);
 	id++;
 	buff.pos = { size.x + pos.x + 25 - 3*103 * px , pos.y + size.y };
 	buff.id = id;
 	buff.size = { 103 * px, 43 * py };
-	add(buff);
+	//add(buff);
 	id++;
 }
 

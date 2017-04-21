@@ -100,8 +100,17 @@ public:
 	/* Functions */
 	int update(double deltatime);
 	int StoreCollapse(vec2 pos, int line, int size);
+	int	StoreExpand(vec2 pos);
 
 	PlayerEnviroment();
 	~PlayerEnviroment();
 
 };
+
+
+///////////////////////////////////
+//	Functions
+//
+///////////////////////////////////
+
+bool execButtonExpandStore(int *, int *);
