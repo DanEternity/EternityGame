@@ -57,6 +57,7 @@ public:
 	void setPosition(vec2 newPosition);
 	void setMovement(vec2 newMove);
 	int addModule(ModuleType type);
+	int addModule(Module * target);
 	int addAttrToModule(int id, Attribute Attr);
 	int tekeDamage(DamageInfo info);
 	WeaponModuleInfo getWeaponInfo(int id);
