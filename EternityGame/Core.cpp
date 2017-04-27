@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint bt_002 = LoadTex("Resource/bt_002.tga");
 	GLuint bt_004 = LoadTex("Resource/cell_002.tga");
 	GLuint bt_005 = LoadTex("Resource/cell_002s.tga");
-	GLuint shipui = LoadTex("Resource/shipui.tga");
+	GLuint texshipui = LoadTex("Resource/shipui.tga");
 	GLuint textureCell_004 = LoadTex("Resource/cell_004.tga");
 	GLuint textureCell_004s = LoadTex("Resource/cell_004s.tga");
 	GLuint textureScreen_001 = LoadTex("Resource/window_back.tga");
@@ -154,12 +154,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	sMap->createShipMap("GameData/ShipMap_000.shipmap");
 	UIComponentShip->texCell_004 = textureCell_004;
 	UIComponentShip->texCell_004s = textureCell_004s;
-	UIComponentShip->texBack_001 = textureScreen_001;
+	//UIComponentShip->texBack_001 = textureScreen_001;
+	UIComponentShip->texBack_001 = texshipui;
 	UIComponentShip->texMap = textureItemMap;
 	UIComponentShip->texturegray = texturegray;
 	UIComponentShip->setPosition({ 350, 75 });
 	sMap->Font = &Font;
-	sMap->_Store->bgSize = { 1040, 1080 };
+	//sMap->_Store->bgSize = { 1040, 1080 };
+	sMap->_Store->bgSize = { 1040/2 + 40, 1080/1.5f};
 
 	SimpleButton * btExpandStore = new SimpleButton();
 	btExpandStore->pos = { 400, 560 };
@@ -198,11 +200,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	drmod->texbt_004 = bt_004;
 	drmod->texbt_005 = bt_005;
 	drmod->texbt_006 = UI_001; 	
-	drmod->shipui = shipui;
+	drmod->shipui = texshipui;
 
 	/*INTERFACE SETUP*/
 	pEnv->StoreCollapse({ 350, 475 }, 1, 8);
 	btExpandStore->pos = { 590, 450 };
+	drmod->init(0);
+	drmod->btSelect[0] = -1;
+	drmod->btSelect[1] = 4;
+	drmod->btSelect[2] = 1;
 	/* program main loop */
 	while (!bQuit)
 	{
@@ -268,7 +274,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			switch (gameStatus)
 			{
-				case -1: 	
+				case -1:
 					bott->init(0);
 
 					gameStatus = bott->drawBotton();
@@ -278,16 +284,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					battle->DrawAll();
 					talk->fileRead("new document.txt");
 					break;
-				case 1: 
-					((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
-					drmod->init(0);
-					drmod->drawShip();
-					drmod->drawModule();
-					drmod->drawHp((tShip*) battle->units[player->shipIndex]);
-					gameStatus = drmod->checkNumb();				
+				case 1:
+				{
+					//((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
+
+					//drmod->drawShip();
+					//drmod->drawModule();
+					//drmod->drawHp((tShip*)battle->units[player->shipIndex]);
+
+
+
+					int btSelected = drmod->checkNumb();
+					gameStatus = (btSelected == 1) ? gameStatus : btSelected;
 					break;
+				}
 				case 2:
-					
+				{
 
 					pEnv->update(deltaTime);
 					btExpandStore->Draw();
@@ -311,8 +323,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 						Font.outText(40, 85, "Left mouse click");
 					if (mouseDownL)
 						Font.outText(40, 105, "Left mouse down");
-
+					int btSelected = drmod->checkNumb();
+					gameStatus = (btSelected == 1) ? gameStatus : btSelected;
 					break;
+				}
 				case 4: 
 					bQuit = true;
 					break;

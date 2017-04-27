@@ -60,6 +60,10 @@ public:
 	unsigned int texbt_005;
 	unsigned int texbt_006;
 	unsigned int shipui;
+
+	int btSelect[5];
+	
+
 	DrawModule();
 	~DrawModule();
 

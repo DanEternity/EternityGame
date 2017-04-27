@@ -131,6 +131,7 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="editor.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Sources\Adventure_base.cpp" />
     <ClCompile Include="Sources\Battle.cpp" />
     <ClCompile Include="Sources\Globals.cpp" />
     <ClCompile Include="Sources\Graphics.cpp" />
@@ -145,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="editor.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Sources\Adventure_base.h" />
     <ClInclude Include="Sources\Battle.h" />
     <ClInclude Include="Sources\Globals.h" />
     <ClInclude Include="Sources\Graphics.h" />

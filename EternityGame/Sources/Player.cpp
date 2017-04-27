@@ -44,6 +44,12 @@ int PlayerHandle::setWeaponStats(int moduleId, WeaponInfo info)
 	return 0;
 }
 
+int PlayerHandle::updateShipStats(double deltatime)
+{
+	((tShip*)battle->units[shipIndex])->updStats(deltatime);
+	return 0;
+}
+
 PlayerHandle::PlayerHandle()
 {
 	shipIndex = -1;
@@ -469,7 +475,7 @@ int PlayerEnviroment::update(double deltatime)
 			{
 				std::swap(_shipM->items[selectedShipMapId], _store->items[tmpItemStore]);
 				std::swap(_shipM->_Store->cells[selectedShipMapId].additional, _store->_Store->cells[tmpItemStore].additional);
-				SyncShip(deltatime);
+				SyncShip(0);
 			}
 
 			selectedShipMapId = -1;
@@ -492,7 +498,7 @@ int PlayerEnviroment::update(double deltatime)
 				{
 					std::swap(_shipM->items[tmpItemShipMap], _store->items[selectedStoreId]);
 					std::swap(_shipM->_Store->cells[tmpItemShipMap].additional, _store->_Store->cells[selectedStoreId].additional);
-					SyncShip(deltatime);
+					SyncShip(0);
 				}
 
 				selectedStoreId = -1;
@@ -616,6 +622,8 @@ int PlayerEnviroment::SyncShip(double deltatime)
 			int moduleId = pick->addModule(((Module *)_shipM->items[i].entity));
 		}
 	}
+
+	pick->updStats(deltatime);
 
 	return 0;
 }

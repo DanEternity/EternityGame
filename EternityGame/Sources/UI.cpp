@@ -236,13 +236,13 @@ int DrawModule::checkNumb()
 	switch (isInsideCell2(xPos - 5, yPos + 3))
 	{
 	case 7:
-		a = -1;
+		a = btSelect[0];
 		break;
 	case 8:
-		a = 4;
+		a = btSelect[1];
 		break;
 	default:
-		a = 1;
+		a = btSelect[2];
 	}
 	return a;
 }

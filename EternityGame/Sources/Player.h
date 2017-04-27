@@ -20,6 +20,7 @@ public:
 	int useWeapon(int weaponId);
 	int setBattle(tBattle * newBattle);
 	int setWeaponStats(int moduleId, WeaponInfo info);
+	int updateShipStats(double deltatime);
 	
 	PlayerHandle();
 	~PlayerHandle();

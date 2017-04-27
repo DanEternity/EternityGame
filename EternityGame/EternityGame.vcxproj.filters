@@ -31,6 +31,9 @@
     <Filter Include="items">
       <UniqueIdentifier>{b3b9a07b-2500-4387-9f71-1e844f7ad1e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Adventure">
+      <UniqueIdentifier>{744927a1-1193-45ca-8347-ebfa62678f0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="tview.cpp">
       <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Adventure_base.cpp">
+      <Filter>Adventure</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="tview.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Adventure_base.h">
+      <Filter>Adventure</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
