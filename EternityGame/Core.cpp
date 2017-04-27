@@ -201,6 +201,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	drmod->texbt_005 = bt_005;
 	drmod->texbt_006 = UI_001; 	
 	drmod->shipui = texshipui;
+	drmod->texturegray = texturegray;
 
 	/*INTERFACE SETUP*/
 	pEnv->StoreCollapse({ 350, 475 }, 1, 8);
@@ -318,6 +319,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 							pEnv->bShipMapActive = false;
 						}
 					}
+					((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
+					drmod->drawHp((tShip*)battle->units[player->shipIndex]);
 					Font.outInt(40, 65, SelectedItemId);
 					if (mouseClickL)
 						Font.outText(40, 85, "Left mouse click");

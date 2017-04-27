@@ -534,6 +534,7 @@ int PlayerEnviroment::update(double deltatime)
 				mouseClickL = false;
 			}
 		}
+		SyncShip(0); // delete this
 	}
 /*
 	if (mouseClickL)

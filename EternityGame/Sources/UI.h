@@ -60,6 +60,7 @@ public:
 	unsigned int texbt_005;
 	unsigned int texbt_006;
 	unsigned int shipui;
+	unsigned int texturegray;
 
 	int btSelect[5];
 	
