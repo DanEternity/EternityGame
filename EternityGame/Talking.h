@@ -27,8 +27,8 @@ public:
 	int init(int id);
 	void check(UISmartGrid*UISG);
 	
-	int conclusion(std::string s);
-	int conclusion_v2(const char s[]);
+	int conclusion(const char s[]);
+
 	void setFont(tFont * pick);
 	tFont * Font;
 	UISmartGrid * tUISmartGrid;

@@ -4,6 +4,8 @@
 #include<Vector>
 #include<gl/gl.h>
 #include<module.h>
+#include <cstdio>
+#include <iostream>
 
 class tShip
 {
@@ -66,4 +68,5 @@ public:
 	int setWeaponStats(WeaponModuleInfo info, float cooldown, int id);
 	void updStats(double deltatime);
 	void Draw();
+	void loadShip(const char *name);
 };
