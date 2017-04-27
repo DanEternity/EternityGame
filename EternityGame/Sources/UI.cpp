@@ -216,10 +216,31 @@ void DrawModule::drawGui()
 
 void DrawModule::drawHp(tShip* pick)
 {
-	Font->outText(350, 100, "BaseHP/FullHP");
+	Font->outText(350, 100, "HP");
 	Font->outInt(485, 100, pick->baseHull);
 	Font->outText(510, 100, "/");
 	Font->outInt(515, 100, pick->hullMax);
+
+	Font->outText(350, 120, "SHIELD");
+	Font->outInt(480, 120, pick->baseShield);
+	Font->outText(510, 120, "/");
+	Font->outInt(515, 120, pick->shieldMax);
+
+	Font->outText(350, 140, "SPEED");
+	Font->outInt(480, 140, pick->baseSpeed);
+	Font->outText(510, 140, "/");
+	Font->outInt(515, 140, pick->speed);
+
+	Font->outText(350, 160, "EVADE");
+	Font->outInt(480, 160, pick->baseEvade);
+	Font->outText(510, 160, "/");
+	Font->outInt(515, 160, pick->evade);
+
+	Font->outText(350, 180, "BATTERY");
+	Font->outInt(480, 180, pick->baseBattery);	
+	Font->outText(510, 180, "/");
+	Font->outInt(515, 180, pick->powerBatteryMax);
+
 }
 
 int DrawModule::checkNumb()

@@ -245,3 +245,18 @@ void tShip::Draw()
 {
 	DrawSprite2v(shipTexture, sizeX, sizeY, pos.x, pos.y);
 }
+
+void tShip::loadShip(const char * name)
+{
+	FILE*f;
+	freopen_s(&f,"file.txt", "w", stdout);
+	std::cout <<name;
+	std::cout << baseHull;
+	std::cout << baseHullReg;
+	std::cout << baseShield;
+	std::cout << baseShieldReg;
+	std::cout << baseSpeed;
+	std::cout << baseEvade;
+	std::cout << baseBattery;
+
+}
