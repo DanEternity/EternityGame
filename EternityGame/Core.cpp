@@ -149,6 +149,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	pEnv->bStoreActive = true;
 	pEnv->bShipMapActive = true;
 	pEnv->bStoreExpanded = true;
+	pEnv->_player = player;
 
 	sMap->createShipMap("GameData/ShipMap_000.shipmap");
 	UIComponentShip->texCell_004 = textureCell_004;
@@ -201,7 +202,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	/*INTERFACE SETUP*/
 	pEnv->StoreCollapse({ 350, 475 }, 1, 8);
-
+	btExpandStore->pos = { 590, 450 };
 	/* program main loop */
 	while (!bQuit)
 	{
@@ -288,15 +289,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				case 2:
 					
 
-
 					pEnv->update(deltaTime);
 					btExpandStore->Draw();
 					if (mouseClickL && btExpandStore->onClick(xPos, yPos))
 					{
 						if (pEnv->bStoreExpanded)
+						{
 							pEnv->StoreCollapse({ 350, 475 }, 1, 8);
+							btExpandStore->pos = { 590, 450 };
+							pEnv->bShipMapActive = true;
+						}
 						else
+						{
 							pEnv->StoreExpand({ 350, 75 });
+							btExpandStore->pos = { 590, 50 };
+							pEnv->bShipMapActive = false;
+						}
 					}
 					Font.outInt(40, 65, SelectedItemId);
 					if (mouseClickL)

@@ -469,6 +469,7 @@ int PlayerEnviroment::update(double deltatime)
 			{
 				std::swap(_shipM->items[selectedShipMapId], _store->items[tmpItemStore]);
 				std::swap(_shipM->_Store->cells[selectedShipMapId].additional, _store->_Store->cells[tmpItemStore].additional);
+				SyncShip(deltatime);
 			}
 
 			selectedShipMapId = -1;
@@ -491,6 +492,7 @@ int PlayerEnviroment::update(double deltatime)
 				{
 					std::swap(_shipM->items[tmpItemShipMap], _store->items[selectedStoreId]);
 					std::swap(_shipM->_Store->cells[tmpItemShipMap].additional, _store->_Store->cells[selectedStoreId].additional);
+					SyncShip(deltatime);
 				}
 
 				selectedStoreId = -1;
@@ -588,6 +590,33 @@ int PlayerEnviroment::StoreExpand(vec2 pos)
 	Storelinepos = pos;
 	_store->collapsed = false;
 	_store->_Store->setPosition(pos);
+	return 0;
+}
+
+int PlayerEnviroment::SyncShip(double deltatime)
+{
+
+	tShip * pick = ((tShip *)_player->battle->units[_player->shipIndex]);
+
+	//pick->tModule.size();
+	/* Clear ship modules */
+	for (int i(0); i < pick->tModule.size(); i++)
+	{
+		delete pick->tModule[i];
+	}
+
+	pick->tModule.clear();
+
+	/* Setup new modules */
+
+	for (int i(0); i < _shipM->items.size(); i++)
+	{
+		if (_shipM->items[i].type != nullItem)
+		{
+			int moduleId = pick->addModule(((Module *)_shipM->items[i].entity));
+		}
+	}
+
 	return 0;
 }
 

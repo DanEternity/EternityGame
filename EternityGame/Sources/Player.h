@@ -20,7 +20,7 @@ public:
 	int useWeapon(int weaponId);
 	int setBattle(tBattle * newBattle);
 	int setWeaponStats(int moduleId, WeaponInfo info);
-
+	
 	PlayerHandle();
 	~PlayerHandle();
 };
@@ -86,6 +86,7 @@ public:
 	int selectedStoreId;
 	ShipMap * _shipM;
 	PrimaryStore * _store;
+	PlayerHandle * _player;
 
 	/* Flags */
 	bool bShipMapActive;
@@ -101,6 +102,7 @@ public:
 	int update(double deltatime);
 	int StoreCollapse(vec2 pos, int line, int size);
 	int	StoreExpand(vec2 pos);
+	int SyncShip(double deltatime);
 
 	PlayerEnviroment();
 	~PlayerEnviroment();

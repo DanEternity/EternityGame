@@ -109,6 +109,31 @@ int tShip::addModule(ModuleType type)
 	return id;
 }
 
+int tShip::addModule(Module * target)
+{
+	int id = 0;
+	switch (target->type)
+	{
+	case none:
+		break;
+	case core:
+		break;
+	case sys:
+		tModule.push_back(new SysModule(*((SysModule*)target)));
+		//SysModule * mod = new SysModule(*((SysModule*)target));
+		id = tModule.size() - 1;
+		break;
+	case wep:
+		tModule.push_back(new WepModule(*((WepModule*)target)));
+		id = tModule.size() - 1;
+		tWep.push_back(id);
+		break;
+	default:
+		break;
+	}
+	return id;
+}
+
 int tShip::addAttrToModule(int id, Attribute Attr)
 {
 	SysModule * pick = (SysModule*)tModule[id];
