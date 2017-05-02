@@ -1,6 +1,7 @@
 #pragma once
 #include<vector>
 #include<string>
+#include<Types.h>
 
 void StartDraw2D(int sizeX, int sizeY);
 void EndDraw2D();
@@ -8,7 +9,7 @@ unsigned int LoadTex(const char* FilePath);
 void DrawSprite(unsigned int tex, float size, float x, float y);
 void DrawSprite2v(unsigned int tex, float sizeW, float sizeH, float x, float y);
 void DrawImage(unsigned int tex, int texSizeX, int texSizeY, int PartSizeX, int PartSizeY, int PosX, int PosY, int Sx, int Sy);
-
+void VectorRotate(vec2 &vec, double angle);
 /* 
 DrawImage()
 tex - texture id
@@ -20,6 +21,8 @@ Sx, Sy - Масштабирование по X и Y. Показывает фактическую ширину изображения
 
 void DrawSprite3v(unsigned int tex, int sizeW, int sizeH, float x, float y);
 void DrawSprite4v(int size, int texId, float x, float y); // using for texture map
+void DrawSprite5v(ModelInfo model, float size, double angle, float x, float y); // rotatable; new format
+void DrawTile1v(ModelInfo model, float size, double angle, float multiplier, vec2 diff, float x, float y); // rotatable; new format
 void AssignTextureMap(int id, int sizeX, int sizeY);
 void GetScale(int sizeW, int sizeH, int texSizeX, int texSizeY, float &scaleX, float &scaleY);
 

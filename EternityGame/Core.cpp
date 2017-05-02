@@ -13,6 +13,7 @@
 #include <UI.h>
 #include <Menu.h>
 #include <Talking.h>
+#include <Adventure_base.h>
 
 
 /**************************
@@ -86,6 +87,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint textureCellHoverBlue = LoadTex("Resource/cell_hower_blue.tga");
 	GLuint textureItemMap = LoadTex("Resource/textureMap.tga");
 	GLuint texturegray = LoadTex("Resource/texture_gray.tga");
+	GLuint textureTileSpace_001 = LoadTex("Resource/texture_tile_space.tga");
 
 	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
@@ -95,6 +97,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	Init();
 
 	/*Init test version*/
+
+	/* Variables */
+
+	int id(0);
+
+	/* */
+
 	tBattle * battle = new tBattle();
 	PlayerHandle * player = new PlayerHandle();
 	player->setBattle(battle);
@@ -102,12 +111,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	battle->setShipStats({ "Test Ship",100,1,0,0,50,0,100, MainShip, 64, 64}, player->shipIndex);
 	battle->setShipPosition({ 400, 300 }, player->shipIndex);
-
-	int id = player->addModule(sys);
+	
+	/*
+	id = player->addModule(sys);
 	player->addAttrToModule(id, { tHull, 100 });
 	id = player->addModule(wep);
 	player->setWeaponStats(id, { 0.7f, 230, 40, 600, bullet, bul });
-
+	
 	id = battle->addShip();
 	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
 	battle->setShipPosition({ 300, 100 }, id);
@@ -123,7 +133,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	id = battle->addShip();
 	battle->setShipStats({ "Meteorite", 300, 0, 0, 0, 1, 0, 1, book, 160, 160, 60 }, id);
 	battle->setShipPosition({ 620, 300 }, id);
-
+	*/
 
 	PrimaryStore * store = new PrimaryStore(40);
 	UIStore * UIComponentStore = new UIStore();
@@ -185,6 +195,41 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	bott->setFont(&Font);
 	bott->texbt_001 = bt_001;
 
+	/* Adventure setup */
+
+	tBaseAdventure * MainAdventure = new tBaseAdventure();
+	MainAdventure->tile.tex = textureTileSpace_001;
+	MainAdventure->tile.p1 = { 0, 0 };
+	MainAdventure->tile.p2 = { 1, 1 };
+	MainAdventure->tileSize = 2048;
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { book, {0, 0}, {1, 1} };
+	MainAdventure->ObjectMap[id]->pos = { 100 , 100 };
+	MainAdventure->ObjectMap[id]->texSize = 160;
+	MainAdventure->ObjectMap[id]->rotate = 0.5;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0.1;
+
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { book,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 400 , 100 };
+	MainAdventure->ObjectMap[id]->texSize = 195;
+	MainAdventure->ObjectMap[id]->rotate = 0.5;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0.07;
+
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { book,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 500 , 300 };
+	MainAdventure->ObjectMap[id]->texSize = 220;
+	MainAdventure->ObjectMap[id]->rotate = 0.5;
+	MainAdventure->ObjectMap[id]->rotateSpeed = -0.1;
+
+	MainAdventure->cameraSpeed = 200;
+
+	/* End */
+
 	Talking * talk = new Talking();
 	talk->texturegray = texturegray;
 	talk->setFont(&Font);
@@ -206,10 +251,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	/*INTERFACE SETUP*/
 	pEnv->StoreCollapse({ 350, 475 }, 1, 8);
 	btExpandStore->pos = { 590, 450 };
+	bott->init(0);
 	drmod->init(0);
 	drmod->btSelect[0] = -1;
 	drmod->btSelect[1] = 4;
 	drmod->btSelect[2] = 1;
+
+	/* Additional Init*/
+
+	((tShip*)battle->units[player->shipIndex])->pos = { float(gameFrameW / 2), float(gameFrameH / 2) };
+	MainAdventure->camera = { 0, 0 };
+	MainAdventure->ScrollingSpeed = 1600;
+
+
 	/* program main loop */
 	while (!bQuit)
 	{
@@ -233,58 +287,72 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			deltaTime = GetDeltaTime();
 
-			vec2 movement = { 0, 0 };
-
-			if (keyState[VK_LEFT])
-			{
-				movement.x -= 1;
-			}
-			if (keyState[VK_RIGHT])
-			{
-				movement.x += 1;
-			}
-			if (keyState[VK_DOWN])
-			{
-				movement.y += 1;
-			}
-			if (keyState[VK_UP])
-				movement.y -= 1;
-
-			player->setShipMovement(movement);
-
-			if (keyState[VK_SPACE])
-			{
-				player->useWeapon(0);
-			}
-
 			/* OpenGL animation code goes here */	
 
 			StartDraw2D(wndWidth, wndHeight);	
 
-			glBindTexture(GL_TEXTURE_2D, BG);
-	
-			glBegin(GL_QUADS);
-
-			glTexCoord2f(0.0f, 1.0f); 		glVertex2f(0, 0);
-			glTexCoord2f(1.0f, 1.0f);		glVertex2f(gameFrameW, 0);
-			glTexCoord2f(1.0f, 0.0f); 		glVertex2f(gameFrameW, gameFrameH);
-			glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, gameFrameH);
-
-			glEnd();
-			
-
 			switch (gameStatus)
 			{
 				case -1:
-					bott->init(0);
+					/* Simple background*/
+					glBindTexture(GL_TEXTURE_2D, BG);
+
+					glBegin(GL_QUADS);
+
+					glTexCoord2f(0.0f, 1.0f); 		glVertex2f(0, 0);
+					glTexCoord2f(1.0f, 1.0f);		glVertex2f(wndWidth, 0);
+					glTexCoord2f(1.0f, 0.0f); 		glVertex2f(wndWidth, wndHeight);
+					glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, wndHeight);
+
+					glEnd();
+					/* End simple background */
 
 					gameStatus = bott->drawBotton();
 					break;
 				case 0:
+				{
+					/* Simple background*/
+					glBindTexture(GL_TEXTURE_2D, BG);
+
+					glBegin(GL_QUADS);
+
+					glTexCoord2f(0.0f, 1.0f); 		glVertex2f(0, 0);
+					glTexCoord2f(1.0f, 1.0f);		glVertex2f(wndWidth, 0);
+					glTexCoord2f(1.0f, 0.0f); 		glVertex2f(wndWidth, wndHeight);
+					glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, wndHeight);
+
+					glEnd();
+					/* End simple background */
+
+					vec2 movement = { 0, 0 };
+
+					if (keyState[VK_LEFT])
+					{
+						movement.x -= 1;
+					}
+					if (keyState[VK_RIGHT])
+					{
+						movement.x += 1;
+					}
+					if (keyState[VK_DOWN])
+					{
+						movement.y += 1;
+					}
+					if (keyState[VK_UP])
+						movement.y -= 1;
+
+					player->setShipMovement(movement);
+
+					if (keyState[VK_SPACE])
+					{
+						player->useWeapon(0);
+					}
+
 					battle->update(deltaTime);
 					battle->DrawAll();
 					talk->fileRead("new document.txt");
 					break;
+				}
 				case 1:
 				{
 					//((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
@@ -292,8 +360,53 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					//drmod->drawShip();
 					//drmod->drawModule();
 					//drmod->drawHp((tShip*)battle->units[player->shipIndex]);
+					MainAdventure->SetCamera(((tShip*)battle->units[player->shipIndex])->rotation * 180/M_PI_2 * (-1.0f/2));
+					vec2 movement;
+					float thrust = 0, seek = 0;
 
 
+					if (keyState[VK_LEFT])
+					{
+						seek -= 1;
+					}
+					if (keyState[VK_RIGHT])
+					{
+						seek += 1;
+					}
+					if (keyState[VK_DOWN])
+					{
+						thrust += 1;
+					}
+					if (keyState[VK_UP])
+						thrust -= 1;
+
+					movement = {0, thrust};
+					((tShip*)battle->units[player->shipIndex])->rotation += seek * deltaTime * 0.5;
+					VectorRotate(movement, ((tShip*)battle->units[player->shipIndex])->rotation);
+
+					MainAdventure->SetCameraMove(movement);
+
+					MainAdventure->Update(deltaTime);
+					MainAdventure->Draw();
+
+					battle->update(deltaTime);
+					battle->DrawAll();
+
+					//MainAdventure->camera = ((tShip*)battle->units[player->shipIndex])->pos;
+					//MainAdventure->SetCamera(-45, { MainAdventure->camera.x + gameFrameW / 2, MainAdventure->camera.y + gameFrameH / 2 });
+					MainAdventure->ResetCamera();
+
+					Font.outText(1000, 20, "Camera x,y");
+					Font.outInt(1000, 40, MainAdventure->camera.x);
+					Font.outInt(1000, 60, MainAdventure->camera.y);
+
+					Font.outText(1000, 100, "Ship x,y");
+					Font.outInt(1000, 120, MainAdventure->camera.x + gameFrameW/2);
+					Font.outInt(1000, 140, MainAdventure->camera.y + gameFrameH/2);
+
+					Font.outText(1000, 170, "ShipRotation/CameraRotation");
+					Font.outInt(1000, 190, ((tShip*)battle->units[player->shipIndex])->rotation * 180 / M_PI_2);
+					Font.outInt(1000, 210, MainAdventure->fAngle);
 
 					int btSelected = drmod->checkNumb();
 					gameStatus = (btSelected == 1) ? gameStatus : btSelected;
@@ -301,6 +414,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				}
 				case 2:
 				{
+
+					/* Simple background*/
+					glBindTexture(GL_TEXTURE_2D, BG);
+
+					glBegin(GL_QUADS);
+
+					glTexCoord2f(0.0f, 1.0f); 		glVertex2f(0, 0);
+					glTexCoord2f(1.0f, 1.0f);		glVertex2f(wndWidth, 0);
+					glTexCoord2f(1.0f, 0.0f); 		glVertex2f(wndWidth, wndHeight);
+					glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, wndHeight);
+
+					glEnd();
+					/* End simple background */
 
 					pEnv->update(deltaTime);
 					btExpandStore->Draw();

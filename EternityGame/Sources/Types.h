@@ -177,3 +177,9 @@ struct SocketInfo
 	ModuleSize size;
 	int maxLevel;
 };
+
+struct ModelInfo
+{
+	unsigned int tex;
+	vec2 p1, p2;
+};

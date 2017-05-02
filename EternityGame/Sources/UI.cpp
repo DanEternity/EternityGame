@@ -221,7 +221,7 @@ void DrawModule::drawHp(tShip* pick)
 	const int y = 100;
 	DrawSprite3v(texturegray, 200, 150, x-20, y-20);
 	Font->outText(x, y, "HP");
-	Font->outInt(x+135, y, pick->baseHull);
+	Font->outInt(x+130, y, pick->baseHull);
 	Font->outText(x+160, y, "/");
 	Font->outInt(x+165, y, pick->hullMax);
 
@@ -230,20 +230,20 @@ void DrawModule::drawHp(tShip* pick)
 	Font->outText(x+160, y+20, "/");
 	Font->outInt(x+165, y+20, pick->shieldMax);
 
-	Font->outText(x, y+40, "SPEED");
-	Font->outInt(x+130, y+40, pick->baseSpeed);
+	Font->outText(x, y+80, "SPEED");
+//	Font->outInt(x+130, y+40, pick->baseSpeed);
+//	Font->outText(x+160, y+40, "/");
+	Font->outInt(x+130, y+80, pick->speed);
+
+	Font->outText(x, y+60, "EVASION");
+//	Font->outInt(x+130, y+60, pick->baseEvade);
+//	Font->outText(x+160, y+60, "/");
+	Font->outInt(x+130, y+60, pick->evade);
+
+	Font->outText(x, y+40, "BATTERY");
+	Font->outInt(x+130, y+40, pick->powerBattery);	
 	Font->outText(x+160, y+40, "/");
-	Font->outInt(x+165, y+40, pick->speed);
-
-	Font->outText(x, y+60, "EVADE");
-	Font->outInt(x+130, y+60, pick->baseEvade);
-	Font->outText(x+160, y+60, "/");
-	Font->outInt(x+165, y+60, pick->evade);
-
-	Font->outText(x, y+80, "BATTERY");
-	Font->outInt(x+130, y+80, pick->baseBattery);	
-	Font->outText(x+160, y+80, "/");
-	Font->outInt(x+165, y+80, pick->powerBatteryMax);
+	Font->outInt(x+165, y+40, pick->powerBatteryMax);
 
 }
 

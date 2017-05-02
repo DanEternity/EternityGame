@@ -1,5 +1,6 @@
 #include "Ship.h"
 #include <Graphics.h>
+#include <Globals.h>
 
 tShip::tShip()
 {
@@ -7,7 +8,12 @@ tShip::tShip()
 	movement = { 0, 0 };
 	pos = { 0, 0 };
 	direction = { 0, -1 };
+	rotation = 0;
 	PhysicalSize = 1;
+	shipModel.p1 = { 0, 0 };
+	shipModel.p2 = { 1, 1 };
+
+
 
 	baseHull = 1;
 	baseHullReg = 0;
@@ -55,6 +61,7 @@ void tShip::setName(const char * newName)
 void tShip::setTexture(unsigned int tex)
 {
 	shipTexture = tex;
+	shipModel.tex = tex;
 }
 
 void tShip::setSize(int sizeShipX, int sizeShipY)
@@ -268,7 +275,7 @@ void tShip::updStats(double deltatime)
 
 void tShip::Draw()
 {
-	DrawSprite2v(shipTexture, sizeX, sizeY, pos.x, pos.y);
+	DrawSprite5v(shipModel, sizeX, rotation, pos.x, pos.y);
 }
 
 void tShip::loadShip(const char * name)
