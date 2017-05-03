@@ -13,6 +13,8 @@ HGLRC hRC;
 MSG msg;
 BOOL bQuit = FALSE;
 BOOL keyState[0xffff];
+BOOL keyPress[0xffff];
+BOOL keyBlock[0xffff];
 
 /**************************
 * Options
@@ -71,3 +73,4 @@ int mouseX = 0, mouseY = 0;
 int xPos = 0, yPos = 0;
 int SelectedItemId = -1;
 bool lMouseBotton = false;
+char lastChar = '0';

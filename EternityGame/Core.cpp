@@ -262,7 +262,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	((tShip*)battle->units[player->shipIndex])->pos = { float(gameFrameW / 2), float(gameFrameH / 2) };
 	MainAdventure->camera = { 0, 0 };
 	MainAdventure->ScrollingSpeed = 1600;
-
+	player->playerStatus = pNone;
 
 	/* program main loop */
 	while (!bQuit)
@@ -360,30 +360,41 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					//drmod->drawShip();
 					//drmod->drawModule();
 					//drmod->drawHp((tShip*)battle->units[player->shipIndex]);
-					MainAdventure->SetCamera(((tShip*)battle->units[player->shipIndex])->rotation * 180/M_PI_2 * (-1.0f/2));
+
+					if (player->playerStatus == pNone)
+					{
+						/* Init game */
+
+						player->playerStatus = pAdventure;
+
+					}
+
+					MainAdventure->SetCamera(((tShip*)battle->units[player->shipIndex])->rotation * 180 / M_PI_2 * (-1.0f / 2));
 					vec2 movement;
 					float thrust = 0, seek = 0;
 
+					if (player->playerStatus == pAdventure)	// Управление в Приключении
+					{
+						if (keyState[VK_LEFT])
+						{
+							seek -= 1;
+						}
+						if (keyState[VK_RIGHT])
+						{
+							seek += 1;
+						}
+						if (keyState[VK_DOWN])
+						{
+							thrust += 1;
+						}
+						if (keyState[VK_UP])
+							thrust -= 1;
+					}
 
-					if (keyState[VK_LEFT])
-					{
-						seek -= 1;
-					}
-					if (keyState[VK_RIGHT])
-					{
-						seek += 1;
-					}
-					if (keyState[VK_DOWN])
-					{
-						thrust += 1;
-					}
-					if (keyState[VK_UP])
-						thrust -= 1;
+					movement = { 0, thrust };
 
-					movement = {0, thrust};
 					((tShip*)battle->units[player->shipIndex])->rotation += seek * deltaTime * 0.5;
 					VectorRotate(movement, ((tShip*)battle->units[player->shipIndex])->rotation);
-
 					MainAdventure->SetCameraMove(movement);
 
 					MainAdventure->Update(deltaTime);
@@ -396,6 +407,32 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					//MainAdventure->SetCamera(-45, { MainAdventure->camera.x + gameFrameW / 2, MainAdventure->camera.y + gameFrameH / 2 });
 					MainAdventure->ResetCamera();
 
+					if (player->playerStatus == pShipMain)	// Экран корабля
+					{
+
+						pEnv->update(deltaTime);
+						btExpandStore->Draw();
+						if (mouseClickL && btExpandStore->onClick(xPos, yPos))
+						{
+							if (pEnv->bStoreExpanded)
+							{
+								pEnv->StoreCollapse({ 350, 475 }, 1, 8);
+								btExpandStore->pos = { 590, 450 };
+								pEnv->bShipMapActive = true;
+							}
+							else
+							{
+								pEnv->StoreExpand({ 350, 75 });
+								btExpandStore->pos = { 590, 50 };
+								pEnv->bShipMapActive = false;
+							}
+						}
+						((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
+						drmod->drawHp((tShip*)battle->units[player->shipIndex]);
+						Font.outInt(40, 65, SelectedItemId);
+
+					}
+
 					Font.outText(1000, 20, "Camera x,y");
 					Font.outInt(1000, 40, MainAdventure->camera.x);
 					Font.outInt(1000, 60, MainAdventure->camera.y);
@@ -407,6 +444,35 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					Font.outText(1000, 170, "ShipRotation/CameraRotation");
 					Font.outInt(1000, 190, ((tShip*)battle->units[player->shipIndex])->rotation * 180 / M_PI_2);
 					Font.outInt(1000, 210, MainAdventure->fAngle);
+
+					if (lastChar >= 'A' && lastChar <= 'Z')
+					{
+						char lc[2] = { 0, 0 };
+						lc[0] = lastChar;
+						Font.outText(1000, 230, lc);
+					}
+					else
+						Font.outText(1000, 230, "Null");
+
+					/*Key update*/
+
+					if (keyPress['I'])
+					{
+						keyPress['I'] = FALSE;
+						if (player->playerStatus == pAdventure)
+						{
+							player->playerStatus = pShipMain;
+						}
+						else
+						{
+							if (player->playerStatus == pShipMain || player->playerStatus == pShipFactory)
+							{
+								player->playerStatus = pAdventure;
+							}
+						}
+					}
+
+					/* Buttons */
 
 					int btSelected = drmod->checkNumb();
 					gameStatus = (btSelected == 1) ? gameStatus : btSelected;
@@ -562,10 +628,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 			return 0;
 		default:
 			keyState[wParam] = TRUE;
+			if (!keyBlock[wParam])
+				keyPress[wParam] = TRUE;
+			keyBlock[wParam] = TRUE;
+			lastChar = wParam;
 		}
 		return 0;
 	case WM_KEYUP:
 		keyState[wParam] = FALSE;
+		keyBlock[wParam] = FALSE;
+		keyPress[wParam] = FALSE;
+		
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}

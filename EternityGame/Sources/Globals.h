@@ -13,6 +13,8 @@ extern HGLRC hRC;
 extern MSG msg;
 extern BOOL bQuit;
 extern BOOL keyState[0xffff];
+extern BOOL keyPress[0xffff];
+extern BOOL keyBlock[0xffff];
 
 /**************************
 * Options
@@ -71,6 +73,7 @@ extern int mouseX, mouseY;
 extern int xPos, yPos;
 extern bool lMouseBotton;
 extern int SelectedItemId;
+extern char lastChar;
 
 const float vdiv = 0.707106781f; // sqrt(2)/2
 
@@ -87,3 +90,7 @@ const float vdiv = 0.707106781f; // sqrt(2)/2
 #define M_2_SQRTPI 1.12837916709551257390   // 2/sqrt(pi)
 #define M_SQRT2    1.41421356237309504880   // sqrt(2)
 #define M_SQRT1_2  0.707106781186547524401  // 1/sqrt(2)
+
+/* Keys  */
+
+#define mKey_I	73

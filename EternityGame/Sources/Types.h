@@ -183,3 +183,12 @@ struct ModelInfo
 	unsigned int tex;
 	vec2 p1, p2;
 };
+
+enum PlayerStatus
+{
+	pNone,
+	pMenu,
+	pAdventure,
+	pShipMain,
+	pShipFactory
+};

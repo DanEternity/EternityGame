@@ -14,6 +14,7 @@ class PlayerHandle
 public:
 	tBattle * battle;
 	int shipIndex;
+	PlayerStatus playerStatus;
 	int setShipMovement(vec2 NewMove);
 	int addModule(ModuleType type);
 	int addAttrToModule(int moduleId, Attribute attr);
@@ -21,7 +22,7 @@ public:
 	int setBattle(tBattle * newBattle);
 	int setWeaponStats(int moduleId, WeaponInfo info);
 	int updateShipStats(double deltatime);
-	
+
 	PlayerHandle();
 	~PlayerHandle();
 };
