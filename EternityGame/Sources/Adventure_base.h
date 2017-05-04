@@ -10,6 +10,7 @@ class tBaseObject
 {
 public:
 	vec2 pos;
+	ObjectType type;
 
 	float rotate;
 	float rotateSpeed;
@@ -41,10 +42,15 @@ public:
 	ModelInfo tile;
 	float tileSize;
 
+	/* additional */
+	int activeZoneId;
+
+	/* end */
 	void SetCamera(float angle);
 	void ResetCamera();
 	void Update(double deltatime);
 	void SetCameraMove(vec2 movement);
 	void Draw();
 	int AddBaseObject();
+	tBaseAdventure();
 };

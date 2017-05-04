@@ -27,10 +27,24 @@ void tBaseAdventure::Update(double deltatime)
 		float(camera.y + cameraMoveVector.y * deltatime * cameraSpeed)
 	};
 
+	bool ZoneActive = false;
+
 	for (int i(0); i < ObjectMap.size(); i++)
 	{
 		ObjectMap[i]->rotate += ObjectMap[i]->rotateSpeed * deltatime;
+		if (ObjectMap[i]->type == objectTypepZone)
+		{
+			//	if (DistSqr({ shipX, shipY }, { ObjectMap[i]->pos.x, ObjectMap[i]->pos.y}) < ObjectMap[i]->size*ObjectMap[i]->size)
+			if (DistSqr({ shipX, shipY }, { ObjectMap[i]->pos.x + ObjectMap[i]->size/2, ObjectMap[i]->pos.y + ObjectMap[i]->size/2}) < (ObjectMap[i]->size)*(ObjectMap[i]->size))
+			{
+				activeZoneId = ObjectMap[i]->id;
+				ZoneActive = true;
+			}
+		}
 	}
+
+	if (!ZoneActive)
+		activeZoneId = false;
 }
 
 void tBaseAdventure::SetCameraMove(vec2 movement)
@@ -60,6 +74,12 @@ int tBaseAdventure::AddBaseObject()
 	return ObjectMap.size() - 1;
 }
 
+tBaseAdventure::tBaseAdventure()
+{
+	activeZoneId = -1;
+}
+
 tBaseObject::tBaseObject()
 {
+	type = objectTypeNone;
 }

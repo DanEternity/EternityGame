@@ -74,6 +74,7 @@ extern int xPos, yPos;
 extern bool lMouseBotton;
 extern int SelectedItemId;
 extern char lastChar;
+extern float shipX, shipY;
 
 const float vdiv = 0.707106781f; // sqrt(2)/2
 

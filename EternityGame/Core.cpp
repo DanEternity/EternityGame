@@ -88,6 +88,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint textureItemMap = LoadTex("Resource/textureMap.tga");
 	GLuint texturegray = LoadTex("Resource/texture_gray.tga");
 	GLuint textureTileSpace_001 = LoadTex("Resource/texture_tile_space.tga");
+	GLuint textureAsteroidBelt_001; //= LoadTex("Resource/asteroid_belt_001");
+	GLuint textureAsteroidBelt_002; // = LoadTex("Resource/asteroid_belt_002");
+	GLuint textureZone_blue; // = LoadTex("Resource/Zone_001.tga");
 
 	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
@@ -205,7 +208,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	id = MainAdventure->AddBaseObject();
 	MainAdventure->ObjectMap[id]->sprite = { book, {0, 0}, {1, 1} };
-	MainAdventure->ObjectMap[id]->pos = { 100 , 100 };
+	MainAdventure->ObjectMap[id]->pos = { 5100 , 5100 };
 	MainAdventure->ObjectMap[id]->texSize = 160;
 	MainAdventure->ObjectMap[id]->rotate = 0.5;
 	MainAdventure->ObjectMap[id]->rotateSpeed = 0.1;
@@ -213,7 +216,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	id = MainAdventure->AddBaseObject();
 	MainAdventure->ObjectMap[id]->sprite = { book,{ 0, 0 },{ 1, 1 } };
-	MainAdventure->ObjectMap[id]->pos = { 400 , 100 };
+	MainAdventure->ObjectMap[id]->pos = { 5400 , 5100 };
 	MainAdventure->ObjectMap[id]->texSize = 195;
 	MainAdventure->ObjectMap[id]->rotate = 0.5;
 	MainAdventure->ObjectMap[id]->rotateSpeed = 0.07;
@@ -221,10 +224,37 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	id = MainAdventure->AddBaseObject();
 	MainAdventure->ObjectMap[id]->sprite = { book,{ 0, 0 },{ 1, 1 } };
-	MainAdventure->ObjectMap[id]->pos = { 500 , 300 };
+	MainAdventure->ObjectMap[id]->pos = { 5500 , 5300 };
 	MainAdventure->ObjectMap[id]->texSize = 220;
 	MainAdventure->ObjectMap[id]->rotate = 0.5;
 	MainAdventure->ObjectMap[id]->rotateSpeed = -0.1;
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { 0,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 4500 , 4700 };
+	MainAdventure->ObjectMap[id]->texSize = 1000;
+	MainAdventure->ObjectMap[id]->rotate = 0;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
+	int tmp_001 = id;
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { 0,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 6500 , 4700 };
+	MainAdventure->ObjectMap[id]->texSize = 800;
+	MainAdventure->ObjectMap[id]->rotate = 0;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
+	int tmp_002 = id;
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { 0,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 4300 , 4600 };
+	MainAdventure->ObjectMap[id]->texSize = 128;
+	MainAdventure->ObjectMap[id]->size = 128;
+	MainAdventure->ObjectMap[id]->rotate = 0;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
+	MainAdventure->ObjectMap[id]->id = 1;
+	MainAdventure->ObjectMap[id]->type = objectTypepZone;
+	int tmp_003 = id;
 
 	MainAdventure->cameraSpeed = 200;
 
@@ -364,9 +394,17 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					if (player->playerStatus == pNone)
 					{
 						/* Init game */
+						textureAsteroidBelt_001 = LoadTex("Resource/asteroid_belt_001.tga");
+						textureAsteroidBelt_002 = LoadTex("Resource/asteroid_belt_002.tga");
+						textureZone_blue = LoadTex("Resource/Zone_select_001.tga");
+
+						MainAdventure->ObjectMap[tmp_001]->sprite.tex = textureAsteroidBelt_001;
+						MainAdventure->ObjectMap[tmp_002]->sprite.tex = textureAsteroidBelt_002;
+						MainAdventure->ObjectMap[tmp_003]->sprite.tex = textureZone_blue;
+
+						MainAdventure->camera = { 4500, 4500 };
 
 						player->playerStatus = pAdventure;
-
 					}
 
 					MainAdventure->SetCamera(((tShip*)battle->units[player->shipIndex])->rotation * 180 / M_PI_2 * (-1.0f / 2));
@@ -396,6 +434,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					((tShip*)battle->units[player->shipIndex])->rotation += seek * deltaTime * 0.5;
 					VectorRotate(movement, ((tShip*)battle->units[player->shipIndex])->rotation);
 					MainAdventure->SetCameraMove(movement);
+
+					shipX = MainAdventure->camera.x + gameFrameW / 2 + 64;
+					shipY = MainAdventure->camera.y + gameFrameW / 2 - 116;
 
 					MainAdventure->Update(deltaTime);
 					MainAdventure->Draw();
@@ -444,6 +485,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					Font.outText(1000, 170, "ShipRotation/CameraRotation");
 					Font.outInt(1000, 190, ((tShip*)battle->units[player->shipIndex])->rotation * 180 / M_PI_2);
 					Font.outInt(1000, 210, MainAdventure->fAngle);
+
+					Font.outText(1000, 250, "ActiveZone: ");
+					Font.outInt(1100, 250, MainAdventure->activeZoneId);
 
 					if (lastChar >= 'A' && lastChar <= 'Z')
 					{

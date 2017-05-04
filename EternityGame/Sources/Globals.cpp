@@ -1,5 +1,6 @@
 #include <Globals.h>
 #include <windows.h>
+#include <Types.h>
 
 /**************************
 * WinAPI / OpenGL
@@ -74,3 +75,4 @@ int xPos = 0, yPos = 0;
 int SelectedItemId = -1;
 bool lMouseBotton = false;
 char lastChar = '0';
+float shipX = 0, shipY = 0;

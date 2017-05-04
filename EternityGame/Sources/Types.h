@@ -192,3 +192,10 @@ enum PlayerStatus
 	pShipMain,
 	pShipFactory
 };
+
+enum ObjectType
+{
+	objectTypeNone,
+	objectTypeDecor,
+	objectTypepZone
+};
