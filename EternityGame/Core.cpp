@@ -363,7 +363,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				case 0:
 				{
 					if (!bBattleReady)
-					{
+					{	/* Battle initialization */
 						GlobalKeysLock = false;
 						bBattleReady = true;
 
@@ -384,7 +384,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 					glEnd();
 					/* End simple background */
-
+					/* Movement */
 					vec2 movement = { 0, 0 };
 
 					if (keyState[VK_LEFT])
@@ -403,40 +403,26 @@ int WINAPI WinMain(HINSTANCE hInstance,
 						movement.y -= 1;
 
 					player->setShipMovement(movement);
+					
+					/* Activate weapons */
+					for (int i(1); i <= 9; i++)
+						if (keyState['0' + i])
+						{
+							keyState['0' + i] = false;
+							if (pEnv->_shipM->activewepCount >= i)
+								player->useWeapon(i - 1);
+						}
 
-					if (keyState['1'])
-					{
-						keyState['1'] = false;
-					//	if (pEnv->_shipM->items[pEnv->_shipM->weapons[0]].type == module)
-						if (pEnv->_shipM->activewepCount >= 1)
-							player->useWeapon(0);
-					}
-					if (keyState['2'])
-					{
-						keyState['2'] = false;
-						if (pEnv->_shipM->activewepCount >= 2)
-							player->useWeapon(1);
-					}
-					if (keyState['3'])
-					{
-						keyState['3'] = false;
-						if (pEnv->_shipM->activewepCount >= 3)
-							player->useWeapon(2);
-					}
-
+					/* Battle update */
 					battle->update(deltaTime);
+					/* Draw */
 					battle->DrawAll();
+
 				//	talk->fileRead("new document.txt");
 					break;
 				}
 				case 1:
 				{
-					//((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
-
-					//drmod->drawShip();
-					//drmod->drawModule();
-					//drmod->drawHp((tShip*)battle->units[player->shipIndex]);
-
 					if (player->playerStatus == pNone)
 					{
 						/* Init game */
@@ -452,11 +438,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 						player->playerStatus = pAdventure;
 					}
-
+					/* Cameta Setup */
 					MainAdventure->SetCamera(((tShip*)battle->units[player->shipIndex])->rotation * 180 / M_PI_2 * (-1.0f / 2));
 					vec2 movement;
 					float thrust = 0, seek = 0;
-
+					/* Camera move */
 					if (player->playerStatus == pAdventure)	// Управление в Приключении
 					{
 						if (keyState[VK_LEFT])
@@ -477,12 +463,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 					movement = { 0, thrust };
 
+					/* Ship and camera rotate */
+
 					((tShip*)battle->units[player->shipIndex])->rotation += seek * deltaTime * 0.5;
 					VectorRotate(movement, ((tShip*)battle->units[player->shipIndex])->rotation);
 					MainAdventure->SetCameraMove(movement);
 
 					shipX = MainAdventure->camera.x + gameFrameW / 2 + 64;
 					shipY = MainAdventure->camera.y + gameFrameW / 2 - 116;
+
+					/* Update and draw */
 
 					MainAdventure->Update(deltaTime);
 					MainAdventure->Draw();
