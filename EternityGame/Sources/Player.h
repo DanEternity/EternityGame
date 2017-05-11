@@ -15,6 +15,7 @@ public:
 	tBattle * battle;
 	int shipIndex;
 	PlayerStatus playerStatus;
+	float shipRotation;
 	int setShipMovement(vec2 NewMove);
 	int addModule(ModuleType type);
 	int addAttrToModule(int moduleId, Attribute attr);
@@ -70,8 +71,9 @@ public:
 
 	//std::vector<Item> shipModules;
 	std::vector<SocketInfo> sockets;
-
-
+	int weapons[10];
+	int wepCount;
+	int activewepCount;
 	int update(double deltatime);
 	int swapItem(int id1, int id2);
 

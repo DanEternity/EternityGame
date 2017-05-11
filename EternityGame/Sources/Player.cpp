@@ -53,6 +53,7 @@ int PlayerHandle::updateShipStats(double deltatime)
 PlayerHandle::PlayerHandle()
 {
 	shipIndex = -1;
+	shipRotation = 0;
 	battle = nullptr;
 }
 
@@ -426,6 +427,7 @@ int ShipMap::createShipMap(const char * filename)
 	if (freopen_s(&file, filename, "r", stdin))
 		return 0;
 
+	wepCount = 0;
 	int sz;
 
 	std::cin >> sz;
@@ -443,7 +445,10 @@ int ShipMap::createShipMap(const char * filename)
 		if (strcmp(c, "sys") == 0)
 			sockets[i].type = sys;
 		if (strcmp(c, "wep") == 0)
+		{
 			sockets[i].type = wep;
+			weapons[wepCount++] = i;
+		}
 		if (strcmp(c, "core") == 0)
 			sockets[i].type = core;
 	}
@@ -604,7 +609,7 @@ int PlayerEnviroment::SyncShip(double deltatime)
 {
 
 	tShip * pick = ((tShip *)_player->battle->units[_player->shipIndex]);
-
+	_shipM->activewepCount = 0;
 	//pick->tModule.size();
 	/* Clear ship modules */
 	for (int i(0); i < pick->tModule.size(); i++)
@@ -613,7 +618,7 @@ int PlayerEnviroment::SyncShip(double deltatime)
 	}
 
 	pick->tModule.clear();
-
+	pick->tWep.clear();
 	/* Setup new modules */
 
 	for (int i(0); i < _shipM->items.size(); i++)
@@ -621,6 +626,8 @@ int PlayerEnviroment::SyncShip(double deltatime)
 		if (_shipM->items[i].type != nullItem)
 		{
 			int moduleId = pick->addModule(((Module *)_shipM->items[i].entity));
+			if (_shipM->sockets[i].type == wep)
+				_shipM->activewepCount++;
 		}
 	}
 

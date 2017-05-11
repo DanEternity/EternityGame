@@ -108,7 +108,7 @@ int tShip::addModule(ModuleType type)
 	case wep:
 		tModule.push_back(new WepModule());
 		id = tModule.size() - 1;
-		tWep.push_back(id);
+		//tWep.push_back(id);
 		break;
 	default:
 		break;

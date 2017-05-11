@@ -34,6 +34,9 @@
     <Filter Include="Adventure">
       <UniqueIdentifier>{744927a1-1193-45ca-8347-ebfa62678f0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{b088f5d7-272b-47b6-aa7d-5ecb53d8eb9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -77,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="Sources\Adventure_base.cpp">
       <Filter>Adventure</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\BattleScripts.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="Sources\Adventure_base.h">
       <Filter>Adventure</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\BattleScripts.h">
+      <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

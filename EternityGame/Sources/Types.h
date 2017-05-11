@@ -197,5 +197,21 @@ enum ObjectType
 {
 	objectTypeNone,
 	objectTypeDecor,
-	objectTypepZone
+	objectTypepZone,
+	objectTypeItem
 };
+
+enum ScriptResultCode
+{
+	rcNothing,
+	rcBattle,
+	rcDrop
+};
+
+struct ScriptResult
+{
+	bool success;
+	int sResultCode;
+	int sResultAttribute;
+};
+

@@ -14,6 +14,7 @@
 #include <Menu.h>
 #include <Talking.h>
 #include <Adventure_base.h>
+#include <BattleScripts.h>
 
 
 /**************************
@@ -188,6 +189,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	//store->addItem(3, module);
 	store->createItemModule(3, 64, sys, "Basic Engine");
 	((SysModule*)(store->items[3].entity))->addAtribute(tSpeed, 15);
+
+	store->createItemModule(4, 65, wep, "Plasma cannon");
+	((WepModule*)(store->items[4].entity))->baseCooldown = 1.2f;
+	((WepModule*)(store->items[4].entity))->Info = { 230, 40, 600, bullet, bul };
+
+	store->createItemModule(5, 65, wep, "Plasma cannon");
+	((WepModule*)(store->items[5].entity))->baseCooldown = 1.2f;
+	((WepModule*)(store->items[5].entity))->Info = { 230, 40, 600, bullet, bul };
+
+	store->createItemModule(6, 65, wep, "Plasma cannon");
+	((WepModule*)(store->items[6].entity))->baseCooldown = 1.2f;
+	((WepModule*)(store->items[6].entity))->Info = { 230, 40, 600, bullet, bul };
+
 	/*
 	sMap->createItemModule(0, 64, sys, "Basec Engine");
 	((SysModule*)(sMap->items[0].entity))->addAtribute(tSpeed, 15);
@@ -252,9 +266,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	MainAdventure->ObjectMap[id]->size = 128;
 	MainAdventure->ObjectMap[id]->rotate = 0;
 	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
-	MainAdventure->ObjectMap[id]->id = 1;
-	MainAdventure->ObjectMap[id]->type = objectTypepZone;
+	//MainAdventure->ObjectMap[id]->id = 1;
 	int tmp_003 = id;
+	MainAdventure->ObjectMap[id]->type = objectTypepZone;
+	id = MainAdventure->AddZone(id);
+	MainAdventure->Zones[id]->attribute1 = book;
+	MainAdventure->Zones[id]->EnterFunction = CreateTestField;
+
 
 	MainAdventure->cameraSpeed = 200;
 
@@ -293,6 +311,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	MainAdventure->camera = { 0, 0 };
 	MainAdventure->ScrollingSpeed = 1600;
 	player->playerStatus = pNone;
+
+	bool GlobalKeysLock = false;
+	bool bBattleReady = false;
 
 	/* program main loop */
 	while (!bQuit)
@@ -341,6 +362,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					break;
 				case 0:
 				{
+					if (!bBattleReady)
+					{
+						GlobalKeysLock = false;
+						bBattleReady = true;
+
+						((tShip*)battle->units[player->shipIndex])->pos = { float(gameFrameW / 2), float(gameFrameH) - 100 };
+						player->shipRotation = ((tShip*)battle->units[player->shipIndex])->rotation;
+						((tShip*)battle->units[player->shipIndex])->rotation = 0;
+						pEnv->SyncShip(0);
+					}
 					/* Simple background*/
 					glBindTexture(GL_TEXTURE_2D, BG);
 
@@ -373,14 +404,29 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 					player->setShipMovement(movement);
 
-					if (keyState[VK_SPACE])
+					if (keyState['1'])
 					{
-						player->useWeapon(0);
+						keyState['1'] = false;
+					//	if (pEnv->_shipM->items[pEnv->_shipM->weapons[0]].type == module)
+						if (pEnv->_shipM->activewepCount >= 1)
+							player->useWeapon(0);
+					}
+					if (keyState['2'])
+					{
+						keyState['2'] = false;
+						if (pEnv->_shipM->activewepCount >= 2)
+							player->useWeapon(1);
+					}
+					if (keyState['3'])
+					{
+						keyState['3'] = false;
+						if (pEnv->_shipM->activewepCount >= 3)
+							player->useWeapon(2);
 					}
 
 					battle->update(deltaTime);
 					battle->DrawAll();
-					talk->fileRead("new document.txt");
+				//	talk->fileRead("new document.txt");
 					break;
 				}
 				case 1:
@@ -474,6 +520,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 					}
 
+					/* Debug Section */
+
 					Font.outText(1000, 20, "Camera x,y");
 					Font.outInt(1000, 40, MainAdventure->camera.x);
 					Font.outInt(1000, 60, MainAdventure->camera.y);
@@ -516,10 +564,41 @@ int WINAPI WinMain(HINSTANCE hInstance,
 						}
 					}
 
-					/* Buttons */
+					if (keyPress[VK_RETURN] || keyPress[VK_SPACE])
+					{
+						if (player->playerStatus == pAdventure && MainAdventure->activeZoneId != -1)
+						{
+							keyPress[VK_RETURN] = FALSE;
+							keyPress[VK_SPACE] = FALSE;
 
-					int btSelected = drmod->checkNumb();
-					gameStatus = (btSelected == 1) ? gameStatus : btSelected;
+							/* Execute script */
+
+							if (MainAdventure->EnterZone(MainAdventure, battle))
+							{
+								switch (MainAdventure->lastScriptResult.sResultCode)
+								{
+								case rcNothing:
+									break;
+								case rcBattle:
+									gameStatus = 0;
+									
+									break;
+								case rcDrop:
+									break;
+								default:
+									// Error
+									break;
+								}
+							}
+						}
+					}
+
+					/* Buttons */
+					if (!GlobalKeysLock)
+					{
+						int btSelected = drmod->checkNumb();
+						gameStatus = (btSelected == 1) ? gameStatus : btSelected;
+					}
 					break;
 				}
 				case 2:

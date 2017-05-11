@@ -42,6 +42,7 @@ public:
 	// Modules
 	std::vector <Module *> tModule;
 	std::vector<int> tWep; // weapon indexes
+
 	float powerCapacity;
 	float powerUsage;
 	float powerBattery;

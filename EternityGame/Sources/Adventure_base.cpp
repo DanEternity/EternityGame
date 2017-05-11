@@ -44,7 +44,7 @@ void tBaseAdventure::Update(double deltatime)
 	}
 
 	if (!ZoneActive)
-		activeZoneId = false;
+		activeZoneId = -1;
 }
 
 void tBaseAdventure::SetCameraMove(vec2 movement)
@@ -68,10 +68,37 @@ void tBaseAdventure::Draw()
 	}
 }
 
+bool tBaseAdventure::EnterZone(tBaseAdventure * pAdventure, tBattle * pBattle)
+{
+	if (activeZoneId != -1 && Zones[activeZoneId]->EnterFunction != NULL)
+	{
+		ScriptResult sResult = Zones[activeZoneId]->EnterFunction(
+			pAdventure,
+			pBattle,
+			Zones[activeZoneId]->attribute1,
+			Zones[activeZoneId]->attribute2,
+			Zones[activeZoneId]->attributeArray);
+
+		lastScriptResult = sResult;
+
+		if (sResult.success)
+			return TRUE;
+	}
+	return FALSE;
+}
+
 int tBaseAdventure::AddBaseObject()
 {
 	ObjectMap.push_back(new tBaseObject());
 	return ObjectMap.size() - 1;
+}
+
+int tBaseAdventure::AddZone(int objectId)
+{
+	Zones.push_back(new tZone());
+	ObjectMap[objectId]->id = Zones.size() - 1;
+
+	return Zones.size() - 1;
 }
 
 tBaseAdventure::tBaseAdventure()
@@ -82,4 +109,8 @@ tBaseAdventure::tBaseAdventure()
 tBaseObject::tBaseObject()
 {
 	type = objectTypeNone;
+}
+
+tZone::tZone()
+{
 }

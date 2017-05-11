@@ -12,9 +12,9 @@ extern HDC hDC;
 extern HGLRC hRC;
 extern MSG msg;
 extern BOOL bQuit;
-extern BOOL keyState[0xffff];
-extern BOOL keyPress[0xffff];
-extern BOOL keyBlock[0xffff];
+extern BOOL keyState[0xffff]; // Клавиша нажата (вдавлена)
+extern BOOL keyPress[0xffff]; // Событие что клавиша была нажата (существует 1 тик)
+extern BOOL keyBlock[0xffff]; // Не позволяет генерировать событие KeyPress
 
 /**************************
 * Options
