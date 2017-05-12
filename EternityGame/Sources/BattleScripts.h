@@ -9,3 +9,10 @@ ScriptResult CreateTestField(
 	int attribute1,
 	int attribute2,
 	int * attributeArray);
+
+ScriptResult CreateTestField2(
+	tBaseAdventure * pAdventure,
+	tBattle * pBattle,
+	int attribute1,
+	int attribute2,
+	int * attributeArray);

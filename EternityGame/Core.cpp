@@ -273,6 +273,20 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	MainAdventure->Zones[id]->attribute1 = book;
 	MainAdventure->Zones[id]->EnterFunction = CreateTestField;
 
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { 0,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 5400 , 4800 };
+	MainAdventure->ObjectMap[id]->texSize = 128;
+	MainAdventure->ObjectMap[id]->size = 128;
+	MainAdventure->ObjectMap[id]->rotate = 0;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
+	//MainAdventure->ObjectMap[id]->id = 1;
+	int tmp_004 = id;
+	MainAdventure->ObjectMap[id]->type = objectTypepZone;
+	id = MainAdventure->AddZone(id);
+	MainAdventure->Zones[id]->attribute1 = book;
+	MainAdventure->Zones[id]->attribute2 = 5;
+	MainAdventure->Zones[id]->EnterFunction = CreateTestField2;
 
 	MainAdventure->cameraSpeed = 200;
 
@@ -433,6 +447,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 						MainAdventure->ObjectMap[tmp_001]->sprite.tex = textureAsteroidBelt_001;
 						MainAdventure->ObjectMap[tmp_002]->sprite.tex = textureAsteroidBelt_002;
 						MainAdventure->ObjectMap[tmp_003]->sprite.tex = textureZone_blue;
+						MainAdventure->ObjectMap[tmp_004]->sprite.tex = textureZone_blue;
 
 						MainAdventure->camera = { 4500, 4500 };
 
@@ -571,7 +586,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 									break;
 								case rcBattle:
 									gameStatus = 0;
-									
+									GlobalKeysLock = true;
 									break;
 								case rcDrop:
 									break;

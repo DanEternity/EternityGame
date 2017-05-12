@@ -211,7 +211,7 @@ enum ScriptResultCode
 struct ScriptResult
 {
 	bool success;
-	int sResultCode;
+	ScriptResultCode sResultCode;
 	int sResultAttribute;
 };
 
