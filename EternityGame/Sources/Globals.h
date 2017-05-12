@@ -1,5 +1,7 @@
 #pragma once
 #include <windows.h>
+#include <vector>
+#include <types.h>
 
 /**************************
 * WinAPI / OpenGL
@@ -43,6 +45,7 @@ extern void * pFont;
 **************************/
 
 extern unsigned int texModHover;
+extern std::vector<textureStorage> texture;
 extern int gameStatus;
 
 extern unsigned int  targetTextureMap;

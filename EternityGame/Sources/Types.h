@@ -215,3 +215,10 @@ struct ScriptResult
 	int sResultAttribute;
 };
 
+struct textureStorage
+{
+	unsigned int tex;
+	char * fileName;
+	bool loaded;
+	bool named;
+};

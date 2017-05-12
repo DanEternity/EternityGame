@@ -1,5 +1,6 @@
 #include <Globals.h>
 #include <windows.h>
+#include <vector>
 #include <Types.h>
 
 /**************************
@@ -44,6 +45,7 @@ void * pFont = nullptr;
 **************************/
 
 unsigned int texModHover = 0;
+std::vector<textureStorage> texture;
 int gameStatus = -1;
 
 unsigned int targetTextureMap = 0;

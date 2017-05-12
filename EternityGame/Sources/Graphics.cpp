@@ -116,6 +116,67 @@ void VectorRotate(vec2 & vec, double angle)
 	};
 }
 
+void TextureRegister(unsigned int & index)
+{
+	texture.push_back({ 0, NULL, FALSE, FALSE});
+	index = texture.size() - 1;
+}
+
+void TextureRegister(unsigned int & index, const char * filename, bool load)
+{
+	texture.push_back({0, NULL, load, TRUE});
+	index = texture.size() - 1;
+	texture[index].fileName = new char[strlen(filename) + 2];
+	strcpy_s(texture[index].fileName, sizeof(filename) + 1,filename);
+	if (load)
+		texture[index].tex = LoadTex(texture[index].fileName);
+}
+
+void TextureRegister(unsigned int & index, const char * filename)
+{
+	texture.push_back({ 0, NULL, FALSE, TRUE });
+	index = texture.size() - 1;
+	texture[index].fileName = new char[strlen(filename) + 2];
+	strcpy_s(texture[index].fileName, sizeof(filename) + 1, filename);
+}
+
+void TextureUpdate(unsigned int index, const char * filename, bool load)
+{
+	texture[index].fileName = new char[strlen(filename) + 2];
+	strcpy_s(texture[index].fileName, sizeof(filename) + 1, filename);
+	texture[index].named = TRUE;
+	texture[index].loaded = load;
+	if (load)
+		texture[index].tex = LoadTex(texture[index].fileName);
+}
+
+void TextureUpdate(unsigned int index, const char * filename)
+{
+	texture[index].fileName = new char[strlen(filename) + 2];
+	strcpy_s(texture[index].fileName, sizeof(filename) + 1, filename);
+	texture[index].named = TRUE;
+	texture[index].loaded = FALSE;
+}
+
+void TextureLoad(unsigned int index)
+{
+	if (texture[index].named)
+	{
+		texture[index].tex = LoadTex(texture[index].fileName);
+		texture[index].loaded = TRUE;
+	}
+}
+
+void TextureLoad(unsigned int index, const char * filename)
+{
+	TextureUpdate(index, filename, true);
+}
+
+unsigned int TextureGetTexId(unsigned int index)
+{
+	return texture[index].tex;
+}
+
 void DrawSprite3v(unsigned int tex, int sizeW, int sizeH, float x, float y)
 {
 	glBindTexture(GL_TEXTURE_2D, tex);

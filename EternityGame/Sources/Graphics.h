@@ -10,6 +10,17 @@ void DrawSprite(unsigned int tex, float size, float x, float y);
 void DrawSprite2v(unsigned int tex, float sizeW, float sizeH, float x, float y);
 void DrawImage(unsigned int tex, int texSizeX, int texSizeY, int PartSizeX, int PartSizeY, int PosX, int PosY, int Sx, int Sy);
 void VectorRotate(vec2 &vec, double angle);
+
+void TextureRegister(unsigned int &index);
+void TextureRegister(unsigned int &index, const char * filename, bool load); // Use this
+void TextureRegister(unsigned int &index, const char * filename);
+void TextureUpdate(unsigned int index, const char * filename, bool load);
+void TextureUpdate(unsigned int index, const char * filename);
+void TextureLoad(unsigned int index);
+void TextureLoad(unsigned int index, const char * filename);
+
+inline unsigned int TextureGetTexId(unsigned int index);
+
 /* 
 DrawImage()
 tex - texture id
