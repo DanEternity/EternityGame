@@ -1,9 +1,10 @@
 #pragma once
-#include<Types.h>
-#include<Battle.h>
-#include<Ship.h>
-#include<vector>
+#include <Types.h>
+#include <Battle.h>
+#include <Ship.h>
+#include <vector>
 #include <gl/gl.h>
+#include <Player.h>
 
 class tBaseAdventure;
 	
@@ -26,6 +27,17 @@ public:
 	tBaseObject();
 };
 
+struct tZoneContext
+{
+	tBaseAdventure * pAdv;
+	tBattle * pBattle;
+	PlayerEnviroment * pEnv;
+	int attribute1;
+	int attribute2;
+	int * attributeArray;
+	void * pCustomStruct;
+};
+
 class tZone
 {
 public:
@@ -35,17 +47,11 @@ public:
 
 	/* Script info */
 
-	ScriptResult(*EnterFunction)(
-		tBaseAdventure * pAdventure,	// Adventure pointer
-		tBattle * pBattle,				// Battle pointer
-		int attribute1,					// Base attribute1
-		int attribute2,					// Base attribute
-		int * attributeArray);			// Additional Information
+	ScriptResult(*EnterFunction)(tZoneContext * Context);		
+	ScriptResult(*ProcessFunction)(tZoneContext * Context, tfEvent fEvent);
+	ScriptResult(*EndFunction)(tZoneContext * Context);
 
-	int attribute1;
-	int attribute2;
-	int * attributeArray;
-
+	tZoneContext context;
 	tZone();
 };
 
@@ -77,7 +83,9 @@ public:
 	void Update(double deltatime);
 	void SetCameraMove(vec2 movement);
 	void Draw();
-	bool EnterZone(tBaseAdventure * pAdventure, tBattle * pBattle);
+	bool EnterZone(tBaseAdventure * pAdventure, tBattle * pBattle, PlayerEnviroment * pEnviroment);
+	bool ProcessZone(tfEvent eventType);
+
 	int AddBaseObject();
 	int AddZone(int objectId);
 	tBaseAdventure();

@@ -92,7 +92,15 @@ int PrimaryStore::addItem(int id, ItemType type)
 	default:
 		break;
 	}
-	return 0;
+	return id;
+}
+
+int PrimaryStore::addItem(ItemType type)
+{
+	for (int i(0); i < items.size(); i++)
+		if (items[i].type == nullItem)
+			return (addItem(i, type));
+	return -1;
 }
 
 void PrimaryStore::deleteItem(int id)

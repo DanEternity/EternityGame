@@ -205,7 +205,8 @@ enum ScriptResultCode
 {
 	rcNothing,
 	rcBattle,
-	rcDrop
+	rcDrop,
+	rcAdventure
 };
 
 struct ScriptResult
@@ -221,4 +222,11 @@ struct textureStorage
 	char * fileName;
 	bool loaded;
 	bool named;
+};
+
+enum tfEvent
+{
+	tfUpdate,
+	tfEnd,
+	tfObjectDestroed
 };

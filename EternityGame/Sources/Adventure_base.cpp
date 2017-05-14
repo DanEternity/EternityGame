@@ -68,17 +68,28 @@ void tBaseAdventure::Draw()
 	}
 }
 
-bool tBaseAdventure::EnterZone(tBaseAdventure * pAdventure, tBattle * pBattle)
+bool tBaseAdventure::EnterZone(tBaseAdventure * pAdventure, tBattle * pBattle, PlayerEnviroment * pEnviroment)
 {
 	if (activeZoneId != -1 && Zones[activeZoneId]->EnterFunction != NULL)
 	{
-		ScriptResult sResult = Zones[activeZoneId]->EnterFunction(
-			pAdventure,
-			pBattle,
-			Zones[activeZoneId]->attribute1,
-			Zones[activeZoneId]->attribute2,
-			Zones[activeZoneId]->attributeArray);
+		Zones[activeZoneId]->context.pAdv = pAdventure;
+		Zones[activeZoneId]->context.pBattle = pBattle;
+		Zones[activeZoneId]->context.pEnv = pEnviroment;
 
+		ScriptResult sResult = Zones[activeZoneId]->EnterFunction(&Zones[activeZoneId]->context);
+		lastScriptResult = sResult;
+
+		if (sResult.success)
+			return TRUE;
+	}
+	return FALSE;
+}
+
+bool tBaseAdventure::ProcessZone(tfEvent eventType)
+{
+	if (activeZoneId != -1 && Zones[activeZoneId]->ProcessFunction != NULL)
+	{
+		ScriptResult sResult = Zones[activeZoneId]->ProcessFunction(&Zones[activeZoneId]->context, eventType);
 		lastScriptResult = sResult;
 
 		if (sResult.success)
@@ -113,4 +124,7 @@ tBaseObject::tBaseObject()
 
 tZone::tZone()
 {
+	EnterFunction = NULL;
+	ProcessFunction = NULL;
+	EndFunction = NULL;
 }

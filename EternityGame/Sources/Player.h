@@ -48,6 +48,7 @@ public:
 
 
 	int addItem(int id, ItemType type);
+	int addItem(ItemType type);
 	void deleteItem(int id);
 	void swapItem(int id1, int id2);
 	int selectItem(int mouseX, int mouseY);
@@ -68,8 +69,6 @@ public:
 class ShipMap : public PrimaryStore
 {
 public:
-
-	//std::vector<Item> shipModules;
 	std::vector<SocketInfo> sockets;
 	int weapons[10];
 	int wepCount;

@@ -1,18 +1,13 @@
 #pragma once
-#include<Types.h>
-#include<Battle.h>
-#include<Adventure_base.h>
+#include <Types.h>
+#include <Battle.h>
+#include <Adventure_base.h>
+#include <Globals.h>
 
-ScriptResult CreateTestField(
-	tBaseAdventure * pAdventure,
-	tBattle * pBattle,
-	int attribute1,
-	int attribute2,
-	int * attributeArray);
+ScriptResult CreateTestField(tZoneContext * Context);
 
-ScriptResult CreateTestField2(
-	tBaseAdventure * pAdventure,
-	tBattle * pBattle,
-	int attribute1,
-	int attribute2,
-	int * attributeArray);
+ScriptResult CreateTestField2(tZoneContext * Context);
+
+ScriptResult CreateBasicProcessField(tZoneContext * Context);
+
+ScriptResult BasicProcessField(tZoneContext * Context, tfEvent fEvent);

@@ -15,6 +15,8 @@
 #include <Talking.h>
 #include <Adventure_base.h>
 #include <BattleScripts.h>
+#include <time.h>
+#include <cstdlib>
 
 
 /**************************
@@ -99,6 +101,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	pFont = &Font;
 
 	Init();
+	std::srand(time(NULL));
 
 	/*Init test version*/
 
@@ -115,29 +118,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	battle->setShipStats({ "Test Ship",100,1,0,0,50,0,100, MainShip, 64, 64}, player->shipIndex);
 	battle->setShipPosition({ 400, 300 }, player->shipIndex);
-	
-	/*
-	id = player->addModule(sys);
-	player->addAttrToModule(id, { tHull, 100 });
-	id = player->addModule(wep);
-	player->setWeaponStats(id, { 0.7f, 230, 40, 600, bullet, bul });
-	
-	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
-	battle->setShipPosition({ 300, 100 }, id);
-
-	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
-	battle->setShipPosition({ 400, 150 }, id);
-
-	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
-	battle->setShipPosition({ 720, 400 }, id);
-
-	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 300, 0, 0, 0, 1, 0, 1, book, 160, 160, 60 }, id);
-	battle->setShipPosition({ 620, 300 }, id);
-	*/
 
 	PrimaryStore * store = new PrimaryStore(40);
 	UIStore * UIComponentStore = new UIStore();
@@ -266,11 +246,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	MainAdventure->ObjectMap[id]->size = 128;
 	MainAdventure->ObjectMap[id]->rotate = 0;
 	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
-	//MainAdventure->ObjectMap[id]->id = 1;
+
 	int tmp_003 = id;
 	MainAdventure->ObjectMap[id]->type = objectTypepZone;
 	id = MainAdventure->AddZone(id);
-	MainAdventure->Zones[id]->attribute1 = book;
+	MainAdventure->Zones[id]->context.attribute1 = book;
 	MainAdventure->Zones[id]->EnterFunction = CreateTestField;
 
 	id = MainAdventure->AddBaseObject();
@@ -280,14 +260,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	MainAdventure->ObjectMap[id]->size = 128;
 	MainAdventure->ObjectMap[id]->rotate = 0;
 	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
-	//MainAdventure->ObjectMap[id]->id = 1;
+
 	int tmp_004 = id;
 	MainAdventure->ObjectMap[id]->type = objectTypepZone;
 	id = MainAdventure->AddZone(id);
-	MainAdventure->Zones[id]->attribute1 = book;
-	MainAdventure->Zones[id]->attribute2 = 5;
-	MainAdventure->Zones[id]->EnterFunction = CreateTestField2;
-
+	MainAdventure->Zones[id]->context.attribute1 = book;
+	MainAdventure->Zones[id]->context.attribute2 = 8;
+	MainAdventure->Zones[id]->EnterFunction = CreateBasicProcessField;
+	MainAdventure->Zones[id]->ProcessFunction = BasicProcessField;
 	MainAdventure->cameraSpeed = 200;
 
 	/* End */
@@ -426,12 +406,27 @@ int WINAPI WinMain(HINSTANCE hInstance,
 							if (pEnv->_shipM->activewepCount >= i)
 								player->useWeapon(i - 1);
 						}
-
+					/* Zone process script*/
+					MainAdventure->ProcessZone(tfUpdate);
 					/* Battle update */
 					battle->update(deltaTime);
 					/* Draw */
 					battle->DrawAll();
 
+					if (keyPress[VK_ESCAPE])
+					{
+						keyPress[VK_ESCAPE] = FALSE;
+						if (MainAdventure->ProcessZone(tfEnd)) // Process end condition
+						{
+							if (MainAdventure->lastScriptResult.sResultCode == rcAdventure) // Returning to adventure
+							{
+								gameStatus = 1;
+								((tShip*)battle->units[player->shipIndex])->pos = { float(gameFrameW / 2), float(gameFrameH / 2) };
+								((tShip*)battle->units[player->shipIndex])->rotation = player->shipRotation;
+								// SyncShipMap(0); // not available;
+							}
+						}
+					}
 				//	talk->fileRead("new document.txt");
 					break;
 				}
@@ -578,7 +573,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 							/* Execute script */
 
-							if (MainAdventure->EnterZone(MainAdventure, battle))
+							if (MainAdventure->EnterZone(MainAdventure, battle, pEnv))
 							{
 								switch (MainAdventure->lastScriptResult.sResultCode)
 								{
@@ -751,9 +746,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
-		case VK_ESCAPE:
-			PostQuitMessage(0);
-			return 0;
 		default:
 			keyState[wParam] = TRUE;
 			if (!keyBlock[wParam])
