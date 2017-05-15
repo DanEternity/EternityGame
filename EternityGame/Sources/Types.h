@@ -65,7 +65,8 @@ enum tAttribute
 	tRegshield,
 	tSpeed,
 	tPowerBattery,
-	tEvade
+	tEvade,
+	tEnergy
 };
 struct Attribute
 {

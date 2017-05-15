@@ -28,7 +28,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void EnableOpenGL(HWND hWnd, HDC *hDC, HGLRC *hRC);
 void DisableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);
 void Init();
-void InitDebug();
 double GetDeltaTime();
 
 /**************************
@@ -148,13 +147,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	sMap->createShipMap("GameData/ShipMap_000.shipmap");
 	UIComponentShip->texCell_004 = textureCell_004;
 	UIComponentShip->texCell_004s = textureCell_004s;
-	//UIComponentShip->texBack_001 = textureScreen_001;
 	UIComponentShip->texBack_001 = texshipui;
 	UIComponentShip->texMap = textureItemMap;
 	UIComponentShip->texturegray = texturegray;
 	UIComponentShip->setPosition({ 350, 75 });
 	sMap->Font = &Font;
-	//sMap->_Store->bgSize = { 1040, 1080 };
 	sMap->_Store->bgSize = { 1040/2 + 40, 1080/1.5f};
 
 	SimpleButton * btExpandStore = new SimpleButton();
@@ -166,27 +163,33 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	store->configItem(1, 10, 0, "Iron");
 	store->addItem(2, resource);
 	store->configItem(2, 25, 1, "Nickel");
-	//store->addItem(3, module);
+
+	sMap->createItemModule(6, 66, sys, "Core");
+	((SysModule*)(sMap->items[6].entity))->addAtribute(tEnergy, 25);
+	((SysModule*)(sMap->items[6].entity))->energyUsage = 0;
+
 	store->createItemModule(3, 64, sys, "Basic Engine");
 	((SysModule*)(store->items[3].entity))->addAtribute(tSpeed, 15);
+	((SysModule*)(store->items[3].entity))->energyUsage = 10;
+
+	store->createItemModule(7, 64, sys, "Basic Engine");
+	((SysModule*)(store->items[7].entity))->addAtribute(tSpeed, 15);
+	((SysModule*)(store->items[7].entity))->energyUsage = 10;
 
 	store->createItemModule(4, 65, wep, "Plasma cannon");
 	((WepModule*)(store->items[4].entity))->baseCooldown = 1.2f;
 	((WepModule*)(store->items[4].entity))->Info = { 230, 40, 600, bullet, bul };
+	((SysModule*)(store->items[4].entity))->energyUsage = 5;
 
 	store->createItemModule(5, 65, wep, "Plasma cannon");
 	((WepModule*)(store->items[5].entity))->baseCooldown = 1.2f;
 	((WepModule*)(store->items[5].entity))->Info = { 230, 40, 600, bullet, bul };
+	((SysModule*)(store->items[5].entity))->energyUsage = 5;
 
 	store->createItemModule(6, 65, wep, "Plasma cannon");
 	((WepModule*)(store->items[6].entity))->baseCooldown = 1.2f;
 	((WepModule*)(store->items[6].entity))->Info = { 230, 40, 600, bullet, bul };
-
-	/*
-	sMap->createItemModule(0, 64, sys, "Basec Engine");
-	((SysModule*)(sMap->items[0].entity))->addAtribute(tSpeed, 15);
-	*/
-	//store->configItem(2, 25, 1, "Iron");
+	((SysModule*)(store->items[6].entity))->energyUsage = 5;
 
 	Botton * bott = new Botton();
 	bott->setFont(&Font);
@@ -251,11 +254,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	MainAdventure->ObjectMap[id]->type = objectTypepZone;
 	id = MainAdventure->AddZone(id);
 	MainAdventure->Zones[id]->context.attribute1 = book;
-	MainAdventure->Zones[id]->EnterFunction = CreateTestField;
+	MainAdventure->Zones[id]->context.attribute2 = 5;
+	MainAdventure->Zones[id]->EnterFunction = CreateBasicProcessField;
+	MainAdventure->Zones[id]->ProcessFunction = BasicProcessField;
 
 	id = MainAdventure->AddBaseObject();
 	MainAdventure->ObjectMap[id]->sprite = { 0,{ 0, 0 },{ 1, 1 } };
-	MainAdventure->ObjectMap[id]->pos = { 5400 , 4800 };
+	MainAdventure->ObjectMap[id]->pos = { 6700 , 4700 };
 	MainAdventure->ObjectMap[id]->texSize = 128;
 	MainAdventure->ObjectMap[id]->size = 128;
 	MainAdventure->ObjectMap[id]->rotate = 0;
@@ -268,6 +273,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	MainAdventure->Zones[id]->context.attribute2 = 8;
 	MainAdventure->Zones[id]->EnterFunction = CreateBasicProcessField;
 	MainAdventure->Zones[id]->ProcessFunction = BasicProcessField;
+
 	MainAdventure->cameraSpeed = 200;
 
 	/* End */
@@ -416,18 +422,18 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					if (keyPress[VK_ESCAPE])
 					{
 						keyPress[VK_ESCAPE] = FALSE;
-						if (MainAdventure->ProcessZone(tfEnd)) // Process end condition
+						if (MainAdventure->ProcessZone(tfEnd)) // Process_End condition
 						{
 							if (MainAdventure->lastScriptResult.sResultCode == rcAdventure) // Returning to adventure
 							{
 								gameStatus = 1;
 								((tShip*)battle->units[player->shipIndex])->pos = { float(gameFrameW / 2), float(gameFrameH / 2) };
 								((tShip*)battle->units[player->shipIndex])->rotation = player->shipRotation;
+								bBattleReady = false;
 								// SyncShipMap(0); // not available;
 							}
 						}
 					}
-				//	talk->fileRead("new document.txt");
 					break;
 				}
 				case 1:
@@ -596,8 +602,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 					/* Buttons */
 					if (!GlobalKeysLock)
 					{
-						int btSelected = drmod->checkNumb();
-						gameStatus = (btSelected == 1) ? gameStatus : btSelected;
+						//int btSelected = drmod->checkNumb();
+						//gameStatus = (btSelected == 1) ? gameStatus : btSelected;
 					}
 					break;
 				}

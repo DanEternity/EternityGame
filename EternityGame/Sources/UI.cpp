@@ -245,6 +245,11 @@ void DrawModule::drawHp(tShip* pick)
 	Font->outText(x+160, y+40, "/");
 	Font->outInt(x+165, y+40, pick->powerBatteryMax);
 
+	Font->outText(x, y + 100, "ENERGY USAGE");
+	Font->outInt(x + 140, y + 100, pick->powerUsage);
+	Font->outText(x + 170, y + 100, "/");
+	Font->outInt(x + 175, y + 100, pick->powerCapacity);
+
 }
 
 int DrawModule::checkNumb()

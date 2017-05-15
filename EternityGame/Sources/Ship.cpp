@@ -203,6 +203,9 @@ void tShip::updStats(double deltatime)
 	speed = baseSpeed;
 	evade = baseEvade;
 	powerBatteryMax = baseBattery;
+	powerCapacity = 0;
+	powerUsage = 0;
+
 	for (int i = 0; i < tModule.size(); i++)
 	{
 		if (tModule[i]->type == wep)
@@ -215,11 +218,13 @@ void tShip::updStats(double deltatime)
 				if (pick->currentCooldown < 0)
 					pick->bCooldown = false;
 			}
+			powerUsage += pick->energyUsage;
 		}
 		if (tModule[i]->type == sys)
 		{
 			SysModule*pick = (SysModule*)tModule[i];
 			pick->active = true;
+			powerUsage += pick->energyUsage;
 			for (int k = 0; k < pick->attrN; k++)
 			{
 				switch (pick->mAttr[k].type)
@@ -257,6 +262,11 @@ void tShip::updStats(double deltatime)
 				case tEvade:
 				{
 					evade += pick->mAttr[k].count;;
+					break;
+				}
+				case tEnergy:
+				{
+					powerCapacity += pick->mAttr[k].count;;
 					break;
 				}
 

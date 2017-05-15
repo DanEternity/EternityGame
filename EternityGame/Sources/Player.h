@@ -75,7 +75,8 @@ public:
 	int activewepCount;
 	int update(double deltatime);
 	int swapItem(int id1, int id2);
-
+	int shipPowerCapacity;
+	int	shipPowerUsage;
 	int createShipMap(const char * filename);
 
 	ShipMap();
@@ -100,6 +101,8 @@ public:
 	int StorelineSize;
 	vec2 Storelinepos;
 	vec2 StorePos;
+	int shipPowerCapacity;
+	int	shipPowerUsage;
 
 	/* Functions */
 	int update(double deltatime);
