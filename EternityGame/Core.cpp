@@ -276,7 +276,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			switch (gameStatus)
 			{
 				case -1:
-					bott->init(0);
 
 					gameStatus = bott->drawBotton();
 					break;
