@@ -65,7 +65,8 @@ enum tAttribute
 	tRegshield,
 	tSpeed,
 	tPowerBattery,
-	tEvade
+	tEvade,
+	tEnergy
 };
 struct Attribute
 {
@@ -176,4 +177,57 @@ struct SocketInfo
 	ModuleType type;
 	ModuleSize size;
 	int maxLevel;
+};
+
+struct ModelInfo
+{
+	unsigned int tex;
+	vec2 p1, p2;
+};
+
+enum PlayerStatus
+{
+	pNone,
+	pMenu,
+	pAdventure,
+	pShipMain,
+	pShipFactory
+};
+
+enum ObjectType
+{
+	objectTypeNone,
+	objectTypeDecor,
+	objectTypepZone,
+	objectTypeItem
+};
+
+enum ScriptResultCode
+{
+	rcNothing,
+	rcBattle,
+	rcDrop,
+	rcAdventure
+};
+
+struct ScriptResult
+{
+	bool success;
+	ScriptResultCode sResultCode;
+	int sResultAttribute;
+};
+
+struct textureStorage
+{
+	unsigned int tex;
+	char * fileName;
+	bool loaded;
+	bool named;
+};
+
+enum tfEvent
+{
+	tfUpdate,
+	tfEnd,
+	tfObjectDestroed
 };

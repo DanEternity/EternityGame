@@ -14,6 +14,8 @@ class PlayerHandle
 public:
 	tBattle * battle;
 	int shipIndex;
+	PlayerStatus playerStatus;
+	float shipRotation;
 	int setShipMovement(vec2 NewMove);
 	int addModule(ModuleType type);
 	int addAttrToModule(int moduleId, Attribute attr);
@@ -21,7 +23,7 @@ public:
 	int setBattle(tBattle * newBattle);
 	int setWeaponStats(int moduleId, WeaponInfo info);
 	int updateShipStats(double deltatime);
-	
+
 	PlayerHandle();
 	~PlayerHandle();
 };
@@ -46,6 +48,7 @@ public:
 
 
 	int addItem(int id, ItemType type);
+	int addItem(ItemType type);
 	void deleteItem(int id);
 	void swapItem(int id1, int id2);
 	int selectItem(int mouseX, int mouseY);
@@ -66,14 +69,14 @@ public:
 class ShipMap : public PrimaryStore
 {
 public:
-
-	//std::vector<Item> shipModules;
 	std::vector<SocketInfo> sockets;
-
-
+	int weapons[10];
+	int wepCount;
+	int activewepCount;
 	int update(double deltatime);
 	int swapItem(int id1, int id2);
-
+	int shipPowerCapacity;
+	int	shipPowerUsage;
 	int createShipMap(const char * filename);
 
 	ShipMap();
@@ -98,6 +101,8 @@ public:
 	int StorelineSize;
 	vec2 Storelinepos;
 	vec2 StorePos;
+	int shipPowerCapacity;
+	int	shipPowerUsage;
 
 	/* Functions */
 	int update(double deltatime);

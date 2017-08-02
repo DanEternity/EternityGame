@@ -1,5 +1,6 @@
 #include "Ship.h"
 #include <Graphics.h>
+#include <Globals.h>
 
 tShip::tShip()
 {
@@ -7,7 +8,12 @@ tShip::tShip()
 	movement = { 0, 0 };
 	pos = { 0, 0 };
 	direction = { 0, -1 };
+	rotation = 0;
 	PhysicalSize = 1;
+	shipModel.p1 = { 0, 0 };
+	shipModel.p2 = { 1, 1 };
+
+
 
 	baseHull = 1;
 	baseHullReg = 0;
@@ -55,6 +61,7 @@ void tShip::setName(const char * newName)
 void tShip::setTexture(unsigned int tex)
 {
 	shipTexture = tex;
+	shipModel.tex = tex;
 }
 
 void tShip::setSize(int sizeShipX, int sizeShipY)
@@ -101,7 +108,7 @@ int tShip::addModule(ModuleType type)
 	case wep:
 		tModule.push_back(new WepModule());
 		id = tModule.size() - 1;
-		tWep.push_back(id);
+		//tWep.push_back(id);
 		break;
 	default:
 		break;
@@ -196,6 +203,9 @@ void tShip::updStats(double deltatime)
 	speed = baseSpeed;
 	evade = baseEvade;
 	powerBatteryMax = baseBattery;
+	powerCapacity = 0;
+	powerUsage = 0;
+
 	for (int i = 0; i < tModule.size(); i++)
 	{
 		if (tModule[i]->type == wep)
@@ -208,11 +218,13 @@ void tShip::updStats(double deltatime)
 				if (pick->currentCooldown < 0)
 					pick->bCooldown = false;
 			}
+			powerUsage += pick->energyUsage;
 		}
 		if (tModule[i]->type == sys)
 		{
 			SysModule*pick = (SysModule*)tModule[i];
 			pick->active = true;
+			powerUsage += pick->energyUsage;
 			for (int k = 0; k < pick->attrN; k++)
 			{
 				switch (pick->mAttr[k].type)
@@ -252,6 +264,11 @@ void tShip::updStats(double deltatime)
 					evade += pick->mAttr[k].count;;
 					break;
 				}
+				case tEnergy:
+				{
+					powerCapacity += pick->mAttr[k].count;;
+					break;
+				}
 
 				default:
 					break;
@@ -268,7 +285,7 @@ void tShip::updStats(double deltatime)
 
 void tShip::Draw()
 {
-	DrawSprite2v(shipTexture, sizeX, sizeY, pos.x, pos.y);
+	DrawSprite5v(shipModel, sizeX, rotation, pos.x, pos.y);
 }
 
 void tShip::loadShip(const char * name)

@@ -1,5 +1,7 @@
 #include <Globals.h>
 #include <windows.h>
+#include <vector>
+#include <Types.h>
 
 /**************************
 * WinAPI / OpenGL
@@ -13,6 +15,8 @@ HGLRC hRC;
 MSG msg;
 BOOL bQuit = FALSE;
 BOOL keyState[0xffff];
+BOOL keyPress[0xffff];
+BOOL keyBlock[0xffff];
 
 /**************************
 * Options
@@ -41,6 +45,7 @@ void * pFont = nullptr;
 **************************/
 
 unsigned int texModHover = 0;
+std::vector<textureStorage> texture;
 int gameStatus = -1;
 
 unsigned int targetTextureMap = 0;
@@ -71,3 +76,5 @@ int mouseX = 0, mouseY = 0;
 int xPos = 0, yPos = 0;
 int SelectedItemId = -1;
 bool lMouseBotton = false;
+char lastChar = '0';
+float shipX = 0, shipY = 0;

@@ -53,6 +53,7 @@ int PlayerHandle::updateShipStats(double deltatime)
 PlayerHandle::PlayerHandle()
 {
 	shipIndex = -1;
+	shipRotation = 0;
 	battle = nullptr;
 }
 
@@ -91,7 +92,15 @@ int PrimaryStore::addItem(int id, ItemType type)
 	default:
 		break;
 	}
-	return 0;
+	return id;
+}
+
+int PrimaryStore::addItem(ItemType type)
+{
+	for (int i(0); i < items.size(); i++)
+		if (items[i].type == nullItem)
+			return (addItem(i, type));
+	return -1;
 }
 
 void PrimaryStore::deleteItem(int id)
@@ -293,6 +302,10 @@ void PrimaryStore::description(int id, vec2 pos)
 					Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Evade:+"); 
 					Font->outInt(pos.x + 120, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->mAttr[i].count); k++;
 					break;
+				case tEnergy:
+					Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Energy:+");
+					Font->outInt(pos.x + 120, pos.y + 32 + 20 * k, ((SysModule*)(items[id].entity))->mAttr[i].count); k++;
+					break;
 				default:
 					break;
 				}
@@ -303,11 +316,11 @@ void PrimaryStore::description(int id, vec2 pos)
 			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "name:");
 			Font->outText(pos.x + 106, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->name); k++;
 			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "cooldown:");
-			Font->outInt(pos.x + 141, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->currentCooldown);
+			Font->outInt(pos.x + 141, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->baseCooldown * 1000); k++;
 			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "energyUsage:");
 			Font->outInt(pos.x + 155, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->energyUsage); k++;
 			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Damage:");
-			Font->outInt(pos.x + 120, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->Info.damage); k++;
+			Font->outInt(pos.x + 130, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->Info.damage); k++;
 			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Range:");
 			Font->outInt(pos.x + 113, pos.y + 32 + 20 * k, ((WepModule*)(items[id].entity))->Info.range); k++;
 			Font->outText(pos.x + 64, pos.y + 32 + 20 * k, "Speed:");
@@ -398,10 +411,25 @@ int ShipMap::update(double deltatime)
 
 	_Store->DrawStore();
 
-	for (int i(0); i < capacity; i++)
-		if (items[i].type != nullItem)
-			drawStats(i);
+	shipPowerCapacity = 0;
+	shipPowerUsage = 0;
 
+	for (int i(0); i < items.size(); i++)
+	{
+
+		/*if (items[i].type != nullItem)
+			drawStats(i);*/
+		if (items[i].type == module)
+		{
+			shipPowerUsage += ((Module*)(items[i].entity))->energyUsage;
+			if (((Module*)(items[i].entity))->type == sys)
+			{
+				for (int j(0); j < ((SysModule*)(items[i].entity))->attrN; j++)
+					if (((SysModule*)(items[i].entity))->mAttr[j].type == tEnergy)
+						shipPowerCapacity += ((SysModule*)(items[i].entity))->mAttr[j].count;
+			}
+		}
+	}
 	if (selected != -1)
 		description(selected, _Store->cells[selected].pos);
 
@@ -426,10 +454,11 @@ int ShipMap::createShipMap(const char * filename)
 	if (freopen_s(&file, filename, "r", stdin))
 		return 0;
 
+	wepCount = 0;
 	int sz;
 
 	std::cin >> sz;
-
+	//capacity = sz;
 	for (int i(0); i < sz; i++)
 	{
 		cell temp;
@@ -443,7 +472,10 @@ int ShipMap::createShipMap(const char * filename)
 		if (strcmp(c, "sys") == 0)
 			sockets[i].type = sys;
 		if (strcmp(c, "wep") == 0)
+		{
 			sockets[i].type = wep;
+			weapons[wepCount++] = i;
+		}
 		if (strcmp(c, "core") == 0)
 			sockets[i].type = core;
 	}
@@ -454,6 +486,8 @@ int ShipMap::createShipMap(const char * filename)
 
 ShipMap::ShipMap()
 {
+	shipPowerCapacity = 0;
+	shipPowerUsage = 0;
 }
 
 ShipMap::~ShipMap()
@@ -465,13 +499,18 @@ int PlayerEnviroment::update(double deltatime)
 	int tmpItemShipMap = selectedShipMapId;
 	int	tmpItemStore = selectedStoreId;
 
+	shipPowerCapacity = _shipM->shipPowerCapacity;
+	shipPowerUsage = _shipM->shipPowerUsage;
+
 	if (bShipMapActive)
 	{
 		_shipM->update(deltatime);
 		selectedShipMapId = _shipM->selected;
 		if (tmpItemStore != -1 && selectedShipMapId != -1 && mouseClickL)
 		{
-			if (_store->items[tmpItemStore].type == module && _shipM->sockets[selectedShipMapId].type == ((Module *)(_store->items[tmpItemStore].entity))->type)
+			if (_store->items[tmpItemStore].type == module 
+				&& _shipM->sockets[selectedShipMapId].type == ((Module *)(_store->items[tmpItemStore].entity))->type
+				&& max(0 ,shipPowerCapacity-shipPowerUsage) >= ((Module*)(_store->items[tmpItemStore].entity))->energyUsage)
 			{
 				std::swap(_shipM->items[selectedShipMapId], _store->items[tmpItemStore]);
 				std::swap(_shipM->_Store->cells[selectedShipMapId].additional, _store->_Store->cells[tmpItemStore].additional);
@@ -493,7 +532,9 @@ int PlayerEnviroment::update(double deltatime)
 			selectedStoreId = _store->selected;
 			if (selectedStoreId != -1 && tmpItemShipMap != -1 && mouseClickL)
 			{
-				if ((_store->items[selectedStoreId].type == module && _shipM->sockets[tmpItemShipMap].type == ((Module *)(_store->items[tmpItemShipMap].entity))->type)
+				if ((_store->items[selectedStoreId].type == module && 
+					_shipM->sockets[tmpItemShipMap].type == ((Module *)(_store->items[selectedStoreId].entity))->type
+					&& max(0, shipPowerCapacity - shipPowerUsage) >= ((Module*)(_store->items[selectedStoreId].entity))->energyUsage)
 					|| (_store->items[selectedStoreId].type == nullItem))
 				{
 					std::swap(_shipM->items[tmpItemShipMap], _store->items[selectedStoreId]);
@@ -520,7 +561,8 @@ int PlayerEnviroment::update(double deltatime)
 			}
 			if (selectedStoreId != -1 && tmpItemShipMap != -1 && mouseClickL)
 			{
-				if ((_store->items[selectedStoreId].type == module && _shipM->sockets[tmpItemShipMap].type == ((Module *)(_store->items[tmpItemShipMap].entity))->type)
+				if ((_store->items[selectedStoreId].type == module && _shipM->sockets[tmpItemShipMap].type == ((Module *)(_store->items[selectedStoreId].entity))->type
+					&& max(0, shipPowerCapacity - shipPowerUsage) >= ((Module*)(_store->items[selectedStoreId].entity))->energyUsage)
 					|| (_store->items[selectedStoreId].type == nullItem))
 				{
 					std::swap(_shipM->items[tmpItemShipMap], _store->items[selectedStoreId]);
@@ -604,7 +646,7 @@ int PlayerEnviroment::SyncShip(double deltatime)
 {
 
 	tShip * pick = ((tShip *)_player->battle->units[_player->shipIndex]);
-
+	_shipM->activewepCount = 0;
 	//pick->tModule.size();
 	/* Clear ship modules */
 	for (int i(0); i < pick->tModule.size(); i++)
@@ -613,7 +655,7 @@ int PlayerEnviroment::SyncShip(double deltatime)
 	}
 
 	pick->tModule.clear();
-
+	pick->tWep.clear();
 	/* Setup new modules */
 
 	for (int i(0); i < _shipM->items.size(); i++)
@@ -621,6 +663,8 @@ int PlayerEnviroment::SyncShip(double deltatime)
 		if (_shipM->items[i].type != nullItem)
 		{
 			int moduleId = pick->addModule(((Module *)_shipM->items[i].entity));
+			if (_shipM->sockets[i].type == wep)
+				_shipM->activewepCount++;
 		}
 	}
 
@@ -636,6 +680,8 @@ PlayerEnviroment::PlayerEnviroment()
 	bShipMapActive = false;
 	bStoreActive = false;
 	bStoreExpanded = false;
+	shipPowerCapacity = 0;
+	shipPowerUsage = 0;
 }
 
 PlayerEnviroment::~PlayerEnviroment()

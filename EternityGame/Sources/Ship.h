@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <iostream>
 
+
+
 class tShip
 {
 public:
@@ -17,6 +19,7 @@ public:
 	vec2 pos;
 	vec2 movement;
 	vec2 direction;
+	double rotation;
 
 	// Base stats
 	float baseHull;
@@ -39,6 +42,7 @@ public:
 	// Modules
 	std::vector <Module *> tModule;
 	std::vector<int> tWep; // weapon indexes
+
 	float powerCapacity;
 	float powerUsage;
 	float powerBattery;
@@ -46,6 +50,8 @@ public:
 
 	// Graphics
 	unsigned int shipTexture;
+	ModelInfo shipModel;
+
 	int sizeX, sizeY; // horizontal; vectical
 	float PhysicalSize;
 

@@ -13,6 +13,10 @@
 #include <UI.h>
 #include <Menu.h>
 #include <Talking.h>
+#include <Adventure_base.h>
+#include <BattleScripts.h>
+#include <time.h>
+#include <cstdlib>
 
 
 /**************************
@@ -24,7 +28,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void EnableOpenGL(HWND hWnd, HDC *hDC, HGLRC *hRC);
 void DisableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);
 void Init();
-void InitDebug();
 double GetDeltaTime();
 
 /**************************
@@ -86,6 +89,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	GLuint textureCellHoverBlue = LoadTex("Resource/cell_hower_blue.tga");
 	GLuint textureItemMap = LoadTex("Resource/textureMap.tga");
 	GLuint texturegray = LoadTex("Resource/texture_gray.tga");
+	GLuint textureTileSpace_001 = LoadTex("Resource/texture_tile_space.tga");
+	GLuint textureAsteroidBelt_001; //= LoadTex("Resource/asteroid_belt_001");
+	GLuint textureAsteroidBelt_002; // = LoadTex("Resource/asteroid_belt_002");
+	GLuint textureZone_blue; // = LoadTex("Resource/Zone_001.tga");
 
 	texModHover = LoadTex("Resource/UI_002.tga");
 	tFont Font = tFont("Resource/Font.tga", 32, 256, 32);
@@ -93,8 +100,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	pFont = &Font;
 
 	Init();
+	std::srand(time(NULL));
 
 	/*Init test version*/
+
+	/* Variables */
+
+	int id(0);
+
+	/* */
+
 	tBattle * battle = new tBattle();
 	PlayerHandle * player = new PlayerHandle();
 	player->setBattle(battle);
@@ -102,28 +117,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	battle->setShipStats({ "Test Ship",100,1,0,0,50,0,100, MainShip, 64, 64}, player->shipIndex);
 	battle->setShipPosition({ 400, 300 }, player->shipIndex);
-
-	int id = player->addModule(sys);
-	player->addAttrToModule(id, { tHull, 100 });
-	id = player->addModule(wep);
-	player->setWeaponStats(id, { 0.7f, 230, 40, 600, bullet, bul });
-
-	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
-	battle->setShipPosition({ 300, 100 }, id);
-
-	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
-	battle->setShipPosition({ 400, 150 }, id);
-
-	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 100, 0, 0, 0, 1, 0, 1, book, 80, 80, 40 }, id);
-	battle->setShipPosition({ 720, 400 }, id);
-
-	id = battle->addShip();
-	battle->setShipStats({ "Meteorite", 300, 0, 0, 0, 1, 0, 1, book, 160, 160, 60 }, id);
-	battle->setShipPosition({ 620, 300 }, id);
-
 
 	PrimaryStore * store = new PrimaryStore(40);
 	UIStore * UIComponentStore = new UIStore();
@@ -154,13 +147,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	sMap->createShipMap("GameData/ShipMap_000.shipmap");
 	UIComponentShip->texCell_004 = textureCell_004;
 	UIComponentShip->texCell_004s = textureCell_004s;
-	//UIComponentShip->texBack_001 = textureScreen_001;
 	UIComponentShip->texBack_001 = texshipui;
 	UIComponentShip->texMap = textureItemMap;
 	UIComponentShip->texturegray = texturegray;
 	UIComponentShip->setPosition({ 350, 75 });
 	sMap->Font = &Font;
-	//sMap->_Store->bgSize = { 1040, 1080 };
 	sMap->_Store->bgSize = { 1040/2 + 40, 1080/1.5f};
 
 	SimpleButton * btExpandStore = new SimpleButton();
@@ -172,18 +163,120 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	store->configItem(1, 10, 0, "Iron");
 	store->addItem(2, resource);
 	store->configItem(2, 25, 1, "Nickel");
-	//store->addItem(3, module);
+
+	sMap->createItemModule(6, 66, sys, "Core");
+	((SysModule*)(sMap->items[6].entity))->addAtribute(tEnergy, 25);
+	((SysModule*)(sMap->items[6].entity))->energyUsage = 0;
+
 	store->createItemModule(3, 64, sys, "Basic Engine");
 	((SysModule*)(store->items[3].entity))->addAtribute(tSpeed, 15);
-	/*
-	sMap->createItemModule(0, 64, sys, "Basec Engine");
-	((SysModule*)(sMap->items[0].entity))->addAtribute(tSpeed, 15);
-	*/
-	//store->configItem(2, 25, 1, "Iron");
+	((SysModule*)(store->items[3].entity))->energyUsage = 10;
+
+	store->createItemModule(7, 64, sys, "Basic Engine");
+	((SysModule*)(store->items[7].entity))->addAtribute(tSpeed, 15);
+	((SysModule*)(store->items[7].entity))->energyUsage = 10;
+
+	store->createItemModule(4, 65, wep, "Plasma cannon");
+	((WepModule*)(store->items[4].entity))->baseCooldown = 1.2f;
+	((WepModule*)(store->items[4].entity))->Info = { 230, 40, 600, bullet, bul };
+	((SysModule*)(store->items[4].entity))->energyUsage = 5;
+
+	store->createItemModule(5, 65, wep, "Plasma cannon");
+	((WepModule*)(store->items[5].entity))->baseCooldown = 1.2f;
+	((WepModule*)(store->items[5].entity))->Info = { 230, 40, 600, bullet, bul };
+	((SysModule*)(store->items[5].entity))->energyUsage = 5;
+
+	store->createItemModule(6, 65, wep, "Plasma cannon");
+	((WepModule*)(store->items[6].entity))->baseCooldown = 1.2f;
+	((WepModule*)(store->items[6].entity))->Info = { 230, 40, 600, bullet, bul };
+	((SysModule*)(store->items[6].entity))->energyUsage = 5;
 
 	Botton * bott = new Botton();
 	bott->setFont(&Font);
 	bott->texbt_001 = bt_001;
+
+	/* Adventure setup */
+
+	tBaseAdventure * MainAdventure = new tBaseAdventure();
+	MainAdventure->tile.tex = textureTileSpace_001;
+	MainAdventure->tile.p1 = { 0, 0 };
+	MainAdventure->tile.p2 = { 1, 1 };
+	MainAdventure->tileSize = 2048;
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { book, {0, 0}, {1, 1} };
+	MainAdventure->ObjectMap[id]->pos = { 5100 , 5100 };
+	MainAdventure->ObjectMap[id]->texSize = 160;
+	MainAdventure->ObjectMap[id]->rotate = 0.5;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0.1;
+
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { book,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 5400 , 5100 };
+	MainAdventure->ObjectMap[id]->texSize = 195;
+	MainAdventure->ObjectMap[id]->rotate = 0.5;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0.07;
+
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { book,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 5500 , 5300 };
+	MainAdventure->ObjectMap[id]->texSize = 220;
+	MainAdventure->ObjectMap[id]->rotate = 0.5;
+	MainAdventure->ObjectMap[id]->rotateSpeed = -0.1;
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { 0,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 4500 , 4700 };
+	MainAdventure->ObjectMap[id]->texSize = 1000;
+	MainAdventure->ObjectMap[id]->rotate = 0;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
+	int tmp_001 = id;
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { 0,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 6500 , 4700 };
+	MainAdventure->ObjectMap[id]->texSize = 800;
+	MainAdventure->ObjectMap[id]->rotate = 0;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
+	int tmp_002 = id;
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { 0,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 4300 , 4600 };
+	MainAdventure->ObjectMap[id]->texSize = 128;
+	MainAdventure->ObjectMap[id]->size = 128;
+	MainAdventure->ObjectMap[id]->rotate = 0;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
+
+	int tmp_003 = id;
+	MainAdventure->ObjectMap[id]->type = objectTypepZone;
+	id = MainAdventure->AddZone(id);
+	MainAdventure->Zones[id]->context.attribute1 = book;
+	MainAdventure->Zones[id]->context.attribute2 = 5;
+	MainAdventure->Zones[id]->EnterFunction = CreateBasicProcessField;
+	MainAdventure->Zones[id]->ProcessFunction = BasicProcessField;
+
+	id = MainAdventure->AddBaseObject();
+	MainAdventure->ObjectMap[id]->sprite = { 0,{ 0, 0 },{ 1, 1 } };
+	MainAdventure->ObjectMap[id]->pos = { 6700 , 4700 };
+	MainAdventure->ObjectMap[id]->texSize = 128;
+	MainAdventure->ObjectMap[id]->size = 128;
+	MainAdventure->ObjectMap[id]->rotate = 0;
+	MainAdventure->ObjectMap[id]->rotateSpeed = 0;
+
+	int tmp_004 = id;
+	MainAdventure->ObjectMap[id]->type = objectTypepZone;
+	id = MainAdventure->AddZone(id);
+	MainAdventure->Zones[id]->context.attribute1 = book;
+	MainAdventure->Zones[id]->context.attribute2 = 8;
+	MainAdventure->Zones[id]->EnterFunction = CreateBasicProcessField;
+	MainAdventure->Zones[id]->ProcessFunction = BasicProcessField;
+
+	MainAdventure->cameraSpeed = 200;
+
+	/* End */
 
 	Talking * talk = new Talking();
 	talk->texturegray = texturegray;
@@ -206,10 +299,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	/*INTERFACE SETUP*/
 	pEnv->StoreCollapse({ 350, 475 }, 1, 8);
 	btExpandStore->pos = { 590, 450 };
+	bott->init(0);
 	drmod->init(0);
 	drmod->btSelect[0] = -1;
 	drmod->btSelect[1] = 4;
 	drmod->btSelect[2] = 1;
+
+	/* Additional Init*/
+
+	((tShip*)battle->units[player->shipIndex])->pos = { float(gameFrameW / 2), float(gameFrameH / 2) };
+	MainAdventure->camera = { 0, 0 };
+	MainAdventure->ScrollingSpeed = 1600;
+	player->playerStatus = pNone;
+
+	bool GlobalKeysLock = false;
+	bool bBattleReady = false;
+
 	/* program main loop */
 	while (!bQuit)
 	{
@@ -233,73 +338,290 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 			deltaTime = GetDeltaTime();
 
-			vec2 movement = { 0, 0 };
-
-			if (keyState[VK_LEFT])
-			{
-				movement.x -= 1;
-			}
-			if (keyState[VK_RIGHT])
-			{
-				movement.x += 1;
-			}
-			if (keyState[VK_DOWN])
-			{
-				movement.y += 1;
-			}
-			if (keyState[VK_UP])
-				movement.y -= 1;
-
-			player->setShipMovement(movement);
-
-			if (keyState[VK_SPACE])
-			{
-				player->useWeapon(0);
-			}
-
 			/* OpenGL animation code goes here */	
 
 			StartDraw2D(wndWidth, wndHeight);	
 
-			glBindTexture(GL_TEXTURE_2D, BG);
-	
-			glBegin(GL_QUADS);
-
-			glTexCoord2f(0.0f, 1.0f); 		glVertex2f(0, 0);
-			glTexCoord2f(1.0f, 1.0f);		glVertex2f(gameFrameW, 0);
-			glTexCoord2f(1.0f, 0.0f); 		glVertex2f(gameFrameW, gameFrameH);
-			glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, gameFrameH);
-
-			glEnd();
-			
-
 			switch (gameStatus)
 			{
 				case -1:
+					/* Simple background*/
+					glBindTexture(GL_TEXTURE_2D, BG);
+
+					glBegin(GL_QUADS);
+
+					glTexCoord2f(0.0f, 1.0f); 		glVertex2f(0, 0);
+					glTexCoord2f(1.0f, 1.0f);		glVertex2f(wndWidth, 0);
+					glTexCoord2f(1.0f, 0.0f); 		glVertex2f(wndWidth, wndHeight);
+					glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, wndHeight);
+
+					glEnd();
+					/* End simple background */
 
 					gameStatus = bott->drawBotton();
 					break;
 				case 0:
+				{
+					if (!bBattleReady)
+					{	/* Battle initialization */
+						GlobalKeysLock = false;
+						bBattleReady = true;
+
+						((tShip*)battle->units[player->shipIndex])->pos = { float(gameFrameW / 2), float(gameFrameH) - 100 };
+						player->shipRotation = ((tShip*)battle->units[player->shipIndex])->rotation;
+						((tShip*)battle->units[player->shipIndex])->rotation = 0;
+						pEnv->SyncShip(0);
+					}
+					/* Simple background*/
+					glBindTexture(GL_TEXTURE_2D, BG);
+
+					glBegin(GL_QUADS);
+
+					glTexCoord2f(0.0f, 1.0f); 		glVertex2f(0, 0);
+					glTexCoord2f(1.0f, 1.0f);		glVertex2f(wndWidth, 0);
+					glTexCoord2f(1.0f, 0.0f); 		glVertex2f(wndWidth, wndHeight);
+					glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, wndHeight);
+
+					glEnd();
+					/* End simple background */
+					/* Movement */
+					vec2 movement = { 0, 0 };
+
+					if (keyState[VK_LEFT])
+					{
+						movement.x -= 1;
+					}
+					if (keyState[VK_RIGHT])
+					{
+						movement.x += 1;
+					}
+					if (keyState[VK_DOWN])
+					{
+						movement.y += 1;
+					}
+					if (keyState[VK_UP])
+						movement.y -= 1;
+
+					player->setShipMovement(movement);
+					
+					/* Activate weapons */
+					for (int i(1); i <= 9; i++)
+						if (keyState['0' + i])
+						{
+							keyState['0' + i] = false;
+							if (pEnv->_shipM->activewepCount >= i)
+								player->useWeapon(i - 1);
+						}
+					/* Zone process script*/
+					MainAdventure->ProcessZone(tfUpdate);
+					/* Battle update */
 					battle->update(deltaTime);
+					/* Draw */
 					battle->DrawAll();
-					talk->fileRead("new document.txt");
+
+					if (keyPress[VK_ESCAPE])
+					{
+						keyPress[VK_ESCAPE] = FALSE;
+						if (MainAdventure->ProcessZone(tfEnd)) // Process_End condition
+						{
+							if (MainAdventure->lastScriptResult.sResultCode == rcAdventure) // Returning to adventure
+							{
+								gameStatus = 1;
+								((tShip*)battle->units[player->shipIndex])->pos = { float(gameFrameW / 2), float(gameFrameH / 2) };
+								((tShip*)battle->units[player->shipIndex])->rotation = player->shipRotation;
+								bBattleReady = false;
+								// SyncShipMap(0); // not available;
+							}
+						}
+					}
 					break;
+				}
 				case 1:
 				{
-					//((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
+					if (player->playerStatus == pNone)
+					{
+						/* Init game */
+						textureAsteroidBelt_001 = LoadTex("Resource/asteroid_belt_001.tga");
+						textureAsteroidBelt_002 = LoadTex("Resource/asteroid_belt_002.tga");
+						textureZone_blue = LoadTex("Resource/Zone_select_001.tga");
 
-					//drmod->drawShip();
-					//drmod->drawModule();
-					//drmod->drawHp((tShip*)battle->units[player->shipIndex]);
+						MainAdventure->ObjectMap[tmp_001]->sprite.tex = textureAsteroidBelt_001;
+						MainAdventure->ObjectMap[tmp_002]->sprite.tex = textureAsteroidBelt_002;
+						MainAdventure->ObjectMap[tmp_003]->sprite.tex = textureZone_blue;
+						MainAdventure->ObjectMap[tmp_004]->sprite.tex = textureZone_blue;
 
+						MainAdventure->camera = { 4500, 4500 };
 
+						player->playerStatus = pAdventure;
+					}
+					/* Cameta Setup */
+					MainAdventure->SetCamera(((tShip*)battle->units[player->shipIndex])->rotation * 180 / M_PI_2 * (-1.0f / 2));
+					vec2 movement;
+					float thrust = 0, seek = 0;
+					/* Camera move */
+					if (player->playerStatus == pAdventure)	// Управление в Приключении
+					{
+						if (keyState[VK_LEFT])
+						{
+							seek -= 1;
+						}
+						if (keyState[VK_RIGHT])
+						{
+							seek += 1;
+						}
+						if (keyState[VK_DOWN])
+						{
+							thrust += 1;
+						}
+						if (keyState[VK_UP])
+							thrust -= 1;
+					}
 
-					int btSelected = drmod->checkNumb();
-					gameStatus = (btSelected == 1) ? gameStatus : btSelected;
+					movement = { 0, thrust };
+
+					/* Ship and camera rotate */
+
+					((tShip*)battle->units[player->shipIndex])->rotation += seek * deltaTime * 0.5;
+					VectorRotate(movement, ((tShip*)battle->units[player->shipIndex])->rotation);
+					MainAdventure->SetCameraMove(movement);
+
+					shipX = MainAdventure->camera.x + gameFrameW / 2 + 64;
+					shipY = MainAdventure->camera.y + gameFrameW / 2 - 116;
+
+					/* Update and draw */
+
+					MainAdventure->Update(deltaTime);
+					MainAdventure->Draw();
+
+					battle->update(deltaTime);
+					battle->DrawAll();
+
+					//MainAdventure->camera = ((tShip*)battle->units[player->shipIndex])->pos;
+					//MainAdventure->SetCamera(-45, { MainAdventure->camera.x + gameFrameW / 2, MainAdventure->camera.y + gameFrameH / 2 });
+					MainAdventure->ResetCamera();
+
+					if (player->playerStatus == pShipMain)	// Экран корабля
+					{
+
+						pEnv->update(deltaTime);
+						btExpandStore->Draw();
+						if (mouseClickL && btExpandStore->onClick(xPos, yPos))
+						{
+							if (pEnv->bStoreExpanded)
+							{
+								pEnv->StoreCollapse({ 350, 475 }, 1, 8);
+								btExpandStore->pos = { 590, 450 };
+								pEnv->bShipMapActive = true;
+							}
+							else
+							{
+								pEnv->StoreExpand({ 350, 75 });
+								btExpandStore->pos = { 590, 50 };
+								pEnv->bShipMapActive = false;
+							}
+						}
+						((tShip*)battle->units[player->shipIndex])->updStats(0.0f);
+						drmod->drawHp((tShip*)battle->units[player->shipIndex]);
+						Font.outInt(40, 65, SelectedItemId);
+
+					}
+
+					/* Debug Section */
+
+					Font.outText(1000, 20, "Camera x,y");
+					Font.outInt(1000, 40, MainAdventure->camera.x);
+					Font.outInt(1000, 60, MainAdventure->camera.y);
+
+					Font.outText(1000, 100, "Ship x,y");
+					Font.outInt(1000, 120, MainAdventure->camera.x + gameFrameW/2);
+					Font.outInt(1000, 140, MainAdventure->camera.y + gameFrameH/2);
+
+					Font.outText(1000, 170, "ShipRotation/CameraRotation");
+					Font.outInt(1000, 190, ((tShip*)battle->units[player->shipIndex])->rotation * 180 / M_PI_2);
+					Font.outInt(1000, 210, MainAdventure->fAngle);
+
+					Font.outText(1000, 250, "ActiveZone: ");
+					Font.outInt(1100, 250, MainAdventure->activeZoneId);
+
+					if (lastChar >= 'A' && lastChar <= 'Z')
+					{
+						char lc[2] = { 0, 0 };
+						lc[0] = lastChar;
+						Font.outText(1000, 230, lc);
+					}
+					else
+						Font.outText(1000, 230, "Null");
+
+					/*Key update*/
+
+					if (keyPress['I'])
+					{
+						keyPress['I'] = FALSE;
+						if (player->playerStatus == pAdventure)
+						{
+							player->playerStatus = pShipMain;
+						}
+						else
+						{
+							if (player->playerStatus == pShipMain || player->playerStatus == pShipFactory)
+							{
+								player->playerStatus = pAdventure;
+							}
+						}
+					}
+
+					if (keyPress[VK_RETURN] || keyPress[VK_SPACE])
+					{
+						if (player->playerStatus == pAdventure && MainAdventure->activeZoneId != -1)
+						{
+							keyPress[VK_RETURN] = FALSE;
+							keyPress[VK_SPACE] = FALSE;
+
+							/* Execute script */
+
+							if (MainAdventure->EnterZone(MainAdventure, battle, pEnv))
+							{
+								switch (MainAdventure->lastScriptResult.sResultCode)
+								{
+								case rcNothing:
+									break;
+								case rcBattle:
+									gameStatus = 0;
+									GlobalKeysLock = true;
+									break;
+								case rcDrop:
+									break;
+								default:
+									// Error
+									break;
+								}
+							}
+						}
+					}
+
+					/* Buttons */
+					if (!GlobalKeysLock)
+					{
+						//int btSelected = drmod->checkNumb();
+						//gameStatus = (btSelected == 1) ? gameStatus : btSelected;
+					}
 					break;
 				}
 				case 2:
 				{
+
+					/* Simple background*/
+					glBindTexture(GL_TEXTURE_2D, BG);
+
+					glBegin(GL_QUADS);
+
+					glTexCoord2f(0.0f, 1.0f); 		glVertex2f(0, 0);
+					glTexCoord2f(1.0f, 1.0f);		glVertex2f(wndWidth, 0);
+					glTexCoord2f(1.0f, 0.0f); 		glVertex2f(wndWidth, wndHeight);
+					glTexCoord2f(0.0f, 0.0f); 		glVertex2f(0, wndHeight);
+
+					glEnd();
+					/* End simple background */
 
 					pEnv->update(deltaTime);
 					btExpandStore->Draw();
@@ -430,15 +752,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
-		case VK_ESCAPE:
-			PostQuitMessage(0);
-			return 0;
 		default:
 			keyState[wParam] = TRUE;
+			if (!keyBlock[wParam])
+				keyPress[wParam] = TRUE;
+			keyBlock[wParam] = TRUE;
+			lastChar = wParam;
 		}
 		return 0;
 	case WM_KEYUP:
 		keyState[wParam] = FALSE;
+		keyBlock[wParam] = FALSE;
+		keyPress[wParam] = FALSE;
+		
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
